@@ -31,6 +31,7 @@ One folder in `packages/`. The `package.json` has:
 - `"zerodot": { "sdk": "^1.0", "label": "…", "summary": "…" }`: the node contract versions it works with, the name, and a short line (under 60 characters) for lists. `description` is the long text: what the package does and what it is for. zerodot checks this before it runs the code.
 - `peerDependencies` on `@zerodot/node-sdk` and `zod`. zerodot gives both.
 - `files` with `dist` and every icon file.
+- `main` and `exports` that point to `./dist/index.cjs`. Build the package as CommonJS (`format: ["cjs"]` in `tsdown.config.ts`). zerodot changes the version of a package while it runs. It can free the memory of a CommonJS package. An ES module stays in memory until a restart.
 
 The code exports `nodes` (a list from `defineNode`) and `credentialTypes`. An icon is a file in the package. Read it with `fileIcon(import.meta.url, "../icon.svg")` and set `iconUrl`. A credential type can have `test()` for the Test button. A trigger with `webhook.activate` can set `webhookTest: { hint }` (SDK 1.2): the editor then registers the test address at the service for a test run, and shows the hint instead of the address.
 
