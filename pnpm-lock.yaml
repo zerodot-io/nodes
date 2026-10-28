@@ -437,6 +437,27 @@ importers:
         specifier: 4.6.7
         version: 4.6.7
 
+  packages/telegram:
+    devDependencies:
+      '@types/node':
+        specifier: 26.6.5
+        version: 26.6.5
+      '@zerodot/node-sdk':
+        specifier: ^1.2.0
+        version: 1.2.0(zod@4.6.7)
+      tsdown:
+        specifier: 0.23.2
+        version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+
 packages:
 
   '@biomejs/biome@2.6.3':
@@ -1184,6 +1205,11 @@ packages:
 
   '@zerodot/node-sdk@1.1.1':
     resolution: {integrity: sha512-oy/Sn6Wb8NR0c+FINE0qjB/KKpWefoUEgsOoLGZnLfCJchEw8soX0HlyONGgHu7uI03qq5py45ciRQTEIZIEhQ==}
+    peerDependencies:
+      zod: ^4.0.0
+
+  '@zerodot/node-sdk@1.2.0':
+    resolution: {integrity: sha512-s+vZfyONTrpfs9qn5gZ+k+ShVrOUzoyYVC8ON+BvmKwkjqaa11BlWp7IbMrOEoInmM5cCzByCIrkhOE717I0Ug==}
     peerDependencies:
       zod: ^4.0.0
 
@@ -2519,6 +2545,10 @@ snapshots:
       zod: 4.6.7
 
   '@zerodot/node-sdk@1.1.1(zod@4.6.7)':
+    dependencies:
+      zod: 4.6.7
+
+  '@zerodot/node-sdk@1.2.0(zod@4.6.7)':
     dependencies:
       zod: 4.6.7
 
