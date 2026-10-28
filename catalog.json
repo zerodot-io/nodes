@@ -2,6 +2,20 @@
   "version": 1,
   "packages": [
     {
+      "name": "@zerodot/mysql",
+      "label": "MySQL",
+      "description": "MySQL node for zerodot: run queries and work on rows.",
+      "version": "1.0.0",
+      "sdk": "^1.1",
+      "nodes": [
+        {
+          "type": "mysql.database",
+          "label": "MySQL",
+          "description": "Get, add and update data in MySQL"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/redis",
       "label": "Redis",
       "description": "Redis nodes for zerodot: key operations and a message trigger.",

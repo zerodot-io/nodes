@@ -5,6 +5,7 @@ Official node packages for [zerodot](https://github.com/zerodot-io/zerodot). zer
 | Package          | Nodes                                                 |
 | ---------------- | ----------------------------------------------------- |
 | `@zerodot/redis` | `redis.database`, `trigger.redis`, `redis` credential |
+| `@zerodot/mysql` | `mysql.database`, `mysql` credential |
 
 ## Use a package
 

@@ -1,6 +1,6 @@
 packages:
   - packages/*
 minimumReleaseAgeExclude:
-  - "@zerodot/node-sdk@1.0.0"
+  - "@zerodot/node-sdk@1.0.0 || 1.1.1"
 allowBuilds:
   esbuild: true
