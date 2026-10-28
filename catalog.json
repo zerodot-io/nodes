@@ -175,6 +175,25 @@
           "description": "List, download, upload, rename, and delete files on an SFTP server"
         }
       ]
+    },
+    {
+      "name": "@zerodot/telegram",
+      "label": "Telegram",
+      "description": "Telegram nodes for zerodot: bot API node and a trigger for bot updates.",
+      "version": "1.0.0",
+      "sdk": "^1.2",
+      "nodes": [
+        {
+          "type": "trigger.telegram",
+          "label": "Telegram Trigger",
+          "description": "Start the workflow on a Telegram bot update"
+        },
+        {
+          "type": "telegram.bot",
+          "label": "Telegram",
+          "description": "Send messages and manage chats with a Telegram bot"
+        }
+      ]
     }
   ]
 }
