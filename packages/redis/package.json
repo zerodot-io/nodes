@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/redis",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Work with a Redis database: get, set, and delete keys, use lists and counters, and publish messages. Start a workflow when a message arrives on a channel. Use it for caches, counters, and simple queues.",
   "license": "AGPL-3.0-only",
   "repository": {

@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/mysql",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Run SQL queries on a MySQL database, or insert, update, select, and delete rows. Use it to read and write the data of your app in MySQL.",
   "license": "AGPL-3.0-only",
   "repository": {

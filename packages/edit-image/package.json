@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/edit-image",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Change an image: get its size, resize, crop, rotate, blur, make it gray, or convert it to JPEG, PNG, WebP, or AVIF. Use it to prepare images before you upload or send them.",
   "license": "AGPL-3.0-only",
   "repository": {
