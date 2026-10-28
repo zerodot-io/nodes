@@ -1,0 +1,49 @@
+{
+  "name": "@zerodot/github",
+  "version": "1.0.0",
+  "description": "GitHub nodes for zerodot: an API node and a webhook trigger.",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerodot-io/zerodot-nodes.git",
+    "directory": "packages/github"
+  },
+  "keywords": [
+    "zerodot-node-package"
+  ],
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "exports": {
+    ".": "./dist/index.mjs"
+  },
+  "files": [
+    "dist",
+    "github.svg"
+  ],
+  "zerodot": {
+    "sdk": "^1.1",
+    "label": "GitHub"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -p tsconfig.json",
+    "test": "tsx --test src/*.test.ts",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@zerodot/node-sdk": "^1.1.1",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@zerodot/node-sdk": "^1.1.1",
+    "tsdown": "0.23.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  }
+}

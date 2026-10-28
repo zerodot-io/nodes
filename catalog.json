@@ -2,6 +2,25 @@
   "version": 1,
   "packages": [
     {
+      "name": "@zerodot/github",
+      "label": "GitHub",
+      "description": "GitHub nodes for zerodot: an API node and a webhook trigger.",
+      "version": "1.0.0",
+      "sdk": "^1.1",
+      "nodes": [
+        {
+          "type": "trigger.github",
+          "label": "GitHub Trigger",
+          "description": "Start the workflow on an event in a GitHub repository"
+        },
+        {
+          "type": "github.api",
+          "label": "GitHub",
+          "description": "Work with issues, repositories, files, and releases on GitHub"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/mongodb",
       "label": "MongoDB",
       "description": "MongoDB node for zerodot: find, insert, update, delete and aggregate documents.",
