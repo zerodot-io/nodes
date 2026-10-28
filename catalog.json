@@ -4,7 +4,7 @@
     {
       "name": "@zerodot/edit-image",
       "label": "Edit Image",
-      "description": "Edit Image node for zerodot: info, resize, crop, rotate, blur, grayscale and convert.",
+      "description": "Change an image: get its size, resize, crop, rotate, blur, make it gray, or convert it to JPEG, PNG, WebP, or AVIF. Use it to prepare images before you upload or send them.",
       "version": "1.0.0",
       "sdk": "^1.1",
       "icon": "Image",
@@ -19,7 +19,7 @@
     {
       "name": "@zerodot/email",
       "label": "Email",
-      "description": "Email nodes for zerodot: send mail over SMTP and a trigger for new mail over IMAP.",
+      "description": "Send email through an SMTP server, and start a workflow when a new email arrives in an IMAP mailbox. Use it for notifications and reports, or to react to incoming mail.",
       "version": "1.0.0",
       "sdk": "^1.1",
       "icon": "Mail",
@@ -39,7 +39,7 @@
     {
       "name": "@zerodot/github",
       "label": "GitHub",
-      "description": "GitHub nodes for zerodot: an API node and a webhook trigger.",
+      "description": "Work with issues, repositories, files, and releases on GitHub, and start a workflow on an event in a repository, such as a push or a new issue. Use it to automate your development work.",
       "version": "1.0.0",
       "sdk": "^1.1",
       "icon": "GitBranch",
@@ -60,7 +60,7 @@
     {
       "name": "@zerodot/mcp",
       "label": "MCP Call Tool",
-      "description": "MCP Call Tool node for zerodot: call a tool on an MCP server over Streamable HTTP.",
+      "description": "Call a tool on an MCP server over Streamable HTTP, and use the result in your workflow. Use it to connect to any service that has an MCP server.",
       "version": "1.0.0",
       "sdk": "^1.1",
       "icon": "Plug",
@@ -75,7 +75,7 @@
     {
       "name": "@zerodot/mongodb",
       "label": "MongoDB",
-      "description": "MongoDB node for zerodot: find, insert, update, delete and aggregate documents.",
+      "description": "Find, insert, update, delete, and aggregate documents in a MongoDB collection. Use it to read and write the data of your app in MongoDB.",
       "version": "1.0.0",
       "sdk": "^1.1",
       "icon": "Database",
@@ -91,7 +91,7 @@
     {
       "name": "@zerodot/mysql",
       "label": "MySQL",
-      "description": "MySQL node for zerodot: run queries and work on rows.",
+      "description": "Run SQL queries on a MySQL database, or insert, update, select, and delete rows. Use it to read and write the data of your app in MySQL.",
       "version": "1.0.0",
       "sdk": "^1.1",
       "icon": "Database",
@@ -107,7 +107,7 @@
     {
       "name": "@zerodot/postgres",
       "label": "Postgres",
-      "description": "Postgres nodes for zerodot: queries, rows, a row trigger and a LISTEN trigger.",
+      "description": "Run SQL queries on a Postgres database, or insert, update, select, and delete rows. Start a workflow when a new row appears or when Postgres sends a notification. Use it to read and write your app data.",
       "version": "1.0.0",
       "sdk": "^1.1",
       "icon": "Database",
@@ -133,7 +133,7 @@
     {
       "name": "@zerodot/redis",
       "label": "Redis",
-      "description": "Redis nodes for zerodot: key operations and a message trigger.",
+      "description": "Work with a Redis database: get, set, and delete keys, use lists and counters, and publish messages. Start a workflow when a message arrives on a channel. Use it for caches, counters, and simple queues.",
       "version": "1.0.0",
       "sdk": "^1.0",
       "icon": "Database",
@@ -154,7 +154,7 @@
     {
       "name": "@zerodot/s3",
       "label": "S3",
-      "description": "S3 node for zerodot: buckets and objects on Amazon S3 and S3-compatible services.",
+      "description": "Manage buckets and files in Amazon S3 or in an S3-compatible service such as MinIO or Cloudflare R2: upload, download, list, and delete objects, and make signed links. Use it to store and share files.",
       "version": "1.0.0",
       "sdk": "^1.1",
       "icon": "HardDrive",
@@ -170,7 +170,7 @@
     {
       "name": "@zerodot/ssh",
       "label": "SSH, FTP and SFTP",
-      "description": "SSH, FTP and SFTP nodes for zerodot: run remote commands and move files.",
+      "description": "Run commands on a server over SSH, and list, download, upload, rename, and delete files over FTP and SFTP. Use it to manage servers and to move files.",
       "version": "1.0.0",
       "sdk": "^1.1",
       "icon": "Terminal",
@@ -195,7 +195,7 @@
     {
       "name": "@zerodot/telegram",
       "label": "Telegram",
-      "description": "Telegram nodes for zerodot: bot API node and a trigger for bot updates.",
+      "description": "Send messages and files with a Telegram bot, and start a workflow when the bot gets a message or other update. Use it to build chat bots and notifications.",
       "version": "1.0.0",
       "sdk": "^1.2",
       "icon": "Send",

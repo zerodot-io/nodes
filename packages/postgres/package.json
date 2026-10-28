@@ -1,7 +1,7 @@
 {
   "name": "@zerodot/postgres",
   "version": "1.0.0",
-  "description": "Postgres nodes for zerodot: queries, rows, a row trigger and a LISTEN trigger.",
+  "description": "Run SQL queries on a Postgres database, or insert, update, select, and delete rows. Start a workflow when a new row appears or when Postgres sends a notification. Use it to read and write your app data.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",

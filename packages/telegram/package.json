@@ -1,7 +1,7 @@
 {
   "name": "@zerodot/telegram",
   "version": "1.0.0",
-  "description": "Telegram nodes for zerodot: bot API node and a trigger for bot updates.",
+  "description": "Send messages and files with a Telegram bot, and start a workflow when the bot gets a message or other update. Use it to build chat bots and notifications.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",

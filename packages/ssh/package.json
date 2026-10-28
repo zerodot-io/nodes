@@ -1,7 +1,7 @@
 {
   "name": "@zerodot/ssh",
   "version": "1.0.0",
-  "description": "SSH, FTP and SFTP nodes for zerodot: run remote commands and move files.",
+  "description": "Run commands on a server over SSH, and list, download, upload, rename, and delete files over FTP and SFTP. Use it to manage servers and to move files.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
