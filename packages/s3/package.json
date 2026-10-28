@@ -22,7 +22,8 @@
   ],
   "zerodot": {
     "sdk": "^1.1",
-    "label": "S3"
+    "label": "S3",
+    "summary": "Files and buckets in S3 and compatible storage"
   },
   "scripts": {
     "build": "tsdown",

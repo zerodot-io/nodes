@@ -22,7 +22,8 @@
   ],
   "zerodot": {
     "sdk": "^1.1",
-    "label": "Postgres"
+    "label": "Postgres",
+    "summary": "Queries, rows, and change triggers for Postgres"
   },
   "scripts": {
     "build": "tsdown",

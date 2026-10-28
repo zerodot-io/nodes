@@ -19,6 +19,7 @@ for (const folder of readdirSync(join(root, "packages")).sort()) {
   packages.push({
     name: json.name,
     label: json.zerodot.label ?? json.name,
+    summary: json.zerodot.summary ?? "",
     description: json.description ?? "",
     version: json.version,
     sdk: json.zerodot.sdk,

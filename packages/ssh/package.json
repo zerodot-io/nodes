@@ -21,7 +21,8 @@
   ],
   "zerodot": {
     "sdk": "^1.1",
-    "label": "SSH, FTP and SFTP"
+    "label": "SSH, FTP and SFTP",
+    "summary": "Remote commands and file transfer"
   },
   "scripts": {
     "build": "tsdown",

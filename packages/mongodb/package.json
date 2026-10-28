@@ -22,7 +22,8 @@
   ],
   "zerodot": {
     "sdk": "^1.1",
-    "label": "MongoDB"
+    "label": "MongoDB",
+    "summary": "Documents in MongoDB"
   },
   "scripts": {
     "build": "tsdown",

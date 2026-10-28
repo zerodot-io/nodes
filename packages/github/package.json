@@ -22,7 +22,8 @@
   ],
   "zerodot": {
     "sdk": "^1.1",
-    "label": "GitHub"
+    "label": "GitHub",
+    "summary": "Issues, repos, files, and webhook triggers"
   },
   "scripts": {
     "build": "tsdown",
