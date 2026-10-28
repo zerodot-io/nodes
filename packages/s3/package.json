@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/s3",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Manage buckets and files in Amazon S3 or in an S3-compatible service such as MinIO or Cloudflare R2: upload, download, list, and delete objects, and make signed links. Use it to store and share files.",
   "license": "AGPL-3.0-only",
   "repository": {
@@ -12,9 +12,9 @@
     "zerodot-node-package"
   ],
   "type": "module",
-  "main": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
   "exports": {
-    ".": "./dist/index.mjs"
+    ".": "./dist/index.cjs"
   },
   "files": [
     "dist",
@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@types/node": "26.6.5",
-    "@zerodot/node-sdk": "^1.1.1",
+    "@zerodot/node-sdk": "^1.2.1",
     "tsdown": "0.23.2",
     "tsx": "4.23.15",
     "typescript": "7.0.2",

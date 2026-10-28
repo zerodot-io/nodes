@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/postgres",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Run SQL queries on a Postgres database, or insert, update, select, and delete rows. Start a workflow when a new row appears or when Postgres sends a notification. Use it to read and write your app data.",
   "license": "AGPL-3.0-only",
   "repository": {
@@ -12,9 +12,9 @@
     "zerodot-node-package"
   ],
   "type": "module",
-  "main": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
   "exports": {
-    ".": "./dist/index.mjs"
+    ".": "./dist/index.cjs"
   },
   "files": [
     "dist",
@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@types/node": "26.6.5",
-    "@zerodot/node-sdk": "^1.1.1",
+    "@zerodot/node-sdk": "^1.2.1",
     "tsdown": "0.23.2",
     "tsx": "4.23.15",
     "typescript": "7.0.2",

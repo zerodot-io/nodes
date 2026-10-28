@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/telegram",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Send messages and files with a Telegram bot, and start a workflow when the bot gets a message or other update. Use it to build chat bots and notifications.",
   "license": "AGPL-3.0-only",
   "repository": {
@@ -12,9 +12,9 @@
     "zerodot-node-package"
   ],
   "type": "module",
-  "main": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
   "exports": {
-    ".": "./dist/index.mjs"
+    ".": "./dist/index.cjs"
   },
   "files": [
     "dist",
@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@types/node": "26.6.5",
-    "@zerodot/node-sdk": "^1.2.0",
+    "@zerodot/node-sdk": "^1.2.1",
     "tsdown": "0.23.2",
     "tsx": "4.23.15",
     "typescript": "7.0.2",
