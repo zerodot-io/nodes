@@ -2,6 +2,25 @@
   "version": 1,
   "packages": [
     {
+      "name": "@zerodot/email",
+      "label": "Email",
+      "description": "Email nodes for zerodot: send mail over SMTP and a trigger for new mail over IMAP.",
+      "version": "1.0.0",
+      "sdk": "^1.1",
+      "nodes": [
+        {
+          "type": "email.send",
+          "label": "Send Email",
+          "description": "Sends an email using SMTP protocol"
+        },
+        {
+          "type": "trigger.email_imap",
+          "label": "On new email (IMAP)",
+          "description": "Start a run when a new unread mail arrives in a mailbox"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/github",
       "label": "GitHub",
       "description": "GitHub nodes for zerodot: an API node and a webhook trigger.",
