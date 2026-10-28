@@ -21,7 +21,8 @@
   ],
   "zerodot": {
     "sdk": "^1.1",
-    "label": "Email"
+    "label": "Email",
+    "summary": "Send email and react to new mail"
   },
   "scripts": {
     "build": "tsdown",

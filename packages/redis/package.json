@@ -22,7 +22,8 @@
   ],
   "zerodot": {
     "sdk": "^1.0",
-    "label": "Redis"
+    "label": "Redis",
+    "summary": "Keys, lists, and messages in Redis"
   },
   "scripts": {
     "build": "tsdown",

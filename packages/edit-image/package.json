@@ -21,7 +21,8 @@
   ],
   "zerodot": {
     "sdk": "^1.1",
-    "label": "Edit Image"
+    "label": "Edit Image",
+    "summary": "Resize, crop, rotate, and convert images"
   },
   "scripts": {
     "build": "tsdown",

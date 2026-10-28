@@ -21,7 +21,8 @@
   ],
   "zerodot": {
     "sdk": "^1.1",
-    "label": "MCP Call Tool"
+    "label": "MCP Call Tool",
+    "summary": "Call tools on an MCP server"
   },
   "scripts": {
     "build": "tsdown",

@@ -22,7 +22,8 @@
   ],
   "zerodot": {
     "sdk": "^1.1",
-    "label": "MySQL"
+    "label": "MySQL",
+    "summary": "Queries and rows in MySQL"
   },
   "scripts": {
     "build": "tsdown",

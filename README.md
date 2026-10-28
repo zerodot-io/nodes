@@ -28,7 +28,7 @@ ZERODOT_NODE_PACKAGES=@zerodot/redis
 
 One folder in `packages/`. The `package.json` has:
 
-- `"zerodot": { "sdk": "^1.0" }`: the node contract versions it works with. zerodot checks this before it runs the code.
+- `"zerodot": { "sdk": "^1.0", "label": "…", "summary": "…" }`: the node contract versions it works with, the name, and a short line (under 60 characters) for lists. `description` is the long text: what the package does and what it is for. zerodot checks this before it runs the code.
 - `peerDependencies` on `@zerodot/node-sdk` and `zod`. zerodot gives both.
 - `files` with `dist` and every icon file.
 

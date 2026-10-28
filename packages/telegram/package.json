@@ -22,7 +22,8 @@
   ],
   "zerodot": {
     "sdk": "^1.2",
-    "label": "Telegram"
+    "label": "Telegram",
+    "summary": "Send messages and react to bot updates"
   },
   "scripts": {
     "build": "tsdown",
