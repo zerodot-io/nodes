@@ -2,11 +2,11 @@
 
 Official node packages for [zerodot](https://github.com/zerodot-io/zerodot). zerodot ships with the core nodes only. Install the rest when you need them.
 
-| Package          | Nodes                                                 |
-| ---------------- | ----------------------------------------------------- |
-| `@zerodot/redis` | `redis.database`, `trigger.redis`, `redis` credential |
+| Package             | Nodes                                                                                     |
+| ------------------- | ----------------------------------------------------------------------------------------- |
+| `@zerodot/redis`    | `redis.database`, `trigger.redis`, `redis` credential                                     |
 | `@zerodot/postgres` | `postgres.database`, `trigger.postgres`, `trigger.postgres_listen`, `postgres` credential |
-| `@zerodot/mysql` | `mysql.database`, `mysql` credential                  |
+| `@zerodot/mysql`    | `mysql.database`, `mysql` credential                                                      |
 
 ## Use a package
 
