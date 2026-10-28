@@ -1,7 +1,7 @@
 {
   "name": "@zerodot/mcp",
   "version": "1.0.0",
-  "description": "MCP Call Tool node for zerodot: call a tool on an MCP server over Streamable HTTP.",
+  "description": "Call a tool on an MCP server over Streamable HTTP, and use the result in your workflow. Use it to connect to any service that has an MCP server.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",

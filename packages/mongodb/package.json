@@ -1,7 +1,7 @@
 {
   "name": "@zerodot/mongodb",
   "version": "1.0.0",
-  "description": "MongoDB node for zerodot: find, insert, update, delete and aggregate documents.",
+  "description": "Find, insert, update, delete, and aggregate documents in a MongoDB collection. Use it to read and write the data of your app in MongoDB.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",

@@ -1,7 +1,7 @@
 {
   "name": "@zerodot/github",
   "version": "1.0.0",
-  "description": "GitHub nodes for zerodot: an API node and a webhook trigger.",
+  "description": "Work with issues, repositories, files, and releases on GitHub, and start a workflow on an event in a repository, such as a push or a new issue. Use it to automate your development work.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
