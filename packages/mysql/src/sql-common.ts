@@ -20,7 +20,6 @@ export const WHERE_OPERATORS = [
 export type WhereClause = { column: string; condition: string; value?: unknown };
 export type SortRule = { column: string; direction?: string };
 
-
 const OPERATOR_SET = new Set<string>([...WHERE_OPERATORS, "="]);
 
 /** The `where` option: `{ values: [{ column, condition, value }] }`. */

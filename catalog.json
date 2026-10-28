@@ -16,6 +16,30 @@
       ]
     },
     {
+      "name": "@zerodot/postgres",
+      "label": "Postgres",
+      "description": "Postgres nodes for zerodot: queries, rows, a row trigger and a LISTEN trigger.",
+      "version": "1.0.0",
+      "sdk": "^1.1",
+      "nodes": [
+        {
+          "type": "postgres.database",
+          "label": "Postgres",
+          "description": "Get, add and update data in Postgres"
+        },
+        {
+          "type": "trigger.postgres",
+          "label": "On new Postgres row",
+          "description": "Check a table on a timer and start a run for each new row"
+        },
+        {
+          "type": "trigger.postgres_listen",
+          "label": "On Postgres event",
+          "description": "Start a run at once when a row is added, changed or removed"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/redis",
       "label": "Redis",
       "description": "Redis nodes for zerodot: key operations and a message trigger.",
