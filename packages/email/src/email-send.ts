@@ -34,7 +34,7 @@ export function smtpOptions(
   credential: ResolvedCredential | null,
   allowUnauthorizedCerts = false,
 ): SMTPTransport.Options {
-  if (!credential || credential.type !== "smtp") throw new Error("Pick an SMTP credential");
+  if (credential?.type !== "smtp") throw new Error("Pick an SMTP credential");
   const { data } = credential;
   const host = text(data.host);
   if (!host) throw new Error('The credential has no "host"');

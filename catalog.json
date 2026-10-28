@@ -109,6 +109,30 @@
           "description": "Start a run when a message arrives on a Redis channel"
         }
       ]
+    },
+    {
+      "name": "@zerodot/ssh",
+      "label": "SSH, FTP and SFTP",
+      "description": "SSH, FTP and SFTP nodes for zerodot: run remote commands and move files.",
+      "version": "1.0.0",
+      "sdk": "^1.1",
+      "nodes": [
+        {
+          "type": "ssh.execute",
+          "label": "SSH",
+          "description": "Run a command on a server over SSH"
+        },
+        {
+          "type": "ftp.files",
+          "label": "FTP",
+          "description": "List, download, upload, rename, and delete files on an FTP server"
+        },
+        {
+          "type": "sftp.files",
+          "label": "SFTP",
+          "description": "List, download, upload, rename, and delete files on an SFTP server"
+        }
+      ]
     }
   ]
 }
