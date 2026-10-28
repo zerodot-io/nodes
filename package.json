@@ -1,0 +1,20 @@
+{
+  "name": "zerodot-nodes",
+  "private": true,
+  "license": "AGPL-3.0-only",
+  "packageManager": "pnpm@12.15.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "pnpm -r run build",
+    "check-types": "pnpm -r run check-types",
+    "test": "pnpm -r run test",
+    "lint": "biome check .",
+    "catalog": "node scripts/build-catalog.mjs"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.3",
+    "typescript": "7.0.2"
+  }
+}

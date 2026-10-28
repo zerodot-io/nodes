@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "packages": [
+    {
+      "name": "@zerodot/redis",
+      "label": "Redis",
+      "description": "Redis nodes for zerodot: key operations and a message trigger.",
+      "version": "1.0.0",
+      "sdk": "^1.0",
+      "nodes": [
+        {
+          "type": "redis.database",
+          "label": "Redis",
+          "description": "Get, set and delete keys, work on lists, and publish messages in Redis"
+        },
+        {
+          "type": "trigger.redis",
+          "label": "On Redis message",
+          "description": "Start a run when a message arrives on a Redis channel"
+        }
+      ]
+    }
+  ]
+}
