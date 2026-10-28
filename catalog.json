@@ -54,6 +54,20 @@
       ]
     },
     {
+      "name": "@zerodot/mcp",
+      "label": "MCP Call Tool",
+      "description": "MCP Call Tool node for zerodot: call a tool on an MCP server over Streamable HTTP.",
+      "version": "1.0.0",
+      "sdk": "^1.1",
+      "nodes": [
+        {
+          "type": "mcp.call_tool",
+          "label": "MCP Call Tool",
+          "description": "Call a tool on an MCP server"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/mongodb",
       "label": "MongoDB",
       "description": "MongoDB node for zerodot: find, insert, update, delete and aggregate documents.",
