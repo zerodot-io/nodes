@@ -6,9 +6,9 @@ Official node packages for [zerodot](https://github.com/zerodot-io/zerodot). zer
 
 ## Use
 
-In zerodot, go to **System > Nodes** and install the package.
+**Recommended:** in zerodot, go to **System > Nodes** and install the package.
 
-You can also install the package where the web app and the worker run, and list it:
+Manual: install the package where the web app and the worker run, and list it:
 
 ```sh
 ZERODOT_NODE_PACKAGES=@zerodot/redis
