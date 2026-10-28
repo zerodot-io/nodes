@@ -2,6 +2,20 @@
   "version": 1,
   "packages": [
     {
+      "name": "@zerodot/edit-image",
+      "label": "Edit Image",
+      "description": "Edit Image node for zerodot: info, resize, crop, rotate, blur, grayscale and convert.",
+      "version": "1.0.0",
+      "sdk": "^1.1",
+      "nodes": [
+        {
+          "type": "file.edit_image",
+          "label": "Edit Image",
+          "description": "Resize, crop, rotate, blur, or convert an image"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/email",
       "label": "Email",
       "description": "Email nodes for zerodot: send mail over SMTP and a trigger for new mail over IMAP.",
