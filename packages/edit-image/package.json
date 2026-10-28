@@ -1,0 +1,50 @@
+{
+  "name": "@zerodot/edit-image",
+  "version": "1.0.0",
+  "description": "Edit Image node for zerodot: info, resize, crop, rotate, blur, grayscale and convert.",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerodot-io/zerodot-nodes.git",
+    "directory": "packages/edit-image"
+  },
+  "keywords": [
+    "zerodot-node-package"
+  ],
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "exports": {
+    ".": "./dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "zerodot": {
+    "sdk": "^1.1",
+    "label": "Edit Image"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -p tsconfig.json",
+    "test": "tsx --test src/*.test.ts",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "sharp": "0.35.5"
+  },
+  "peerDependencies": {
+    "@zerodot/node-sdk": "^1.1.1",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@zerodot/node-sdk": "^1.1.1",
+    "tsdown": "0.23.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  }
+}

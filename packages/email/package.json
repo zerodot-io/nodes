@@ -1,0 +1,54 @@
+{
+  "name": "@zerodot/email",
+  "version": "1.0.0",
+  "description": "Email nodes for zerodot: send mail over SMTP and a trigger for new mail over IMAP.",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerodot-io/zerodot-nodes.git",
+    "directory": "packages/email"
+  },
+  "keywords": [
+    "zerodot-node-package"
+  ],
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "exports": {
+    ".": "./dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "zerodot": {
+    "sdk": "^1.1",
+    "label": "Email"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -p tsconfig.json",
+    "test": "tsx --test src/*.test.ts",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "imapflow": "2.9.1",
+    "mailparser": "3.12.4",
+    "nodemailer": "10.2.1"
+  },
+  "peerDependencies": {
+    "@zerodot/node-sdk": "^1.1.1",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/mailparser": "3.9.0",
+    "@types/node": "26.6.5",
+    "@types/nodemailer": "8.0.2",
+    "@zerodot/node-sdk": "^1.1.1",
+    "tsdown": "0.23.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  }
+}
