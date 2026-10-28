@@ -44,7 +44,7 @@
   "devDependencies": {
     "@types/node": "26.6.5",
     "@types/ssh2": "1.15.6",
-    "@zerodot/node-sdk": "^1.1.1",
+    "@zerodot/node-sdk": "^1.2.1",
     "tsdown": "0.23.2",
     "tsx": "4.23.15",
     "typescript": "7.0.2",

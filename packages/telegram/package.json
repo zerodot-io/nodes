@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@types/node": "26.6.5",
-    "@zerodot/node-sdk": "^1.2.0",
+    "@zerodot/node-sdk": "^1.2.1",
     "tsdown": "0.23.2",
     "tsx": "4.23.15",
     "typescript": "7.0.2",
