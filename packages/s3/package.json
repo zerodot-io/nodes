@@ -1,0 +1,51 @@
+{
+  "name": "@zerodot/s3",
+  "version": "1.0.0",
+  "description": "S3 node for zerodot: buckets and objects on Amazon S3 and S3-compatible services.",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerodot-io/zerodot-nodes.git",
+    "directory": "packages/s3"
+  },
+  "keywords": [
+    "zerodot-node-package"
+  ],
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "exports": {
+    ".": "./dist/index.mjs"
+  },
+  "files": [
+    "dist",
+    "amazon-s3.svg"
+  ],
+  "zerodot": {
+    "sdk": "^1.1",
+    "label": "S3"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -p tsconfig.json",
+    "test": "tsx --test src/*.test.ts",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "fast-xml-parser": "5.11.2"
+  },
+  "peerDependencies": {
+    "@zerodot/node-sdk": "^1.1.1",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@zerodot/node-sdk": "^1.1.1",
+    "tsdown": "0.23.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  }
+}

@@ -111,6 +111,20 @@
       ]
     },
     {
+      "name": "@zerodot/s3",
+      "label": "S3",
+      "description": "S3 node for zerodot: buckets and objects on Amazon S3 and S3-compatible services.",
+      "version": "1.0.0",
+      "sdk": "^1.1",
+      "nodes": [
+        {
+          "type": "s3.storage",
+          "label": "S3",
+          "description": "Work with buckets and objects in Amazon S3 and S3-compatible storage"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/ssh",
       "label": "SSH, FTP and SFTP",
       "description": "SSH, FTP and SFTP nodes for zerodot: run remote commands and move files.",
