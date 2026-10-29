@@ -12,7 +12,8 @@ const packages = [];
 async function isPublished(name, version) {
   const response = await fetch(`https://registry.npmjs.org/${name.replace("/", "%2f")}/${version}`);
   if (response.status === 404) return false;
-  if (!response.ok) throw new Error(`npm registry answered ${response.status} for ${name}@${version}`);
+  if (!response.ok)
+    throw new Error(`npm registry answered ${response.status} for ${name}@${version}`);
   return true;
 }
 
