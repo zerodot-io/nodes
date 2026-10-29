@@ -2,6 +2,28 @@
   "version": 1,
   "packages": [
     {
+      "name": "@zerodot/discord",
+      "label": "Discord",
+      "summary": "Bot messages, webhooks, and slash commands",
+      "description": "Send, edit, and react to messages, manage channels, members, and roles with a Discord bot, post with a webhook, and start a workflow on a slash command or a button click. Use it to build Discord bots, alerts, and moderation flows.",
+      "version": "1.0.0",
+      "sdk": "^1.2",
+      "icon": "MessageCircle",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAuMDIgNTcuOCA1MTEuOTIgMzk2LjMiPjxwYXRoIGQ9Ik00MzMuNyA5MWE0MTYuNSA0MTYuNSAwIDAgMC0xMDUuNi0zMy4yYy00LjYgOC4yLTkuOSAxOS4zLTEzLjUgMjguMS0zOS40LTUuOS03OC40LTUuOS0xMTcuMSAwLTMuNy04LjgtOS4xLTE5LjktMTMuNy0yOC4xLTM3LjEgNi40LTcyLjYgMTcuNy0xMDUuNyAzMy4zLTY2LjggMTAxLTg1IDE5OS41LTc1LjkgMjk2LjYgNDQuMyAzMy4xIDg3LjMgNTMuMiAxMjkuNiA2Ni40IDEwLjQtMTQuNCAxOS43LTI5LjYgMjcuNy00NS43LTE1LjMtNS44LTI5LjktMTMtNDMuNy0yMS4zIDMuNy0yLjcgNy4yLTUuNiAxMC43LTguNSA4NC4yIDM5LjQgMTc1LjggMzkuNCAyNTkgMCAzLjUgMi45IDcuMSA1LjggMTAuNyA4LjUtMTMuOSA4LjMtMjguNSAxNS41LTQzLjggMjEuMyA4IDE2IDE3LjMgMzEuMyAyNy43IDQ1LjcgNDIuMy0xMy4yIDg1LjMtMzMuMyAxMjkuNi02Ni40IDEwLjgtMTEyLjUtMTgtMjEwLjEtNzYtMjk2LjdNMTcwLjkgMzI4Yy0yNS4zIDAtNDYtMjMuNi00Ni01Mi40czIwLjMtNTIuNCA0Ni01Mi40IDQ2LjUgMjMuNiA0NiA1Mi40Yy4xIDI4LjgtMjAuMiA1Mi40LTQ2IDUyLjRtMTcwLjIgMGMtMjUuMyAwLTQ2LTIzLjYtNDYtNTIuNHMyMC4zLTUyLjQgNDYtNTIuNCA0Ni41IDIzLjYgNDYgNTIuNGMwIDI4LjgtMjAuMyA1Mi40LTQ2IDUyLjQiIHN0eWxlPSJmaWxsOiM1ODY1ZjIiLz48L3N2Zz4=",
+      "nodes": [
+        {
+          "type": "trigger.discord",
+          "label": "Discord Trigger",
+          "description": "Start the workflow on a slash command, button click, or modal of a Discord app"
+        },
+        {
+          "type": "discord.api",
+          "label": "Discord",
+          "description": "Send messages and manage channels and members with a Discord bot or webhook"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/edit-image",
       "label": "Edit Image",
       "summary": "Resize, crop, rotate, and convert images",
@@ -57,6 +79,23 @@
           "type": "github.api",
           "label": "GitHub",
           "description": "Work with issues, repositories, files, and releases on GitHub"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/google-sheets",
+      "label": "Google Sheets",
+      "summary": "Read and write rows in spreadsheets",
+      "description": "Read, append, update, and delete rows in Google Sheets, with a header row that maps each row to an object. Create spreadsheets and tabs, and clear ranges. Connect with Google sign-in or a service account.",
+      "version": "1.0.0",
+      "sdk": "^1.2",
+      "icon": "Sheet",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNDkiIGhlaWdodD0iNjciPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxwYXRoIGlkPSJjIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxwYXRoIGlkPSJlIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxwYXRoIGlkPSJoIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxwYXRoIGlkPSJqIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxwYXRoIGlkPSJsIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxwYXRoIGlkPSJuIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxyYWRpYWxHcmFkaWVudCBpZD0icCIgY3g9IjMuMTY4JSIgY3k9IjIuNzE3JSIgcj0iMTYxLjI0OSUiIGZ4PSIzLjE2OCUiIGZ5PSIyLjcxNyUiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgLjcyNzI3IDAgLjAwNykiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRkYiIHN0b3Atb3BhY2l0eT0iLjEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNGRkYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJmIiB4MT0iNTAuMDA1JSIgeDI9IjUwLjAwNSUiIHkxPSI4LjU4NiUiIHkyPSIxMDAuMDE0JSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzI2MzIzOCIgc3RvcC1vcGFjaXR5PSIuMiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzI2MzIzOCIgc3RvcC1vcGFjaXR5PSIuMDIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC44MzMgLjk1OCkiPjxtYXNrIGlkPSJiIiBmaWxsPSIjZmZmIj48dXNlIHhsaW5rOmhyZWY9IiNhIi8+PC9tYXNrPjxwYXRoIGZpbGw9IiMwRjlENTgiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTI5LjU4MyAwSDQuNDM4QTQuNDUgNC40NSAwIDAgMCAwIDQuNDM4djU2LjIwOGE0LjQ1IDQuNDUgMCAwIDAgNC40MzggNC40MzdoMzguNDU4YTQuNDUgNC40NSAwIDAgMCA0LjQzNy00LjQzN1YxNy43NUwzNi45OCAxMC4zNTR6IiBtYXNrPSJ1cmwoI2IpIi8+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC44MzMgLjk1OCkiPjxtYXNrIGlkPSJkIiBmaWxsPSIjZmZmIj48dXNlIHhsaW5rOmhyZWY9IiNjIi8+PC9tYXNrPjxwYXRoIGZpbGw9IiNGMUYxRjEiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTExLjgzMyAzMS44MDJWNTMuMjVIMzUuNVYzMS44MDJ6bTEwLjM1NSAxOC40OWgtNy4zOTZ2LTMuNjk4aDcuMzk2em0wLTUuOTE3aC03LjM5NnYtMy42OThoNy4zOTZ6bTAtNS45MTdoLTcuMzk2VjM0Ljc2aDcuMzk2em0xMC4zNTQgMTEuODM0aC03LjM5NnYtMy42OThoNy4zOTZ6bTAtNS45MTdoLTcuMzk2di0zLjY5OGg3LjM5NnptMC01LjkxN2gtNy4zOTZWMzQuNzZoNy4zOTZ6IiBtYXNrPSJ1cmwoI2QpIi8+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC44MzMgLjk1OCkiPjxtYXNrIGlkPSJnIiBmaWxsPSIjZmZmIj48dXNlIHhsaW5rOmhyZWY9IiNlIi8+PC9tYXNrPjxwYXRoIGZpbGw9InVybCgjZikiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTMwLjg4MSAxNi40NTIgNDcuMzMzIDMyLjlWMTcuNzV6IiBtYXNrPSJ1cmwoI2cpIi8+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC44MzMgLjk1OCkiPjxtYXNrIGlkPSJpIiBmaWxsPSIjZmZmIj48dXNlIHhsaW5rOmhyZWY9IiNoIi8+PC9tYXNrPjxnIG1hc2s9InVybCgjaSkiPjxwYXRoIGZpbGw9IiM4N0NFQUMiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTI5LjU4MyAwdjEzLjMxM2E0LjQzNiA0LjQzNiAwIDAgMCA0LjQzOCA0LjQzN2gxMy4zMTJ6Ii8+PC9nPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSguODMzIC45NTgpIj48bWFzayBpZD0iayIgZmlsbD0iI2ZmZiI+PHVzZSB4bGluazpocmVmPSIjaiIvPjwvbWFzaz48cGF0aCBmaWxsPSIjRkZGIiBmaWxsLW9wYWNpdHk9Ii4yIiBmaWxsLXJ1bGU9Im5vbnplcm8iIGQ9Ik00LjQzOCAwQTQuNDUgNC40NSAwIDAgMCAwIDQuNDM4di4zN0E0LjQ1IDQuNDUgMCAwIDEgNC40MzguMzdoMjUuMTQ1VjB6IiBtYXNrPSJ1cmwoI2spIi8+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC44MzMgLjk1OCkiPjxtYXNrIGlkPSJtIiBmaWxsPSIjZmZmIj48dXNlIHhsaW5rOmhyZWY9IiNsIi8+PC9tYXNrPjxwYXRoIGZpbGw9IiMyNjMyMzgiIGZpbGwtb3BhY2l0eT0iLjIiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTQyLjg5NiA2NC43MTRINC40MzhBNC40NSA0LjQ1IDAgMCAxIDAgNjAuMjc2di4zN2E0LjQ1IDQuNDUgMCAwIDAgNC40MzggNC40MzdoMzguNDU4YTQuNDUgNC40NSAwIDAgMCA0LjQzNy00LjQzN3YtLjM3YTQuNDUgNC40NSAwIDAgMS00LjQzNyA0LjQzOCIgbWFzaz0idXJsKCNtKSIvPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSguODMzIC45NTgpIj48bWFzayBpZD0ibyIgZmlsbD0iI2ZmZiI+PHVzZSB4bGluazpocmVmPSIjbiIvPjwvbWFzaz48cGF0aCBmaWxsPSIjMjYzMjM4IiBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsLXJ1bGU9Im5vbnplcm8iIGQ9Ik0zNC4wMiAxNy43NWE0LjQzNiA0LjQzNiAwIDAgMS00LjQzNy00LjQzN3YuMzdhNC40MzYgNC40MzYgMCAwIDAgNC40MzggNC40MzdoMTMuMzEydi0uMzd6IiBtYXNrPSJ1cmwoI28pIi8+PC9nPjxwYXRoIGZpbGw9InVybCgjcCkiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTI5LjU4MyAwSDQuNDM4QTQuNDUgNC40NSAwIDAgMCAwIDQuNDM4djU2LjIwOGE0LjQ1IDQuNDUgMCAwIDAgNC40MzggNC40MzdoMzguNDU4YTQuNDUgNC40NSAwIDAgMCA0LjQzNy00LjQzN1YxNy43NXoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC44MzMgLjk1OCkiLz48L2c+PC9zdmc+",
+      "nodes": [
+        {
+          "type": "google_sheets.api",
+          "label": "Google Sheets",
+          "description": "Read, append, and update rows in Google Sheets"
         }
       ]
     },
@@ -189,6 +228,28 @@
           "type": "s3.storage",
           "label": "S3",
           "description": "Work with buckets and objects in Amazon S3 and S3-compatible storage"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/slack",
+      "label": "Slack",
+      "summary": "Messages, channels, files, and Slack events",
+      "description": "Send and change messages, manage channels, find users, add reactions, and upload files with a Slack bot, and start a workflow on a Slack event, such as a new message or a mention. Use it for team notifications and chat bots.",
+      "version": "1.0.0",
+      "sdk": "^1.2",
+      "icon": "MessageSquare",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJNMTA3LjkgMzIzLjZjMCAyOS43LTI0IDUzLjgtNTMuOCA1My44Uy4zIDM1My40LjMgMzIzLjZjMC0yOS43IDI0LTUzLjggNTMuOC01My44aDUzLjh6bTI2LjkgMGMwLTI5LjcgMjQtNTMuOCA1My44LTUzLjhzNTMuOCAyNCA1My44IDUzLjhWNDU4YzAgMjkuNy0yNCA1My44LTUzLjggNTMuOHMtNTMuOC0yNC01My44LTUzLjh6IiBzdHlsZT0iZmlsbDojZTAxZTVhIi8+PHBhdGggZD0iTTE4OC42IDEwNy43Yy0yOS43IDAtNTMuOC0yNC01My44LTUzLjhTMTU4LjguMSAxODguNi4xczUzLjggMjQgNTMuOCA1My44djUzLjh6bTAgMjcuM2MyOS43IDAgNTMuOCAyNCA1My44IDUzLjhzLTI0IDUzLjgtNTMuOCA1My44SDUzLjhDMjQgMjQyLjYgMCAyMTguNSAwIDE4OC44UzI0IDEzNSA1My44IDEzNXoiIHN0eWxlPSJmaWxsOiMzNmM1ZjAiLz48cGF0aCBkPSJNNDA0LjEgMTg4LjhjMC0yOS43IDI0LTUzLjggNTMuOC01My44czUzLjggMjQgNTMuOCA1My44LTI0IDUzLjgtNTMuOCA1My44aC01My44em0tMjYuOSAwYzAgMjkuNy0yNCA1My44LTUzLjggNTMuOC0yOS43IDAtNTMuOC0yNC01My44LTUzLjhWNTRjMC0yOS43IDI0LTUzLjggNTMuOC01My44czUzLjggMjQgNTMuOCA1My44eiIgc3R5bGU9ImZpbGw6IzJlYjY3ZCIvPjxwYXRoIGQ9Ik0zMjMuNCA0MDQuM2MyOS43IDAgNTMuOCAyNCA1My44IDUzLjggMCAyOS43LTI0IDUzLjgtNTMuOCA1My44LTI5LjcgMC01My44LTI0LTUzLjgtNTMuOHYtNTMuOHptMC0yNi45Yy0yOS43IDAtNTMuOC0yNC01My44LTUzLjhzMjQtNTMuOCA1My44LTUzLjhoMTM0LjhjMjkuNyAwIDUzLjggMjQgNTMuOCA1My44IDAgMjkuNy0yNCA1My44LTUzLjggNTMuOHoiIHN0eWxlPSJmaWxsOiNlY2IyMmUiLz48L3N2Zz4=",
+      "nodes": [
+        {
+          "type": "trigger.slack",
+          "label": "Slack Trigger",
+          "description": "Start the workflow on a Slack event, such as a message or a mention"
+        },
+        {
+          "type": "slack.api",
+          "label": "Slack",
+          "description": "Send messages, manage channels, find users, and upload files with a Slack bot"
         }
       ]
     },
