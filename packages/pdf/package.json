@@ -1,7 +1,7 @@
 {
   "name": "@zerodot/pdf",
-  "version": "1.0.1",
-  "description": "Work with PDF files: read the text and page count, merge files, pick pages, split a file, and rotate pages. Use it to prepare or read documents in a workflow.",
+  "version": "1.1.0",
+  "description": "Work with PDF files: create a file from text, read the text and page count, merge files, pick pages, split a file, and rotate pages. Use it to prepare or read documents in a workflow.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
   "zerodot": {
     "sdk": "^1.1",
     "label": "PDF",
-    "summary": "Read text, merge, split, and rotate PDF files"
+    "summary": "Create, read, merge, split, and rotate PDF files"
   },
   "scripts": {
     "build": "tsdown",

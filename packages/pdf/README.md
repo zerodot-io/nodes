@@ -1,6 +1,6 @@
 # @zerodot/pdf
 
-Work with PDF files: read the text and page count, merge files, pick pages, split a file, and rotate pages. Use it to prepare or read documents in a workflow.
+Work with PDF files: create a file from text, read the text and page count, merge files, pick pages, split a file, and rotate pages. Use it to prepare or read documents in a workflow.
 
 ## Install
 
@@ -12,6 +12,7 @@ Manual: install `@zerodot/pdf` where the web app and the worker run, and add it 
 
 ### PDF (`file.pdf`)
 
+- Create a PDF from text
 - Extract text from a PDF
 - Get information about a PDF
 - Merge PDF files
@@ -24,7 +25,7 @@ Manual: install `@zerodot/pdf` where the web app and the worker run, and add it 
 - Remove the password from a PDF
 - Add a password to a PDF
 
-The node reads the PDF from `binary.<property>` of the input and writes the new file to `binary.<property>` of the output. A split writes `<property>_1`, `<property>_2`, and so on.
+Create from Text needs no input file. Other operations read the PDF from `binary.<property>` of the input and writes the new file to `binary.<property>` of the output. A split writes `<property>_1`, `<property>_2`, and so on.
 
 ## Credential
 
