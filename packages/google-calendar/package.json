@@ -1,0 +1,50 @@
+{
+  "name": "@zerodot/google-calendar",
+  "version": "1.0.0",
+  "description": "Create, read, update, and delete events in Google Calendar. List calendars, quick add an event, check free and busy times, and start a workflow on new or changed events. Connect with Google sign-in or a service account.",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerodot-io/nodes.git",
+    "directory": "packages/google-calendar"
+  },
+  "keywords": [
+    "zerodot-node-package"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "exports": {
+    ".": "./dist/index.cjs"
+  },
+  "files": [
+    "dist",
+    "google-calendar.svg"
+  ],
+  "zerodot": {
+    "sdk": "^1.2",
+    "label": "Google Calendar",
+    "summary": "Events, availability, and new-event triggers"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -p tsconfig.json",
+    "test": "tsx --test src/*.test.ts",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@zerodot/node-sdk": "^1.2.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@zerodot/node-sdk": "^1.2.1",
+    "tsdown": "0.23.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  }
+}

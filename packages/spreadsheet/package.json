@@ -1,0 +1,55 @@
+{
+  "name": "@zerodot/spreadsheet",
+  "version": "1.0.0",
+  "description": "Read and write spreadsheet files: turn a CSV or XLSX file into rows, turn rows into a CSV or XLSX file, convert between the two formats, and list the sheets of a workbook. Use it to move table data in a workflow.",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerodot-io/nodes.git",
+    "directory": "packages/spreadsheet"
+  },
+  "keywords": [
+    "zerodot-node-package"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "exports": {
+    ".": "./dist/index.cjs"
+  },
+  "files": [
+    "dist",
+    "spreadsheet.svg"
+  ],
+  "zerodot": {
+    "sdk": "^1.1",
+    "label": "Spreadsheet File",
+    "summary": "Read and write CSV and XLSX files"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -p tsconfig.json",
+    "test": "tsx --test src/*.test.ts",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "csv-parse": "7.0.3",
+    "csv-stringify": "6.9.0",
+    "read-excel-file": "9.3.11",
+    "write-excel-file": "4.1.1"
+  },
+  "peerDependencies": {
+    "@zerodot/node-sdk": "^1.1.1",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@zerodot/node-sdk": "^1.2.1",
+    "tsdown": "0.23.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  }
+}
