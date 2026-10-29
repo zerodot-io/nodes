@@ -1,0 +1,50 @@
+{
+  "name": "@zerodot/linear",
+  "version": "1.0.0",
+  "description": "Work with issues, comments, projects, teams, and cycles in Linear, and start a workflow on an event, such as a new issue or comment. Use it to automate your product work.",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://linear.com/zerodot-io/nodes.git",
+    "directory": "packages/linear"
+  },
+  "keywords": [
+    "zerodot-node-package"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "exports": {
+    ".": "./dist/index.cjs"
+  },
+  "files": [
+    "dist",
+    "linear.svg"
+  ],
+  "zerodot": {
+    "sdk": "^1.1",
+    "label": "Linear",
+    "summary": "Issues, comments, projects, and webhook triggers"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -p tsconfig.json",
+    "test": "tsx --test src/*.test.ts",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@zerodot/node-sdk": "^1.1.1",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@zerodot/node-sdk": "^1.2.1",
+    "tsdown": "0.23.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  }
+}

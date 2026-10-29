@@ -2,10 +2,12 @@
 import { degrees, PDFDocument, rgb, StandardFonts } from "@cantoo/pdf-lib";
 import { defineNode, type NodeResult, readBinary, toBinary } from "@zerodot/node-sdk";
 import { z } from "zod";
+import { createPdf } from "./create";
 import { PDF_ICON } from "./icon";
 import { parsePages } from "./pages";
 
 const OPERATIONS = [
+  "create",
   "info",
   "text",
   "merge",
@@ -31,6 +33,7 @@ const ALL_FILES = [
   "protect",
 ];
 const NEW_FILE = [
+  "create",
   "merge",
   "pages",
   "split",
@@ -49,6 +52,7 @@ const config = z.object({
     .meta({
       title: "Operation",
       labels: {
+        create: "Create from Text",
         info: "Get Information",
         text: "Extract Text",
         merge: "Merge Files",
@@ -62,6 +66,7 @@ const config = z.object({
         protect: "Add Password",
       },
       hints: {
+        create: "Make a new PDF file from text",
         info: "Get the page count, title, and author of the file",
         text: "Read the text of the file",
         merge: "Join many PDF files into one file",
@@ -110,6 +115,33 @@ const config = z.object({
       description:
         "Pages count from 1. Example: 1-3, 5, 8-. Empty means all pages, except for Pick Pages.",
       showWhen: { operation: ["pages", "rotate", "watermark", "numbers"] },
+    }),
+  content: z
+    .string()
+    .default("")
+    .meta({
+      title: "Content",
+      description: "The text of the file. A line break starts a new line.",
+      ui: "textarea",
+      showWhen: { operation: ["create"] },
+    }),
+  pageSize: z
+    .enum(["a4", "letter"])
+    .default("a4")
+    .meta({
+      title: "Page Size",
+      labels: { a4: "A4", letter: "Letter" },
+      showWhen: { operation: ["create"] },
+    }),
+  bodySize: z
+    .number()
+    .int()
+    .min(6)
+    .max(48)
+    .default(12)
+    .meta({
+      title: "Font Size",
+      showWhen: { operation: ["create"] },
     }),
   pagesPerFile: z
     .number()
@@ -169,8 +201,8 @@ const config = z.object({
     .default("")
     .meta({
       title: "Title",
-      description: "Empty keeps the old value",
-      showWhen: { operation: ["metadata"] },
+      description: "Empty keeps the old value. For a new file, it is also the heading.",
+      showWhen: { operation: ["create", "metadata"] },
     }),
   author: z
     .string()
@@ -178,7 +210,7 @@ const config = z.object({
     .meta({
       title: "Author",
       description: "Empty keeps the old value",
-      showWhen: { operation: ["metadata"] },
+      showWhen: { operation: ["create", "metadata"] },
     }),
   subject: z
     .string()
@@ -233,9 +265,10 @@ function stemOf(fileName: string | undefined): string {
 export default defineNode({
   type: "file.pdf",
   label: "PDF",
-  description: "Read text, merge, split, and rotate PDF files",
+  description: "Create, read, merge, split, and rotate PDF files",
   category: "data",
   actions: [
+    { label: "Create a PDF from text", config: { operation: "create" } },
     { label: "Extract text from a PDF", config: { operation: "text" } },
     { label: "Get information about a PDF", config: { operation: "info" } },
     { label: "Merge PDF files", config: { operation: "merge" } },
@@ -257,6 +290,9 @@ export default defineNode({
     properties: "data",
     outputProperty: "data",
     pages: "",
+    content: "",
+    pageSize: "a4",
+    bodySize: 12,
     pagesPerFile: 1,
     degrees: "90",
     password: "",
@@ -271,6 +307,25 @@ export default defineNode({
   ports: { in: ["in"], out: ["out"] },
   subtitle: (cfg) => (typeof cfg.operation === "string" ? cfg.operation : undefined),
   async run({ config: cfg, input }) {
+    if (cfg.operation === "create") {
+      if (!cfg.content.trim() && !cfg.title.trim()) throw new Error("Add the content of the file");
+      const bytes = await createPdf({
+        content: cfg.content,
+        title: cfg.title,
+        author: cfg.author,
+        pageSize: cfg.pageSize,
+        fontSize: cfg.bodySize,
+      });
+      return {
+        port: "out",
+        data: {
+          binary: {
+            [cfg.outputProperty]: toBinary(bytes, "document.pdf", "application/pdf"),
+          },
+        },
+      };
+    }
+
     if (cfg.operation === "merge") {
       const names = cfg.properties
         .split(",")

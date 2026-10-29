@@ -18,18 +18,24 @@ ZERODOT_NODE_PACKAGES=@zerodot/redis
 - [`discord`](packages/discord): bot messages, webhooks, and slash commands
 - [`edit-image`](packages/edit-image): resize, crop, rotate, and convert images
 - [`email`](packages/email): send email and react to new mail
+- [`feedbackjar`](packages/feedbackjar): posts, comments, votes, and webhook triggers
 - [`github`](packages/github): issues, repos, files, and webhook triggers
+- [`gmail`](packages/gmail): send, read, and label emails in Gmail
+- [`google-calendar`](packages/google-calendar): events, availability, and new-event triggers
+- [`google-drive`](packages/google-drive): find, upload, download, and share files
 - [`google-sheets`](packages/google-sheets): read and write rows in spreadsheets
 - [`higgsfield`](packages/higgsfield): AI image and video generation
+- [`linear`](packages/linear): issues, comments, projects, and webhook triggers
 - [`mcp`](packages/mcp): call tools on an MCP server
 - [`mongodb`](packages/mongodb): documents in MongoDB
 - [`mysql`](packages/mysql): queries and rows in MySQL
 - [`notion`](packages/notion): pages, databases, blocks, and search
-- [`pdf`](packages/pdf): read text, merge, split, and rotate PDF files
+- [`pdf`](packages/pdf): create, read, merge, split, and rotate PDF files
 - [`postgres`](packages/postgres): queries, rows, and change triggers for Postgres
 - [`redis`](packages/redis): keys, lists, and messages in Redis
 - [`s3`](packages/s3): files and buckets in S3 and compatible storage
 - [`slack`](packages/slack): messages, channels, files, and Slack events
+- [`spreadsheet`](packages/spreadsheet): read and write CSV and XLSX files
 - [`ssh`](packages/ssh): remote commands and file transfer over SSH, FTP, and SFTP
 - [`stripe`](packages/stripe): customers, payments, subscriptions, and events
 - [`telegram`](packages/telegram): send messages and react to bot updates

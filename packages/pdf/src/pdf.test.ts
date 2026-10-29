@@ -171,6 +171,28 @@ describe("PDF", () => {
     await assert.rejects(run({ operation: "watermark" }, input), /text of the watermark/);
   });
 
+  it("creates a PDF from text", async () => {
+    const content = Array.from({ length: 120 }, (_, i) => `Line ${i + 1}`).join("\n");
+    const result = await run({ operation: "create", title: "Report", author: "MC", content }, {});
+    const { binary } = result.data as { binary: Binary };
+    const data = binary.data?.data ?? "";
+    assert.ok((await pageCount(data)) > 1);
+    const doc = await PDFDocument.load(Buffer.from(data, "base64"));
+    assert.equal(doc.getTitle(), "Report");
+    assert.equal(doc.getAuthor(), "MC");
+    const read = (await run({ operation: "text" }, { binary })).data as { text: string };
+    assert.match(read.text, /Report/);
+    assert.match(read.text, /Line 120/);
+  });
+
+  it("creates a PDF from text with long words and unknown characters", async () => {
+    const content = `${"x".repeat(400)}\n\n日本語 ok`;
+    const result = await run({ operation: "create", content, pageSize: "letter" });
+    const { binary } = result.data as { binary: Binary };
+    assert.equal(await pageCount(binary.data?.data ?? ""), 1);
+    await assert.rejects(run({ operation: "create" }), /content of the file/);
+  });
+
   it("refuses data that is not a PDF", async () => {
     const input = { binary: { data: file(Buffer.from("not a pdf").toString("base64")) } };
     await assert.rejects(run({ operation: "info" }, input), /not a PDF/);

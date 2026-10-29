@@ -277,7 +277,98 @@ importers:
         specifier: 4.6.7
         version: 4.6.7
 
+  packages/feedbackjar:
+    devDependencies:
+      '@types/node':
+        specifier: 26.6.5
+        version: 26.6.5
+      '@zerodot/node-sdk':
+        specifier: ^1.2.1
+        version: 1.2.1(zod@4.6.7)
+      tsdown:
+        specifier: 0.23.2
+        version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+
   packages/github:
+    devDependencies:
+      '@types/node':
+        specifier: 26.6.5
+        version: 26.6.5
+      '@zerodot/node-sdk':
+        specifier: ^1.2.1
+        version: 1.2.1(zod@4.6.7)
+      tsdown:
+        specifier: 0.23.2
+        version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+
+  packages/gmail:
+    dependencies:
+      nodemailer:
+        specifier: 10.2.1
+        version: 10.2.1
+    devDependencies:
+      '@types/node':
+        specifier: 26.6.5
+        version: 26.6.5
+      '@types/nodemailer':
+        specifier: 8.0.2
+        version: 8.0.2
+      '@zerodot/node-sdk':
+        specifier: ^1.2.1
+        version: 1.2.1(zod@4.6.7)
+      tsdown:
+        specifier: 0.23.2
+        version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+
+  packages/google-calendar:
+    devDependencies:
+      '@types/node':
+        specifier: 26.6.5
+        version: 26.6.5
+      '@zerodot/node-sdk':
+        specifier: ^1.2.1
+        version: 1.2.1(zod@4.6.7)
+      tsdown:
+        specifier: 0.23.2
+        version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+
+  packages/google-drive:
     devDependencies:
       '@types/node':
         specifier: 26.6.5
@@ -320,6 +411,27 @@ importers:
         version: 4.6.7
 
   packages/higgsfield:
+    devDependencies:
+      '@types/node':
+        specifier: 26.6.5
+        version: 26.6.5
+      '@zerodot/node-sdk':
+        specifier: ^1.2.1
+        version: 1.2.1(zod@4.6.7)
+      tsdown:
+        specifier: 0.23.2
+        version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+
+  packages/linear:
     devDependencies:
       '@types/node':
         specifier: 26.6.5
@@ -540,6 +652,40 @@ importers:
         version: 4.6.7
 
   packages/slack:
+    devDependencies:
+      '@types/node':
+        specifier: 26.6.5
+        version: 26.6.5
+      '@zerodot/node-sdk':
+        specifier: ^1.2.1
+        version: 1.2.1(zod@4.6.7)
+      tsdown:
+        specifier: 0.23.2
+        version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+
+  packages/spreadsheet:
+    dependencies:
+      csv-parse:
+        specifier: 7.0.3
+        version: 7.0.3
+      csv-stringify:
+        specifier: 6.9.0
+        version: 6.9.0
+      read-excel-file:
+        specifier: 9.3.11
+        version: 9.3.11
+      write-excel-file:
+        specifier: 4.1.1
+        version: 4.1.1
     devDependencies:
       '@types/node':
         specifier: 26.6.5
@@ -1508,6 +1654,12 @@ packages:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
 
+  csv-parse@7.0.3:
+    resolution: {integrity: sha512-YFd3QM/yo17vH91L1IOZuvl09zM0zEEtdfTcOCKWcMdM++MNaQSyp09slXyFCLaPXvHstQFx/xC8myiFHSMUvw==}
+
+  csv-stringify@6.9.0:
+    resolution: {integrity: sha512-6b3e29CILFfSQ2nDRuZMRROzQOpPuJ+s8zPB5H7eK5ncXBbFOyVuRLU5Sx/zAUmVri3Ly49GyC8NEme4SVSAbA==}
+
   culori@4.0.2:
     resolution: {integrity: sha512-1+BhOB8ahCn4O0cep0Sh2l9KCOfOdY+BXJnKMHFFzDEouSr/el18QwXEMRlOj9UY5nCeA8UN3a/82rUWRBeyBw==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
@@ -1694,6 +1846,9 @@ packages:
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
     engines: {node: '>= 0.4'}
+
+  graceful-fs@4.2.11:
+    resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
   has-symbols@1.1.0:
     resolution: {integrity: sha512-1cDNdwJ2Jaohmb3sg4OmKaMBwuC48sYni5HUw2DvsC8LjGTLK9h+eb1X6RyuOHe4hT0ULCW68iomhjUoKUqlPQ==}
@@ -1892,6 +2047,9 @@ packages:
   node-html-better-parser@1.5.9:
     resolution: {integrity: sha512-z1I5UINMezJXYL9cH3h0a9KBth2G978gSLlfkpQ+CQzzVHVQy9gpARgm9eDsz1O4gn1HtgUqjdAIYxKFZm6uHQ==}
 
+  node-int64@0.4.0:
+    resolution: {integrity: sha512-O5lz91xSOeoXP6DulyHfllpq+Eg00MWitZIbtPfoSEvqIHdl5gfcY6hYzDWnj0qD5tz52PI08u9qUvSVeUBeHw==}
+
   nodemailer@10.2.1:
     resolution: {integrity: sha512-ZrDNsPFoDMwefNs7sJwrYiEJ/CG4ClJWDZv05iNJsEBWa8GRDry1QJHTJxsuTAY9eDDKjX4k+q3SxslXJOao7w==}
     engines: {node: '>=20.0.0'}
@@ -1995,6 +2153,10 @@ packages:
     resolution: {integrity: sha512-K5zQjDllxWkf7Z5xJdV0/B0WTNqx6vxG70zJE4N0kBs4LovmEYWJzQGxC9bS9RAKu3bgM40lrd5zoLJ12MQ5BA==}
     engines: {node: '>= 0.10'}
 
+  read-excel-file@9.3.11:
+    resolution: {integrity: sha512-2WLBV9Akn0Yx6KPIKoJI4NnW1hTsccJ6wz1kCTZsC8ImYZ5gzRb7Ffdmmg8LWICX69WNdYSnCtBhe48VuSOQ2Q==}
+    engines: {node: '>=18'}
+
   real-require@0.2.0:
     resolution: {integrity: sha512-57frrGM/OCTLqLOAh0mhVA9VBMHd+9U7Zb2THMGdBUoZVOtGbJzjxsYGDJ3A9AYYCP4hn6y1TVbaOfzWtm5GFg==}
     engines: {node: '>= 12.13.0'}
@@ -2051,6 +2213,10 @@ packages:
 
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+
+  saxen@11.2.0:
+    resolution: {integrity: sha512-2bG564AAJcm/3vyZC0Uhs/mACrH+4AHMaKHKAB2M5xMqomUZa27FQ7MYaQGFKVcJk/MVzSEQ34A8QZWW+eiWEw==}
+    engines: {node: '>= 20.12'}
 
   selderee@0.12.0:
     resolution: {integrity: sha512-b1YMh3+DHZp59DLna3qVwQ5iOla/nrI6mLBNW02XxU77M3046Df6VLkoaJyFz20VsGIG5kkp+FK0kg4K4HnUFw==}
@@ -2247,6 +2413,10 @@ packages:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
 
+  unzipper-esm@0.13.3:
+    resolution: {integrity: sha512-LUO6VZ6fCzkDbdMev0/fOhoIeVGKaOkTIOoYxVLE0SQjfvmAHK+oywl7lfhloSZIsdGJ25mJ18Mtd9CyTASjrA==}
+    engines: {node: '>=8.0.0'}
+
   vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
@@ -2268,8 +2438,16 @@ packages:
     engines: {node: '>= 8'}
     hasBin: true
 
+  worker-f@0.1.21:
+    resolution: {integrity: sha512-pMi7wCz3uZVxRvRSphyaIYoN7rm9bV0usifTib7u01kKU+hOo+/hFwhajYnpOCHyr0Xp3/2ulc4F+Jm2a3YIfg==}
+    engines: {node: '>=12'}
+
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+
+  write-excel-file@4.1.1:
+    resolution: {integrity: sha512-MUnCnNtQrcZek832ZcU24uU0rSphFmKPD1DvIjXOlygVb93CV7Tme6H3jUTkxsMmjB2W7HIzERzjqTi5kui71A==}
+    engines: {node: '>=18'}
 
   xml-naming@0.3.0:
     resolution: {integrity: sha512-ghig2TBE/H11aOVgmahA3MhimvkBr6JIYknH/Dhdk10nXwdbIqBJsbfMxpvFPG8bAw77gN29aQWvKpmVoPlvPQ==}
@@ -2865,6 +3043,10 @@ snapshots:
       shebang-command: 2.0.0
       which: 2.0.2
 
+  csv-parse@7.0.3: {}
+
+  csv-stringify@6.9.0: {}
+
   culori@4.0.2: {}
 
   debug@4.4.3:
@@ -3079,6 +3261,8 @@ snapshots:
 
   gopd@1.2.0: {}
 
+  graceful-fs@4.2.11: {}
+
   has-symbols@1.1.0: {}
 
   hasown@2.0.4:
@@ -3262,6 +3446,8 @@ snapshots:
     dependencies:
       html-entities: 2.6.0
 
+  node-int64@0.4.0: {}
+
   nodemailer@10.2.1: {}
 
   object-assign@4.1.1: {}
@@ -3350,6 +3536,13 @@ snapshots:
       iconv-lite: 0.7.3
       unpipe: 1.0.0
 
+  read-excel-file@9.3.11:
+    dependencies:
+      fflate: 0.8.3
+      saxen: 11.2.0
+      unzipper-esm: 0.13.3
+      worker-f: 0.1.21
+
   real-require@0.2.0: {}
 
   real-require@1.0.0: {}
@@ -3412,6 +3605,8 @@ snapshots:
   safe-stable-stringify@2.5.0: {}
 
   safer-buffer@2.1.2: {}
+
+  saxen@11.2.0: {}
 
   selderee@0.12.0:
     dependencies:
@@ -3648,6 +3843,11 @@ snapshots:
 
   unpipe@1.0.0: {}
 
+  unzipper-esm@0.13.3:
+    dependencies:
+      graceful-fs: 4.2.11
+      node-int64: 0.4.0
+
   vary@1.1.2: {}
 
   verkit@0.5.0: {}
@@ -3663,7 +3863,13 @@ snapshots:
     dependencies:
       isexe: 2.0.0
 
+  worker-f@0.1.21: {}
+
   wrappy@1.0.2: {}
+
+  write-excel-file@4.1.1:
+    dependencies:
+      fflate: 0.8.3
 
   xml-naming@0.3.0: {}
 
