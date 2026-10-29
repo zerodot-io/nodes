@@ -26,8 +26,21 @@ const idOf = (value: string | undefined, operation: string): string => {
 
 const text = (value: string | undefined): string | undefined => value?.trim() || undefined;
 
-/** A JSON object of text values. Stripe wants `metadata[key]=value`. */
-export function metadataOf(value: string | undefined): Record<string, string> | undefined {
+/**
+ * A field of an update. Text that is blank after trim clears the field: Stripe unsets a field
+ * that has an empty string. Nothing (undefined) leaves the field as it is.
+ */
+const clearable = (value: string | undefined): string | undefined =>
+  value === undefined ? undefined : value.trim();
+
+/**
+ * A JSON object of text values. Stripe wants `metadata[key]=value`. A `null` value unsets that
+ * key. With `clear` (an update), `null` or `{}` gives "", which unsets all keys of the object.
+ */
+export function metadataOf(
+  value: string | undefined,
+  clear = false,
+): Record<string, string> | "" | undefined {
   if (!value?.trim()) return undefined;
   let parsed: unknown;
   try {
@@ -35,11 +48,20 @@ export function metadataOf(value: string | undefined): Record<string, string> | 
   } catch {
     throw new Error('"metadata" must be JSON');
   }
+  if (parsed === null && clear) return "";
   if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
     throw new Error('"metadata" must be a JSON object');
   }
+  const entries = Object.entries(parsed);
+  if (entries.length === 0) return clear ? "" : undefined;
   return Object.fromEntries(
-    Object.entries(parsed).map(([key, entry]) => [key, entry === null ? "" : String(entry)]),
+    entries.map(([key, entry]) => {
+      if (entry === null) return [key, ""];
+      if (typeof entry === "object") {
+        throw new Error(`"metadata" value "${key}" must be text, a number, or a boolean`);
+      }
+      return [key, String(entry)];
+    }),
   );
 }
 
@@ -100,18 +122,18 @@ export function buildRequest(c: StripeConfig): StripeRequest {
         email: text(c.email),
         name: text(c.name),
         phone: text(c.phone),
-        description: c.description,
+        description: c.description?.trim() || undefined,
         metadata: metadataOf(c.metadata),
       });
     case "customer.get":
       return get(`/v1/customers/${idOf(c.id, op)}`);
     case "customer.update":
       return post(`/v1/customers/${idOf(c.id, op)}`, {
-        email: text(c.email),
-        name: text(c.name),
-        phone: text(c.phone),
-        description: c.description,
-        metadata: metadataOf(c.metadata),
+        email: clearable(c.email),
+        name: clearable(c.name),
+        phone: clearable(c.phone),
+        description: clearable(c.description),
+        metadata: metadataOf(c.metadata, true),
       });
     case "customer.delete":
       return { call: { method: "DELETE", path: `/v1/customers/${idOf(c.id, op)}` } };
@@ -126,7 +148,7 @@ export function buildRequest(c: StripeConfig): StripeRequest {
         currency: need(c.currency, "currency", op).trim().toLowerCase(),
         customer: text(c.customer),
         payment_method: text(c.paymentMethod),
-        description: c.description,
+        description: c.description?.trim() || undefined,
         confirm: confirm ? true : undefined,
         return_url: confirm ? c.returnUrl : undefined,
         automatic_payment_methods: { enabled: true },
@@ -185,7 +207,7 @@ export function buildRequest(c: StripeConfig): StripeRequest {
         collection_method: c.collectionMethod,
         days_until_due: send ? c.daysUntilDue : undefined,
         auto_advance: c.autoAdvance,
-        description: c.description,
+        description: c.description?.trim() || undefined,
         metadata: metadataOf(c.metadata),
       });
     }
@@ -210,7 +232,7 @@ export function buildRequest(c: StripeConfig): StripeRequest {
         items: lineItemsOf(c.lineItems, op),
         default_payment_method: text(c.paymentMethod),
         trial_period_days: c.trialDays,
-        description: c.description,
+        description: c.description?.trim() || undefined,
         metadata: metadataOf(c.metadata),
       });
     case "subscription.get":
@@ -219,8 +241,8 @@ export function buildRequest(c: StripeConfig): StripeRequest {
       return post(`/v1/subscriptions/${idOf(c.id, op)}`, {
         cancel_at_period_end: c.cancelAtPeriodEnd,
         default_payment_method: text(c.paymentMethod),
-        description: c.description,
-        metadata: metadataOf(c.metadata),
+        description: clearable(c.description),
+        metadata: metadataOf(c.metadata, true),
       });
     case "subscription.cancel":
       return { call: { method: "DELETE", path: `/v1/subscriptions/${idOf(c.id, op)}` } };
@@ -233,7 +255,7 @@ export function buildRequest(c: StripeConfig): StripeRequest {
     case "product.create":
       return post("/v1/products", {
         name: need(c.name, "name", op).trim(),
-        description: c.description,
+        description: c.description?.trim() || undefined,
         metadata: metadataOf(c.metadata),
       });
     case "product.get":

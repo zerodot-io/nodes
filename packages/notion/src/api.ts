@@ -11,7 +11,29 @@ export const MAX_ITEMS = 5000;
 const PAGE_SIZE = 100;
 
 export type NotionAccess = { token: string };
-export type CallOptions = { signal: AbortSignal; timeoutMs: number };
+export type CallOptions = {
+  signal: AbortSignal;
+  timeoutMs: number;
+  /** How many times to try again after HTTP 429. The default is 0. */
+  retries?: number;
+};
+
+/** The longest wait, in seconds, that one retry accepts. */
+const MAX_RETRY_WAIT = 10;
+
+const sleep = (ms: number, signal: AbortSignal) =>
+  new Promise<void>((resolve, reject) => {
+    if (signal.aborted) return reject(signal.reason);
+    const timer = setTimeout(() => {
+      signal.removeEventListener("abort", onAbort);
+      resolve();
+    }, ms);
+    const onAbort = () => {
+      clearTimeout(timer);
+      reject(signal.reason);
+    };
+    signal.addEventListener("abort", onAbort, { once: true });
+  });
 
 /** The integration token of a credential. */
 export function notionAccess(
@@ -96,8 +118,30 @@ function urlOf(call: Call): URL {
   return url;
 }
 
-/** One call. HTTP 429 means a rate limit. */
+/**
+ * One call. HTTP 429 means a rate limit. With `options.retries`, the call waits for
+ * `Retry-After` (at most 10 seconds) and tries again. Else it throws at once.
+ */
 export async function callNotion(
+  access: NotionAccess,
+  call: Call,
+  options: CallOptions,
+): Promise<NotionAnswer> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await callOnce(access, call, options);
+    } catch (error) {
+      const wait =
+        error instanceof NotionError && error.status === 429 ? error.retryAfter : undefined;
+      if (wait === undefined || wait > MAX_RETRY_WAIT || attempt >= (options.retries ?? 0)) {
+        throw error;
+      }
+      await sleep(wait * 1000, options.signal);
+    }
+  }
+}
+
+async function callOnce(
   access: NotionAccess,
   call: Call,
   options: CallOptions,

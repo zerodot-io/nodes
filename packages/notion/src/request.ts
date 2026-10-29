@@ -44,8 +44,20 @@ const objectOf = (text: string | undefined, name: string, operation: string) =>
   need(json(text, name, "object"), name, operation) as Record<string, unknown>;
 
 /** Notion accepts at most 2000 characters in one rich text part. */
-const richText = (text: string) =>
-  (text.match(/[\s\S]{1,2000}/g) ?? []).map((part) => ({ type: "text", text: { content: part } }));
+export const richText = (text: string) => {
+  const parts: string[] = [];
+  let part = "";
+  // Walk by code point, so a surrogate pair never splits. 2000 UTF-16 units at most.
+  for (const char of text) {
+    if (part.length + char.length > 2000) {
+      parts.push(part);
+      part = "";
+    }
+    part += char;
+  }
+  if (part !== "") parts.push(part);
+  return parts.map((content) => ({ type: "text", text: { content } }));
+};
 
 /** One block of a type, from plain text. */
 export function blockOf(type: NotionConfig["blockType"], text: string): Record<string, unknown> {
@@ -135,6 +147,54 @@ export function buildRequest(c: NotionConfig): NotionRequest {
           body: { properties: objectOf(c.properties, "properties", op) },
         },
       };
+    case "page.getMarkdown":
+      return {
+        call: { method: "GET", path: `/v1/pages/${id(c.pageId, "pageId", op)}/markdown` },
+      };
+    case "page.updateMarkdown": {
+      const path = `/v1/pages/${id(c.pageId, "pageId", op)}/markdown`;
+      const allow = c.allowDeletingContent;
+      if (c.markdownCommand !== "edit" && c.markdown === "" && !allow) {
+        throw new Error(
+          `Notion ${op} needs "markdown". To clear the page, turn on "Allow Deleting Content"`,
+        );
+      }
+      if (c.markdownCommand === "edit") {
+        return {
+          call: {
+            method: "PATCH",
+            path,
+            body: {
+              type: "update_content",
+              update_content: {
+                content_updates: [
+                  {
+                    old_str: need(c.oldStr, "oldStr", op),
+                    new_str: c.newStr ?? "",
+                    replace_all_matches: c.replaceAllMatches,
+                  },
+                ],
+                allow_deleting_content: allow,
+              },
+            },
+          },
+        };
+      }
+      return {
+        call: {
+          method: "PATCH",
+          path,
+          body: {
+            type: "replace_content",
+            replace_content: {
+              new_str:
+                allow && c.markdown !== undefined ? c.markdown : need(c.markdown, "markdown", op),
+              allow_deleting_content: allow,
+            },
+          },
+        },
+      };
+    }
     case "page.archive":
       return {
         call: {

@@ -14,7 +14,7 @@ ZERODOT_NODE_PACKAGES=@zerodot/redis
 
 ## Nodes
 
-- [`anthropic`](packages/anthropic): Claude messages, files, and models
+- [`ai`](packages/ai): text, images, audio, and embeddings from OpenAI, Anthropic, Gemini, and compatible APIs
 - [`discord`](packages/discord): bot messages, webhooks, and slash commands
 - [`edit-image`](packages/edit-image): resize, crop, rotate, and convert images
 - [`email`](packages/email): send email and react to new mail
@@ -24,7 +24,6 @@ ZERODOT_NODE_PACKAGES=@zerodot/redis
 - [`mongodb`](packages/mongodb): documents in MongoDB
 - [`mysql`](packages/mysql): queries and rows in MySQL
 - [`notion`](packages/notion): pages, databases, blocks, and search
-- [`openai`](packages/openai): text, images, audio, embeddings, and moderation
 - [`pdf`](packages/pdf): read text, merge, split, and rotate PDF files
 - [`postgres`](packages/postgres): queries, rows, and change triggers for Postgres
 - [`redis`](packages/redis): keys, lists, and messages in Redis

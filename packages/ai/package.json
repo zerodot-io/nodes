@@ -1,12 +1,12 @@
 {
-  "name": "@zerodot/anthropic",
+  "name": "@zerodot/ai",
   "version": "1.0.0",
-  "description": "Ask Claude models, count tokens, and list models with Anthropic. Send a system prompt, text, and images. Get text or JSON back. Use it to add AI steps to a workflow.",
+  "description": "Generate text, embeddings, images, and audio with OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, in one node. Use it to add AI steps to a workflow.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zerodot-io/nodes.git",
-    "directory": "packages/anthropic"
+    "directory": "packages/ai"
   },
   "keywords": [
     "zerodot-node-package"
@@ -18,12 +18,12 @@
   },
   "files": [
     "dist",
-    "anthropic.svg"
+    "ai.svg"
   ],
   "zerodot": {
     "sdk": "^1.2",
-    "label": "Anthropic",
-    "summary": "Claude messages, token counts, and models"
+    "label": "AI",
+    "summary": "Text, images, audio, and embeddings from many AI providers"
   },
   "scripts": {
     "build": "tsdown",

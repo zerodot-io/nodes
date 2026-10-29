@@ -5,8 +5,9 @@ import type { NodeDefinition } from "@zerodot/node-sdk";
 import { callNotion, callNotionList, NOTION_VERSION, NotionError } from "./api";
 import { notionConfig } from "./config";
 import { credentialTypes, nodes } from "./index";
-import { blockOf, buildRequest } from "./request";
+import { blockOf, buildRequest, richText } from "./request";
 import { plainText, simplifyItem } from "./simplify";
+import { withChildren } from "./tree";
 import trigger, { keyOf, minuteOf, pollBody } from "./trigger";
 
 const signal = new AbortController().signal;
@@ -73,6 +74,8 @@ describe("notion config", () => {
         "create",
         "update",
         "archive",
+        "getMarkdown",
+        "updateMarkdown",
         "query",
         "createRow",
         "getDataSource",
@@ -82,6 +85,7 @@ describe("notion config", () => {
         "list",
       ],
       searchObject: ["all", "page", "dataSource"],
+      markdownCommand: ["replace", "edit"],
       blockType: [
         "paragraph",
         "heading_1",
@@ -598,5 +602,242 @@ describe("notion trigger", () => {
     assert.equal(calls[0]?.url, `https://api.notion.com/v1/data_sources/${ID}/query`);
     assert.equal(result.items[0]?.key, "p1");
     assert.equal(result.cursor, "2026-01-01T10:15:00.000Z");
+  });
+});
+
+describe("notion markdown", () => {
+  it("builds the get call", () => {
+    const { call } = build({ resource: "page", operation: "getMarkdown", pageId: DASHED });
+    assert.equal(call.method, "GET");
+    assert.equal(call.path, `/v1/pages/${ID}/markdown`);
+  });
+
+  it("builds a replace call", () => {
+    const { call } = build({
+      resource: "page",
+      operation: "updateMarkdown",
+      pageId: ID,
+      markdown: "# Hi",
+    });
+    assert.equal(call.method, "PATCH");
+    assert.equal(call.path, `/v1/pages/${ID}/markdown`);
+    assert.deepEqual(call.body, {
+      type: "replace_content",
+      replace_content: { new_str: "# Hi", allow_deleting_content: false },
+    });
+    assert.throws(
+      () => build({ resource: "page", operation: "updateMarkdown", pageId: ID }),
+      /needs "markdown"/,
+    );
+  });
+
+  it("clears the page only with Allow Deleting Content", () => {
+    const base = { resource: "page", operation: "updateMarkdown", pageId: ID, markdown: "" };
+    assert.throws(() => build(base), /needs "markdown"/);
+    const { call } = build({ ...base, allowDeletingContent: true });
+    assert.deepEqual(call.body, {
+      type: "replace_content",
+      replace_content: { new_str: "", allow_deleting_content: true },
+    });
+  });
+
+  it("builds a find and replace call", () => {
+    const { call } = build({
+      resource: "page",
+      operation: "updateMarkdown",
+      pageId: ID,
+      markdownCommand: "edit",
+      oldStr: "a",
+      replaceAllMatches: true,
+      allowDeletingContent: true,
+    });
+    assert.deepEqual(call.body, {
+      type: "update_content",
+      update_content: {
+        content_updates: [{ old_str: "a", new_str: "", replace_all_matches: true }],
+        allow_deleting_content: true,
+      },
+    });
+    assert.throws(
+      () =>
+        build({
+          resource: "page",
+          operation: "updateMarkdown",
+          pageId: ID,
+          markdownCommand: "edit",
+        }),
+      /needs "oldStr"/,
+    );
+  });
+
+  it("gets the markdown of a page through the node", async () => {
+    const calls = mockFetch([{ body: { object: "page_markdown", id: ID, markdown: "# Hi" } }]);
+    const result = await run({ resource: "page", operation: "getMarkdown", pageId: ID });
+    assert.equal(calls[0]?.url, `https://api.notion.com/v1/pages/${ID}/markdown`);
+    assert.deepEqual(result, {
+      port: "out",
+      data: { object: "page_markdown", id: ID, markdown: "# Hi" },
+    });
+  });
+});
+
+describe("notion rich text", () => {
+  it("never splits a surrogate pair and stays within 2000 units", () => {
+    const text = `a${"😀".repeat(1500)}`;
+    const parts = richText(text).map((part) => part.text.content);
+    assert.equal(parts.join(""), text);
+    for (const part of parts) {
+      assert.ok(part.length <= 2000);
+      assert.equal(/[\ud800-\udbff]$/.test(part), false);
+      assert.equal(/^[\udc00-\udfff]/.test(part), false);
+    }
+    assert.equal(richText("").length, 0);
+  });
+});
+
+describe("notion nested blocks", () => {
+  const A = "a".repeat(32);
+  const B = "b".repeat(32);
+  const C = "c".repeat(32);
+  const D = "d".repeat(32);
+  const block = (id: string, has_children: boolean) => ({
+    object: "block",
+    id,
+    type: "paragraph",
+    has_children,
+    paragraph: { rich_text: [{ plain_text: id.slice(0, 1) }] },
+  });
+  const tree = [
+    { body: { results: [block(A, true)], has_more: false } },
+    { body: { results: [block(B, true)], has_more: false } },
+    { body: { results: [block(C, true)], has_more: false } },
+    { body: { results: [block(D, true)], has_more: false } },
+  ];
+
+  it("keeps the flat result when recursive is off", async () => {
+    const calls = mockFetch(tree);
+    const result = await run({ resource: "block", operation: "getChildren", blockId: ID });
+    assert.equal(calls.length, 1);
+    assert.deepEqual((result.data as unknown[]).length, 1);
+  });
+
+  it("reads the children down to the max depth", async () => {
+    const calls = mockFetch(tree);
+    const result = await run({
+      resource: "block",
+      operation: "getChildren",
+      blockId: ID,
+      recursive: true,
+      maxDepth: 2,
+    });
+    assert.equal(calls.length, 3);
+    assert.equal(calls[1]?.url.startsWith(`https://api.notion.com/v1/blocks/${A}/children`), true);
+    const [first] = result.data as {
+      text: string;
+      children: { text: string; children: unknown[] }[];
+    }[];
+    assert.equal(first?.text, "a");
+    assert.equal(first?.children[0]?.text, "b");
+    const deepest = first?.children[0]?.children[0] as { text: string; children?: unknown };
+    assert.equal(deepest.text, "c");
+    assert.equal(deepest.children, undefined);
+    assert.equal((deepest as { truncated?: boolean }).truncated, true);
+    assert.equal((first?.children[0] as { truncated?: boolean } | undefined)?.truncated, undefined);
+  });
+
+  it("does not mark a block without children", async () => {
+    mockFetch([{ body: { results: [block(A, false)], has_more: false } }]);
+    const result = await run({
+      resource: "block",
+      operation: "getChildren",
+      blockId: ID,
+      recursive: true,
+    });
+    const [first] = result.data as { truncated?: boolean; children?: unknown }[];
+    assert.equal(first?.truncated, undefined);
+    assert.equal(first?.children, undefined);
+  });
+
+  it("marks blocks as truncated when the deadline is over", async () => {
+    const calls = mockFetch([]);
+    const out = (await withChildren(access, [block(A, true)], 3, (b) => b, options, {
+      deadlineMs: -1,
+    })) as { truncated?: boolean }[];
+    assert.equal(calls.length, 0);
+    assert.equal(out[0]?.truncated, true);
+  });
+
+  it("counts every call and marks blocks it did not read", async () => {
+    const empty = { body: { results: [], has_more: false } };
+    const calls = mockFetch(Array.from({ length: 8 }, () => empty));
+    const many = Array.from({ length: 5001 }, (_, i) =>
+      block(i.toString(16).padStart(32, "0"), true),
+    );
+    const out = (await withChildren(access, many, 1, (b) => b, options)) as {
+      children?: unknown;
+      truncated?: boolean;
+    }[];
+    assert.equal(calls.length, 5000);
+    assert.equal(out.filter((b) => b.truncated === true).length, 1);
+  });
+
+  it("tries again after a 429 with a short wait", async () => {
+    const calls = mockFetch([
+      { status: 429, headers: { "retry-after": "0" } },
+      { body: { results: [block(B, false)], has_more: false } },
+    ]);
+    const out = (await withChildren(access, [block(A, true)], 1, (b) => b, options)) as {
+      children: unknown[];
+    }[];
+    assert.equal(calls.length, 2);
+    assert.equal(out[0]?.children.length, 1);
+  });
+
+  it("does not wait for a long Retry-After", async () => {
+    const calls = mockFetch([{ status: 429, headers: { "retry-after": "60" } }]);
+    await assert.rejects(
+      callNotion(access, { method: "GET", path: "/v1/users" }, { ...options, retries: 2 }),
+      NotionError,
+    );
+    assert.equal(calls.length, 1);
+  });
+
+  it("runs at most 3 reads at once", async () => {
+    let active = 0;
+    let peak = 0;
+    mock.method(globalThis, "fetch", async () => {
+      active++;
+      peak = Math.max(peak, active);
+      await new Promise((resolve) => setTimeout(resolve, 5));
+      active--;
+      return new Response(JSON.stringify({ results: [], has_more: false }));
+    });
+    const many = Array.from({ length: 9 }, (_, i) => block(String(i).repeat(32), true));
+    await withChildren(access, many, 1, (b) => b, options);
+    assert.equal(peak, 3);
+  });
+
+  it("gives raw blocks with children when simplify is off", async () => {
+    mockFetch([
+      { body: { results: [block(A, true)], has_more: false } },
+      { body: { results: [block(B, false)], has_more: false } },
+    ]);
+    const result = await run({
+      resource: "block",
+      operation: "getChildren",
+      blockId: ID,
+      recursive: true,
+      simplify: false,
+    });
+    const [first] = result.data as { id: string; children: { id: string }[] }[];
+    assert.equal(first?.id, A);
+    assert.equal(first?.children[0]?.id, B);
+  });
+
+  it("does not accept a depth over 3", () => {
+    assert.equal(
+      notionConfig.safeParse({ resource: "block", operation: "getChildren", maxDepth: 4 }).success,
+      false,
+    );
   });
 });

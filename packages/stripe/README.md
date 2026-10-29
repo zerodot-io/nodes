@@ -42,13 +42,17 @@ Use **Other Event Types** for more events, such as `payout.paid`. End a type wit
 
 The output has `id`, `type`, `created`, `livemode`, `account`, `object` (the Stripe object of the event), and `previousAttributes`.
 
-Add the webhook address of the trigger in the Stripe Dashboard, under **Developers > Webhooks**. Copy the signing secret (`whsec_…`) to the credential. Each request must have a valid `Stripe-Signature`. The node checks the HMAC-SHA256 signature, and it refuses a request with a timestamp that is more than 5 minutes old.
+Add the webhook address of the trigger in the Stripe Dashboard, under **Developers > Webhooks**. Copy the signing secret (`whsec_…`) to the credential. Each request must have a valid `Stripe-Signature`. The node checks the HMAC-SHA256 signature, and it refuses a request with a timestamp that is more than 5 minutes old. The node also ignores an event ID that it saw in the last 10 minutes (the SDK does not remove duplicates). The node keeps the IDs in memory, so a restart clears them.
 
 Stripe sends events only to the address in the Dashboard, so test listening is not available. Publish the workflow to get events.
 
 ## Credential
 
-**Stripe account** (`stripe.account`): `secretKey` (`sk_…`, or a restricted key `rk_…`) from **Developers > API keys**, and `webhookSecret` (`whsec_…`) from the webhook endpoint. Only the trigger needs `webhookSecret`. Both are secret. The **Test** button reads the balance.
+**Stripe account** (`stripe.account`): `secretKey` (`sk_…`, or a restricted key `rk_…`) from **Developers > API keys**, and `webhookSecret` (`whsec_…`) from the webhook endpoint. Only the trigger needs `webhookSecret`. Both are secret. The **Test** button reads the balance. A restricted key without the Balance read permission gets an HTTP 403 from Stripe. The test accepts that answer, because Stripe knows the key. Give the key the permissions of the operations that you use. The trigger makes no call to Stripe, so it needs only `webhookSecret`.
+
+Each call sends a fixed `Stripe-Version` header, so the answers do not change when the default version of the account changes.
+
+To clear a field in **Update** (customer name, email, phone, description, or subscription description), set it to an empty value. To clear all metadata, use `{}` or `null`. A `null` value for one key removes that key. Metadata values must be text, numbers, or booleans.
 
 ## License
 

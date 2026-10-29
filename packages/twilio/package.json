@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/twilio",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Send and read SMS, MMS, and WhatsApp messages, make and read phone calls, and look up phone numbers with Twilio, and start a workflow on an incoming message or a status update. Use it for alerts, verification, and customer messages.",
   "license": "AGPL-3.0-only",
   "repository": {

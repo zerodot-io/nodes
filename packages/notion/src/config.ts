@@ -8,13 +8,17 @@ export type Resource = (typeof RESOURCES)[number];
 
 export const OPERATIONS_OF = {
   search: ["search"],
-  page: ["get", "create", "update", "archive"],
+  page: ["get", "create", "update", "archive", "getMarkdown", "updateMarkdown"],
   database: ["get", "list", "getDataSource", "query", "createRow"],
   block: ["get", "getChildren", "append", "delete"],
   user: ["get", "list"],
 } as const satisfies Record<Resource, readonly string[]>;
 
 const ALL_OPERATIONS = [...new Set(Object.values(OPERATIONS_OF).flat())] as [string, ...string[]];
+
+export const MARKDOWN_COMMANDS = ["replace", "edit"] as const;
+/** The deepest level of child blocks that Get Children reads. */
+export const MAX_DEPTH = 3;
 
 export const SEARCH_OBJECTS = ["all", "page", "dataSource"] as const;
 
@@ -84,6 +88,8 @@ export const notionConfig = z
           create: "Create",
           update: "Update",
           archive: "Archive",
+          getMarkdown: "Get Markdown",
+          updateMarkdown: "Update Markdown",
           getDataSource: "Get Data Source",
           query: "Query",
           createRow: "Create Row",
@@ -98,6 +104,8 @@ export const notionConfig = z
           create: "Create a page below another page",
           update: "Change the properties of a page",
           archive: "Move a page to the trash",
+          getMarkdown: "Get the content of a page as Markdown",
+          updateMarkdown: "Replace the content of a page, or change a part of it, with Markdown",
           getDataSource: "Get a data source with the type of each property",
           query: "Get the rows of a data source. You can use a filter and a sort",
           createRow: "Add a row (a page) to a data source",
@@ -133,7 +141,7 @@ export const notionConfig = z
       .string()
       .optional()
       .meta({
-        ...on({ page: ["get", "update", "archive"] }),
+        ...on({ page: ["get", "update", "archive", "getMarkdown", "updateMarkdown"] }),
         title: "Page ID",
         description: "The ID of the page, with or without hyphens",
       }),
@@ -157,6 +165,59 @@ export const notionConfig = z
         ui: "code",
         description:
           'The properties as a JSON object. For example {"Name":{"title":[{"text":{"content":"Task"}}]}}',
+      }),
+    markdownCommand: z
+      .enum(MARKDOWN_COMMANDS)
+      .default("replace")
+      .meta({
+        ...on({ page: ["updateMarkdown"] }),
+        title: "Update Mode",
+        labels: { replace: "Replace All", edit: "Find and Replace" },
+        hints: {
+          replace: "Replace all the content of the page with the Markdown",
+          edit: "Replace one text in the content with a new text",
+        },
+      }),
+    markdown: z
+      .string()
+      .optional()
+      .meta({
+        ...on({ page: ["updateMarkdown"] }),
+        ui: "textarea",
+        description:
+          "The new content of the page, as Markdown. Use it with Replace All. Empty text clears the page, only if Allow Deleting Content is on",
+      }),
+    oldStr: z
+      .string()
+      .optional()
+      .meta({
+        ...on({ page: ["updateMarkdown"] }),
+        title: "Text to Find",
+        description: "The Markdown text to replace. Use it with Find and Replace",
+      }),
+    newStr: z
+      .string()
+      .optional()
+      .meta({
+        ...on({ page: ["updateMarkdown"] }),
+        title: "New Text",
+        description: "The Markdown text to put in its place. Use it with Find and Replace",
+      }),
+    replaceAllMatches: z
+      .boolean()
+      .default(false)
+      .meta({
+        ...on({ page: ["updateMarkdown"] }),
+        title: "Replace All Matches",
+        description: "If off, Notion fails when the text to find is in the page more than once",
+      }),
+    allowDeletingContent: z
+      .boolean()
+      .default(false)
+      .meta({
+        ...on({ page: ["updateMarkdown"] }),
+        title: "Allow Deleting Content",
+        description: "Let the update delete child pages and child databases",
       }),
     blockType: z
       .enum(BLOCK_TYPES)
@@ -289,6 +350,25 @@ export const notionConfig = z
         title: "After Block ID",
         description:
           "Add the new blocks after this child block. If empty, the node adds them at the end",
+      }),
+    recursive: z
+      .boolean()
+      .default(false)
+      .meta({
+        ...on({ block: ["getChildren"] }),
+        title: "Get Nested Blocks",
+        description: "Also get the children of each block that has children, as `children`",
+      }),
+    maxDepth: z
+      .number()
+      .int()
+      .min(1)
+      .max(MAX_DEPTH)
+      .default(MAX_DEPTH)
+      .meta({
+        showWhen: [{ resource: ["block"], operation: ["getChildren"], recursive: [true] }],
+        title: "Max Depth",
+        description: `The number of levels below the first level. At most ${MAX_DEPTH}`,
       }),
     // users
     userId: z
