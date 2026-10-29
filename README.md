@@ -31,6 +31,17 @@ ZERODOT_NODE_PACKAGES=@zerodot/redis
 - [`telegram`](packages/telegram): send messages and react to bot updates
 - [`twilio`](packages/twilio): SMS, WhatsApp, calls, lookups, and message events
 
+## Create your own node
+
+Start from the [create](https://github.com/zerodot-io/create) template:
+
+1. Click **Use this template** on GitHub.
+2. Rename `packages/example`, and set `name`, `description`, and `zerodot.label` in its `package.json`. The name must start with `zerodot-`, such as `zerodot-slack` or `@acme/zerodot-slack`.
+3. Change the nodes in `src`. Start each node type with your own prefix, such as `acme.slack.send`.
+4. Run `pnpm test`, then publish the package to npm.
+
+The template explains the package contract and how to list the package in a registry. The packages in this repository are working examples of triggers, polling, webhooks, and binary data.
+
 ## Develop
 
 ```sh
