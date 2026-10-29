@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/pdf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Work with PDF files: read the text and page count, merge files, pick pages, split a file, and rotate pages. Use it to prepare or read documents in a workflow.",
   "license": "AGPL-3.0-only",
   "repository": {
@@ -17,7 +17,8 @@
     ".": "./dist/index.cjs"
   },
   "files": [
-    "dist"
+    "dist",
+    "pdf.svg"
   ],
   "zerodot": {
     "sdk": "^1.1",

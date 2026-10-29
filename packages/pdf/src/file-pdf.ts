@@ -2,6 +2,7 @@
 import { degrees, PDFDocument, rgb, StandardFonts } from "@cantoo/pdf-lib";
 import { defineNode, type NodeResult, readBinary, toBinary } from "@zerodot/node-sdk";
 import { z } from "zod";
+import { PDF_ICON } from "./icon";
 import { parsePages } from "./pages";
 
 const OPERATIONS = [
@@ -248,6 +249,7 @@ export default defineNode({
     { label: "Add a password to a PDF", config: { operation: "protect" } },
   ],
   icon: "FileText",
+  iconUrl: PDF_ICON,
   config,
   defaultConfig: {
     operation: "text",
