@@ -18,6 +18,6 @@ jobs:
       - run: pnpm run check-types
       - run: pnpm run test
       - run: pnpm run build
-      # catalog.json is generated. It must match the packages.
+      # catalog.json depends on what is on npm, so CI only checks that the script runs.
+      # The catalog workflow writes the file.
       - run: pnpm run catalog
-      - run: git diff --exit-code catalog.json
