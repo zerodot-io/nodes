@@ -14,6 +14,7 @@ ZERODOT_NODE_PACKAGES=@zerodot/redis
 
 ## Nodes
 
+- [`anthropic`](packages/anthropic): Claude messages, files, and models
 - [`discord`](packages/discord): bot messages, webhooks, and slash commands
 - [`edit-image`](packages/edit-image): resize, crop, rotate, and convert images
 - [`email`](packages/email): send email and react to new mail
@@ -22,12 +23,15 @@ ZERODOT_NODE_PACKAGES=@zerodot/redis
 - [`mcp`](packages/mcp): call tools on an MCP server
 - [`mongodb`](packages/mongodb): documents in MongoDB
 - [`mysql`](packages/mysql): queries and rows in MySQL
+- [`notion`](packages/notion): pages, databases, blocks, and search
+- [`openai`](packages/openai): text, images, audio, embeddings, and moderation
 - [`pdf`](packages/pdf): read text, merge, split, and rotate PDF files
 - [`postgres`](packages/postgres): queries, rows, and change triggers for Postgres
 - [`redis`](packages/redis): keys, lists, and messages in Redis
 - [`s3`](packages/s3): files and buckets in S3 and compatible storage
 - [`slack`](packages/slack): messages, channels, files, and Slack events
 - [`ssh`](packages/ssh): remote commands and file transfer over SSH, FTP, and SFTP
+- [`stripe`](packages/stripe): customers, payments, subscriptions, and events
 - [`telegram`](packages/telegram): send messages and react to bot updates
 - [`twilio`](packages/twilio): SMS, WhatsApp, calls, lookups, and message events
 
