@@ -2,9 +2,7 @@
 
 Official node packages for [zerodot](https://github.com/zerodot-io/zerodot). zerodot ships with the core nodes only. Install the rest when you need them.
 
-[`redis`](packages/redis) · [`postgres`](packages/postgres) · [`mysql`](packages/mysql) · [`mongodb`](packages/mongodb) · [`email`](packages/email) · [`ssh`](packages/ssh) · [`s3`](packages/s3) · [`edit-image`](packages/edit-image) · [`mcp`](packages/mcp) · [`telegram`](packages/telegram) · [`github`](packages/github) · [`pdf`](packages/pdf) · [`slack`](packages/slack) · [`discord`](packages/discord) · [`google-sheets`](packages/google-sheets) · [`twilio`](packages/twilio)
-
-## Use
+## Usage
 
 **Recommended:** in zerodot, go to **System > Nodes** and install the package.
 
@@ -13,6 +11,25 @@ Manual: install the package where the web app and the worker run, and list it:
 ```sh
 ZERODOT_NODE_PACKAGES=@zerodot/redis
 ```
+
+## Nodes
+
+- [`discord`](packages/discord): bot messages, webhooks, and slash commands
+- [`edit-image`](packages/edit-image): resize, crop, rotate, and convert images
+- [`email`](packages/email): send email and react to new mail
+- [`github`](packages/github): issues, repos, files, and webhook triggers
+- [`google-sheets`](packages/google-sheets): read and write rows in spreadsheets
+- [`mcp`](packages/mcp): call tools on an MCP server
+- [`mongodb`](packages/mongodb): documents in MongoDB
+- [`mysql`](packages/mysql): queries and rows in MySQL
+- [`pdf`](packages/pdf): read text, merge, split, and rotate PDF files
+- [`postgres`](packages/postgres): queries, rows, and change triggers for Postgres
+- [`redis`](packages/redis): keys, lists, and messages in Redis
+- [`s3`](packages/s3): files and buckets in S3 and compatible storage
+- [`slack`](packages/slack): messages, channels, files, and Slack events
+- [`ssh`](packages/ssh): remote commands and file transfer over SSH, FTP, and SFTP
+- [`telegram`](packages/telegram): send messages and react to bot updates
+- [`twilio`](packages/twilio): SMS, WhatsApp, calls, lookups, and message events
 
 ## Develop
 
