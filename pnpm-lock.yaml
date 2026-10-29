@@ -173,6 +173,27 @@ importers:
         specifier: 7.0.2
         version: 7.0.2
 
+  packages/discord:
+    devDependencies:
+      '@types/node':
+        specifier: 26.6.5
+        version: 26.6.5
+      '@zerodot/node-sdk':
+        specifier: ^1.2.1
+        version: 1.2.1(zod@4.6.7)
+      tsdown:
+        specifier: 0.23.2
+        version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+
   packages/edit-image:
     dependencies:
       sharp:
