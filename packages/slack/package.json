@@ -1,0 +1,50 @@
+{
+  "name": "@zerodot/slack",
+  "version": "1.0.0",
+  "description": "Send and change messages, manage channels, find users, add reactions, and upload files with a Slack bot, and start a workflow on a Slack event, such as a new message or a mention. Use it for team notifications and chat bots.",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerodot-io/nodes.git",
+    "directory": "packages/slack"
+  },
+  "keywords": [
+    "zerodot-node-package"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "exports": {
+    ".": "./dist/index.cjs"
+  },
+  "files": [
+    "dist",
+    "slack.svg"
+  ],
+  "zerodot": {
+    "sdk": "^1.2",
+    "label": "Slack",
+    "summary": "Messages, channels, files, and Slack events"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -p tsconfig.json",
+    "test": "tsx --test src/*.test.ts",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@zerodot/node-sdk": "^1.2.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@zerodot/node-sdk": "^1.2.1",
+    "tsdown": "0.23.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  }
+}
