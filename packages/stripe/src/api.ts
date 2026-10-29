@@ -3,6 +3,12 @@ import type { ResolvedCredential } from "@zerodot/node-sdk";
 
 export const STRIPE_CREDENTIAL = "stripe.account";
 export const STRIPE_API = "https://api.stripe.com";
+/**
+ * The Stripe API version that this package is written for (the latest in stripe-node, checked
+ * 2026-10-29). Each call sends it as `Stripe-Version`, so a change of the account default
+ * version does not change the answers.
+ */
+export const STRIPE_API_VERSION = "2026-09-30.endive";
 
 /** The most items that "return all" collects. A node output has a size limit too. */
 export const MAX_ITEMS = 5000;
@@ -83,7 +89,12 @@ export function stripeErrorOf(label: string, status: number, answer: StripeAnswe
 }
 
 function append(form: URLSearchParams, key: string, value: unknown): void {
-  if (value === undefined || value === null || value === "") return;
+  if (value === undefined) return;
+  // Stripe unsets a field when it gets an empty string. null means the same.
+  if (value === null) {
+    form.append(key, "");
+    return;
+  }
   if (Array.isArray(value)) {
     value.forEach((entry, index) => {
       append(form, `${key}[${index}]`, entry);
@@ -99,7 +110,8 @@ function append(form: URLSearchParams, key: string, value: unknown): void {
 
 /**
  * Form fields for a call, in the style that Stripe wants: `metadata[a]=b` for an object and
- * `items[0][price]=x` for a list. Empty values are left out. `false` and `0` stay.
+ * `items[0][price]=x` for a list. `undefined` is left out. `null` and "" are sent as an empty
+ * string, which makes Stripe unset the field. `false` and `0` stay.
  */
 export function formBody(args: Record<string, unknown>): URLSearchParams {
   const form = new URLSearchParams();
@@ -143,6 +155,7 @@ export async function callStripe(
     headers: {
       authorization: bearerAuth(access),
       accept: "application/json",
+      "stripe-version": STRIPE_API_VERSION,
       ...(call.method === "POST"
         ? { "content-type": "application/x-www-form-urlencoded; charset=utf-8" }
         : {}),

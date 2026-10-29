@@ -3,14 +3,25 @@ import assert from "node:assert/strict";
 import { createHmac } from "node:crypto";
 import { afterEach, describe, it, mock } from "node:test";
 import type { NodeDefinition } from "@zerodot/node-sdk";
-import { bearerAuth, callStripe, callStripeList, formBody, StripeError } from "./api";
+import {
+  bearerAuth,
+  callStripe,
+  callStripeList,
+  formBody,
+  STRIPE_API_VERSION,
+  StripeError,
+} from "./api";
 import { stripeConfig } from "./config";
 import { credentialTypes, nodes } from "./index";
 import { buildRequest, lineItemsOf, metadataOf } from "./request";
 import {
   checkStripeEvent,
+  clearSeenEvents,
+  headerOf as findHeader,
+  isDuplicateEvent,
   matchesType,
   parseSignatureHeader,
+  SEEN_LIMIT,
   stripeSignature,
   triggerConfig,
   verifyStripeRequest,
@@ -145,6 +156,24 @@ describe("stripe request", () => {
       formBody(call.args ?? {}).toString(),
       "email=ada%40example.com&name=Ada&metadata%5Border%5D=42",
     );
+  });
+
+  it("clears fields and metadata on update with empty strings", () => {
+    const { call } = build({
+      operation: "update",
+      id: "cus_1",
+      email: "",
+      name: " ",
+      description: "",
+      metadata: "{}",
+    });
+    assert.equal(formBody(call.args ?? {}).toString(), "email=&name=&description=&metadata=");
+    const keep = build({ operation: "update", id: "cus_1" });
+    assert.equal(formBody(keep.call.args ?? {}).toString(), "");
+    const create = build({ operation: "create", description: "", metadata: "{}" });
+    assert.equal(formBody(create.call.args ?? {}).toString(), "");
+    const key = build({ operation: "update", id: "cus_1", metadata: '{"a":null}' });
+    assert.equal(formBody(key.call.args ?? {}).toString(), "metadata%5Ba%5D=");
   });
 
   it("checks that an ID is an ID", () => {
@@ -355,6 +384,11 @@ describe("stripe request", () => {
   it("reads metadata and price lines", () => {
     assert.deepEqual(metadataOf('{"a":1,"b":null}'), { a: "1", b: "" });
     assert.throws(() => metadataOf("[1]"), /JSON object/);
+    assert.throws(() => metadataOf('{"a":{"b":1}}'), /"a" must be text/);
+    assert.throws(() => metadataOf('{"a":[1]}'), /"a" must be text/);
+    assert.equal(metadataOf("{}"), undefined);
+    assert.equal(metadataOf("{}", true), "");
+    assert.equal(metadataOf("null", true), "");
     assert.throws(() => metadataOf("x"), /must be JSON/);
     assert.deepEqual(lineItemsOf("price_1", "x"), [{ price: "price_1" }]);
     assert.throws(() => lineItemsOf("price_1:0", "x"), /quantity/);
@@ -363,10 +397,20 @@ describe("stripe request", () => {
 });
 
 describe("stripe api", () => {
-  it("drops empty values, keeps false and 0, and nests objects and lists", () => {
+  it("sends empty values to unset a field, and skips undefined", () => {
+    assert.equal(formBody({ a: "", b: null, c: undefined }).toString(), "a=&b=");
+  });
+
+  it("sends the Stripe-Version header", async () => {
+    const calls = mockFetch([{ body: {} }]);
+    await callStripe(access, { method: "GET", path: "/v1/balance" }, options);
+    assert.equal(headerOf(calls[0], "stripe-version"), STRIPE_API_VERSION);
+  });
+
+  it("nests objects and lists, and keeps false and 0", () => {
     const form = formBody({
       A: "1",
-      B: "",
+      B: undefined,
       C: undefined,
       D: false,
       E: 0,
@@ -516,6 +560,17 @@ describe("stripe credential", () => {
       /starts with "sk_"/,
     );
   });
+
+  it("accepts a restricted key that has no Balance permission", async () => {
+    mockFetch([{ status: 403, body: { error: { message: "no permission" } } }]);
+    await credentialTypes[0]?.test?.(credential as never);
+    mock.restoreAll();
+    mockFetch([{ status: 401, body: { error: { code: "invalid_api_key" } } }]);
+    await assert.rejects(
+      credentialTypes[0]?.test?.(credential as never) ?? Promise.resolve(),
+      /401/,
+    );
+  });
 });
 
 describe("stripe trigger", () => {
@@ -655,7 +710,79 @@ describe("stripe trigger", () => {
     assert.equal(trigger.webhookTest, undefined);
   });
 
+  it("finds a header in any case", () => {
+    assert.equal(findHeader({ "Stripe-Signature": "x" }, "stripe-signature"), "x");
+    assert.equal(findHeader({}, "stripe-signature"), undefined);
+    assert.equal(
+      verifyStripeRequest(
+        WEBHOOK_SECRET,
+        { headers: { "Stripe-Signature": signed(body) }, rawBody: body },
+        NOW,
+      ),
+      true,
+    );
+  });
+
+  it("refuses a request without a raw body", () => {
+    assert.equal(
+      verifyStripeRequest(WEBHOOK_SECRET, { headers: { "stripe-signature": signed("") } }, NOW),
+      false,
+    );
+  });
+
+  it("activates without a call to Stripe", async () => {
+    const calls = mockFetch([]);
+    const activate = def("trigger.stripe").webhook?.activate;
+    assert.ok(activate);
+    await activate({ config: {}, credential, url: "x", signal } as never);
+    assert.equal(calls.length, 0);
+    await assert.rejects(
+      activate({
+        config: {},
+        credential: { type: "stripe.account", data: { secretKey: KEY } },
+        url: "x",
+        signal,
+      } as never),
+      /webhookSecret/,
+    );
+  });
+
+  it("ignores a replayed event ID inside the window", async () => {
+    clearSeenEvents();
+    mock.method(Date, "now", () => NOW);
+    const receive = def("trigger.stripe").webhook?.receive;
+    assert.ok(receive);
+    const ask = () =>
+      receive({
+        config: { events: ["*"] },
+        credential,
+        url: "https://zerodot.test/hooks/abc",
+        request: {
+          method: "POST",
+          headers: { "stripe-signature": signed(body) },
+          query: {},
+          body: {},
+          rawBody: body,
+        },
+      } as never);
+    assert.equal((await ask()).verdict, "accept");
+    assert.equal((await ask()).verdict, "ignore");
+    clearSeenEvents();
+  });
+
+  it("forgets event IDs after the window and keeps a bounded set", () => {
+    clearSeenEvents();
+    assert.equal(isDuplicateEvent("evt_a", 0), false);
+    assert.equal(isDuplicateEvent("evt_a", 1000), true);
+    assert.equal(isDuplicateEvent("evt_a", 601_000), false);
+    for (let index = 0; index < SEEN_LIMIT + 5; index++) isDuplicateEvent(`evt_${index}`, 700_000);
+    assert.equal(isDuplicateEvent("evt_0", 700_001), false);
+    assert.equal(isDuplicateEvent(`evt_${SEEN_LIMIT + 4}`, 700_002), true);
+    clearSeenEvents();
+  });
+
   it("accepts a request with a good signature", async () => {
+    clearSeenEvents();
     mock.method(Date, "now", () => NOW);
     const receive = def("trigger.stripe").webhook?.receive;
     assert.ok(receive);

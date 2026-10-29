@@ -2,7 +2,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { defineNode, type ResolvedCredential, type WebhookVerdict } from "@zerodot/node-sdk";
 import { z } from "zod";
-import { callStripe, STRIPE_CREDENTIAL, stripeAccess } from "./api";
+import { STRIPE_CREDENTIAL, stripeAccess } from "./api";
 import { STRIPE_ICON } from "./icon";
 
 export const EVENT_TYPES = [
@@ -119,6 +119,47 @@ export function parseSignatureHeader(header: string | undefined): {
 }
 
 /**
+ * The value of a header. The SDK types do not say that the keys are lowercase, so this
+ * looks for the name in any case.
+ */
+export function headerOf(headers: Record<string, string>, name: string): string | undefined {
+  const wanted = name.toLowerCase();
+  for (const [key, value] of Object.entries(headers)) {
+    if (key.toLowerCase() === wanted) return value;
+  }
+  return undefined;
+}
+
+/** How many event IDs the node remembers. The oldest ID goes first when the set is full. */
+export const SEEN_LIMIT = 10_000;
+/** The SDK does not remove duplicate events, so the node does it. ID -> end of memory (ms). */
+const seen = new Map<string, number>();
+
+/**
+ * True if the event ID came in the last two tolerance windows. If not, the node remembers it.
+ * Expired IDs go away on each call. `now` is in milliseconds.
+ */
+export function isDuplicateEvent(id: string, now: number = Date.now()): boolean {
+  for (const [key, until] of seen) {
+    if (until > now) break; // Entries are in time order, so the rest are still valid.
+    seen.delete(key);
+  }
+  const until = seen.get(id);
+  if (until !== undefined && until > now) return true;
+  seen.delete(id);
+  seen.set(id, now + 2 * TOLERANCE_SECONDS * 1000);
+  while (seen.size > SEEN_LIMIT) {
+    const oldest = seen.keys().next().value;
+    if (oldest === undefined) break;
+    seen.delete(oldest);
+  }
+  return false;
+}
+
+/** For tests. */
+export const clearSeenEvents = (): void => seen.clear();
+
+/**
  * Checks the signature of a request. One `v1` value must match, and the timestamp must be
  * inside the tolerance. `now` is in milliseconds.
  */
@@ -128,10 +169,14 @@ export function verifyStripeRequest(
   now: number = Date.now(),
   toleranceSeconds: number = TOLERANCE_SECONDS,
 ): boolean {
-  const { timestamp, signatures } = parseSignatureHeader(request.headers["stripe-signature"]);
+  // Without the raw body, the signature cannot be checked.
+  if (request.rawBody === undefined) return false;
+  const { timestamp, signatures } = parseSignatureHeader(
+    headerOf(request.headers, "stripe-signature"),
+  );
   if (!timestamp || !/^\d+$/.test(timestamp) || signatures.length === 0) return false;
   if (Math.abs(now / 1000 - Number(timestamp)) > toleranceSeconds) return false;
-  const wanted = Buffer.from(stripeSignature(secret, timestamp, request.rawBody ?? ""));
+  const wanted = Buffer.from(stripeSignature(secret, timestamp, request.rawBody));
   return signatures.some((signature) => {
     const given = Buffer.from(signature);
     return given.byteLength === wanted.byteLength && timingSafeEqual(given, wanted);
@@ -213,17 +258,21 @@ export default defineNode({
         return { verdict: "forbidden", status: 401 };
       }
       if (!verifyStripeRequest(secret, request)) return { verdict: "forbidden", status: 401 };
-      return checkStripeEvent(triggerConfig.parse(raw), request.rawBody ?? "");
+      const verdict = checkStripeEvent(triggerConfig.parse(raw), request.rawBody ?? "");
+      // Remember only the events that start a workflow. A replay inside the window is ignored.
+      if (verdict.verdict === "accept") {
+        const id = (verdict.input as { id: string }).id;
+        if (isDuplicateEvent(id)) return { verdict: "ignore" };
+      }
+      return verdict;
     },
-    /** Checks that the credential works. The trigger needs the webhook secret for the signature. */
-    async activate({ credential, signal }) {
+    /**
+     * The trigger needs the webhook secret for the signature, and nothing else. It makes no call
+     * to Stripe, so a restricted key without any permission works.
+     */
+    async activate({ credential }) {
       webhookSecretOf(credential);
-      const answer = await callStripe(
-        stripeAccess(credential),
-        { method: "GET", path: "/v1/balance" },
-        { signal, timeoutMs: 15_000 },
-      );
-      return { livemode: answer.livemode === true };
+      return null;
     },
   },
   // No `webhookTest`: Stripe sends events only to the address in the Dashboard.

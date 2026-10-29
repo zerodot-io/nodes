@@ -415,6 +415,21 @@ describe("twilio trigger", () => {
     );
   });
 
+  it("rejects a request that has no raw body", () => {
+    const sign = twilioSignature("secret-token", url, new URLSearchParams(""));
+    assert.equal(
+      verifyTwilioRequest("secret-token", url, { headers: { "x-twilio-signature": sign } }),
+      false,
+    );
+    assert.equal(
+      verifyTwilioRequest("secret-token", url, {
+        headers: { "x-twilio-signature": sign },
+        rawBody: "",
+      }),
+      true,
+    );
+  });
+
   it("tells the events apart", () => {
     const of = (body: string) => eventOf(Object.fromEntries(new URLSearchParams(body)));
     assert.equal(of(incoming), "message");

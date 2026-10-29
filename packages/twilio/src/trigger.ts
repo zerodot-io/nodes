@@ -61,10 +61,10 @@ export function verifyTwilioRequest(
   url: string,
   request: { headers: Record<string, string>; rawBody?: string },
 ): boolean {
+  // Twilio signs the address and the sorted form fields. Without a raw body, there is nothing to check.
+  if (request.rawBody === undefined) return false;
   const given = Buffer.from(request.headers["x-twilio-signature"] ?? "");
-  const wanted = Buffer.from(
-    twilioSignature(authToken, url, new URLSearchParams(request.rawBody ?? "")),
-  );
+  const wanted = Buffer.from(twilioSignature(authToken, url, new URLSearchParams(request.rawBody)));
   return given.byteLength === wanted.byteLength && timingSafeEqual(given, wanted);
 }
 

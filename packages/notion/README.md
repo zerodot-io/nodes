@@ -13,9 +13,9 @@ Manual: install `@zerodot/notion` where the web app and the worker run, and add 
 ### Notion (`notion.api`)
 
 - **Search**: find pages and data sources by title
-- **Page**: get, create (below a page, with a title and optional blocks), update the properties, archive
+- **Page**: get, create (below a page, with a title and optional blocks), update the properties, archive, get the content as Markdown, change the content with Markdown (replace all, or find and replace)
 - **Database**: get a database, list the data sources, get a data source (with the type of each property), query a data source (JSON filter, time filters, sort), create a row
-- **Block**: get a block, get the children of a page or block, append blocks, delete a block
+- **Block**: get a block, get the children of a page or block (with an option for nested blocks, at most 3 levels below; a block that the node did not read has `truncated: true`), append blocks, delete a block
 - **User**: get a user, list the users of the workspace
 
 The node uses the Notion API version `2026-03-11`. In this version, a database holds one or more data sources. To query a database or add a row, use the ID of a data source. **Get** on a database shows the data sources and their IDs.
@@ -44,3 +44,7 @@ The first check only marks the time, so the rows that exist then start no runs. 
 ## License
 
 AGPL-3.0-only
+
+## Nested blocks
+
+A block with children has `children`. A block that has `truncated: true` has children that the node did not read. The cause is the depth limit, the limit of 5000 API calls or blocks, or the 60 second time limit. A block with no children has neither key. The node reads 3 blocks at a time. After HTTP 429, it waits for `Retry-After` (10 seconds at most) and tries again, 2 times at most.

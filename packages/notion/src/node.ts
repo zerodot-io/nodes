@@ -5,6 +5,7 @@ import { notionConfig } from "./config";
 import { NOTION_ICON } from "./icon";
 import { buildRequest } from "./request";
 import { simplifyItem } from "./simplify";
+import { withChildren } from "./tree";
 
 export default defineNode({
   type: "notion.api",
@@ -19,6 +20,11 @@ export default defineNode({
     { label: "Create a page", config: { resource: "page", operation: "create" } },
     { label: "Update a page", config: { resource: "page", operation: "update" } },
     { label: "Archive a page", config: { resource: "page", operation: "archive" } },
+    { label: "Get a page as Markdown", config: { resource: "page", operation: "getMarkdown" } },
+    {
+      label: "Update a page with Markdown",
+      config: { resource: "page", operation: "updateMarkdown" },
+    },
     { label: "Get a database", config: { resource: "database", operation: "get" } },
     { label: "List data sources", config: { resource: "database", operation: "list" } },
     {
@@ -55,7 +61,7 @@ export default defineNode({
       : undefined,
   async run({ config, credential, signal }) {
     const access = notionAccess(credential);
-    const options = { signal, timeoutMs: config.timeoutMs };
+    const options = { signal, timeoutMs: config.timeoutMs, retries: 2 };
     const request = buildRequest(config);
 
     if (request.list) {
@@ -65,6 +71,16 @@ export default defineNode({
         config.returnAll ? null : config.limit,
         options,
       );
+      if (config.resource === "block" && config.recursive) {
+        const tree = await withChildren(
+          access,
+          items,
+          config.maxDepth,
+          config.simplify ? simplifyItem : (item) => item,
+          options,
+        );
+        return { port: "out", data: tree };
+      }
       return { port: "out", data: config.simplify ? items.map(simplifyItem) : items };
     }
 
