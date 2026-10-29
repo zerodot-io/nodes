@@ -1,0 +1,36 @@
+name: publish
+# Push a tag like `pdf@1.0.0` to publish packages/pdf to npm.
+on:
+  push:
+    tags: ["*@*"]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g pnpm@12.15.0
+      - name: Check tag against package.json
+        id: pkg
+        run: |
+          name="${GITHUB_REF_NAME%@*}"
+          version="${GITHUB_REF_NAME##*@}"
+          dir="packages/$name"
+          test -f "$dir/package.json" || { echo "No package at $dir"; exit 1; }
+          actual=$(node -p "require('./$dir/package.json').version")
+          [ "$actual" = "$version" ] || { echo "Tag $version, package.json $actual"; exit 1; }
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint
+      - run: pnpm run check-types
+      - run: pnpm run test
+      - run: pnpm run build
+      - name: Publish
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: pnpm publish --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

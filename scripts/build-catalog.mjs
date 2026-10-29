@@ -8,10 +8,23 @@ import { pathToFileURL } from "node:url";
 const root = resolve(import.meta.dirname, "..");
 const packages = [];
 
+// A package that is not on npm yet cannot be installed, so it stays out of the catalog.
+async function isPublished(name, version) {
+  const response = await fetch(`https://registry.npmjs.org/${name.replace("/", "%2f")}/${version}`);
+  if (response.status === 404) return false;
+  if (!response.ok)
+    throw new Error(`npm registry answered ${response.status} for ${name}@${version}`);
+  return true;
+}
+
 for (const folder of readdirSync(join(root, "packages")).sort()) {
   const dir = join(root, "packages", folder);
   const json = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
   if (json.private || !json.zerodot?.sdk) continue;
+  if (!(await isPublished(json.name, json.version))) {
+    console.log(`skip ${json.name}@${json.version}: not on npm`);
+    continue;
+  }
   const entry = typeof json.exports === "string" ? json.exports : json.exports?.["."];
   const loaded = await import(pathToFileURL(join(dir, entry)).href);
   // The icon of the package is the icon of its first node that has one.
