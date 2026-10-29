@@ -1,0 +1,50 @@
+{
+  "name": "@zerodot/higgsfield",
+  "version": "1.0.0",
+  "description": "Make images and videos with the Higgsfield API: run any Higgsfield model, wait for the result or check it later, and cancel or delete a request. Use it for AI video, ads, and image steps in a workflow.",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerodot-io/nodes.git",
+    "directory": "packages/higgsfield"
+  },
+  "keywords": [
+    "zerodot-node-package"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "exports": {
+    ".": "./dist/index.cjs"
+  },
+  "files": [
+    "dist",
+    "higgsfield.svg"
+  ],
+  "zerodot": {
+    "sdk": "^1.2",
+    "label": "Higgsfield",
+    "summary": "AI image and video generation"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -p tsconfig.json",
+    "test": "tsx --test src/*.test.ts",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "@zerodot/node-sdk": "^1.2.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@zerodot/node-sdk": "^1.2.1",
+    "tsdown": "0.23.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  }
+}

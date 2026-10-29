@@ -20,6 +20,7 @@ ZERODOT_NODE_PACKAGES=@zerodot/redis
 - [`email`](packages/email): send email and react to new mail
 - [`github`](packages/github): issues, repos, files, and webhook triggers
 - [`google-sheets`](packages/google-sheets): read and write rows in spreadsheets
+- [`higgsfield`](packages/higgsfield): AI image and video generation
 - [`mcp`](packages/mcp): call tools on an MCP server
 - [`mongodb`](packages/mongodb): documents in MongoDB
 - [`mysql`](packages/mysql): queries and rows in MySQL
