@@ -2,7 +2,7 @@
 
 Official node packages for [zerodot](https://github.com/zerodot-io/zerodot). zerodot ships with the core nodes only. Install the rest when you need them.
 
-[`redis`](packages/redis) · [`postgres`](packages/postgres) · [`mysql`](packages/mysql) · [`mongodb`](packages/mongodb) · [`email`](packages/email) · [`ssh`](packages/ssh) · [`s3`](packages/s3) · [`edit-image`](packages/edit-image) · [`mcp`](packages/mcp) · [`telegram`](packages/telegram) · [`github`](packages/github) · [`pdf`](packages/pdf)
+[`redis`](packages/redis) · [`postgres`](packages/postgres) · [`mysql`](packages/mysql) · [`mongodb`](packages/mongodb) · [`email`](packages/email) · [`ssh`](packages/ssh) · [`s3`](packages/s3) · [`edit-image`](packages/edit-image) · [`mcp`](packages/mcp) · [`telegram`](packages/telegram) · [`github`](packages/github) · [`pdf`](packages/pdf) · [`slack`](packages/slack) · [`discord`](packages/discord) · [`google-sheets`](packages/google-sheets)
 
 ## Use
 
