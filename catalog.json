@@ -78,6 +78,28 @@
       ]
     },
     {
+      "name": "@zerodot/feedbackjar",
+      "label": "FeedbackJar",
+      "summary": "Posts, comments, votes, and webhook triggers",
+      "description": "Manage feedback posts, comments, votes, boards, and tags in FeedbackJar, and start a workflow when a post or comment changes. Use it to move user feedback into your other tools.",
+      "version": "1.0.0",
+      "sdk": "^1.2",
+      "icon": "MessageSquare",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDY2IiBoZWlnaHQ9IjM1NSIgdmlld0JveD0iMCAwIDQ2NiAzNTUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNS40NDQgMzU0Ljk5MUgyMDcuODI4SDQwMy45NDZDNDM4LjAwOSAzNTQuOTkxIDQ2NS42MjQgMzI3LjM0OSA0NjUuNjI0IDI5My4yNTJWNjEuNzQ0MUM0NjUuNjI0IDI3LjY0NjkgNDM4LjAwOSAwLjAwNTYyMTM1IDQwMy45NDYgMC4wMDUwMDY4NkwxMjYuMzk5IDEuMDI0NTRlLTA4QzkyLjMzNDcgLTAuMDAwNjE0NDg4IDY0LjcyMDIgMjcuNjQxMSA2NC43MjAyIDYxLjczOTFWMjIyLjY2N0M2NC43MjAyIDIyOC40NTMgNjMuMDk1OCAyMzQuMTIyIDYwLjAzMjEgMjM5LjAyOUwyLjM2ODcyIDMzMS4zNzZDLTQuMDUwNTQgMzQxLjY1NSAzLjMzMjgzIDM1NC45OTEgMTUuNDQ0IDM1NC45OTFaTTM2NS4zOTcgMTc3LjQ5OEMzMjAuOTcyIDE1Ny4yODIgMjg1LjM2NyAxMjEuNjQyIDI2NS4xNzEgNzcuMTcyOEMyNDQuOTczIDEyMS42NDIgMjA5LjM2OCAxNTcuMjgyIDE2NC45NDUgMTc3LjQ5OEMyMDkuMzY4IDE5Ny43MTYgMjQ0Ljk3MyAyMzMuMzU3IDI2NS4xNzEgMjc3LjgyNUMyODUuMzY3IDIzMy4zNTcgMzIwLjk3MiAxOTcuNzE2IDM2NS4zOTcgMTc3LjQ5OFoiIGZpbGw9IiNGNjQyNDIiLz48L3N2Zz4K",
+      "nodes": [
+        {
+          "type": "trigger.feedbackjar",
+          "label": "FeedbackJar Trigger",
+          "description": "Start the workflow when a post, comment, or tag changes in FeedbackJar"
+        },
+        {
+          "type": "feedbackjar.api",
+          "label": "FeedbackJar",
+          "description": "Work with feedback posts, comments, votes, boards, and tags in FeedbackJar"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/github",
       "label": "GitHub",
       "summary": "Issues, repos, files, and webhook triggers",
@@ -96,6 +118,72 @@
           "type": "github.api",
           "label": "GitHub",
           "description": "Work with issues, repositories, files, and releases on GitHub"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/gmail",
+      "label": "Gmail",
+      "summary": "Send, read, and label emails in Gmail",
+      "description": "Send, reply to, and draft emails in Gmail. Read, search, label, trash, and delete messages and threads, with attachments as binary data. A trigger starts a run for each new email that matches a query. Connect with Google sign-in or a service account.",
+      "version": "1.0.0",
+      "sdk": "^1.2",
+      "icon": "Mail",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJNMzQuOSA0NDhoODEuNVYyNTAuMkwwIDE2M3YyNTAuMkMwIDQzMi41IDE1LjcgNDQ4IDM0LjkgNDQ4IiBzdHlsZT0iZmlsbDojNDI4NWY0Ii8+PHBhdGggZD0iTTM5NS42IDQ0OGg4MS41YzE5LjMgMCAzNC45LTE1LjcgMzQuOS0zNC45VjE2M2wtMTE2LjQgODcuMyIgc3R5bGU9ImZpbGw6IzM0YTg1MyIvPjxwYXRoIGQ9Ik0zOTUuNiA5OXYxNTEuM0w1MTIgMTYzdi00Ni41YzAtNDMuMi00OS4zLTY3LjgtODMuOC00MS45IiBzdHlsZT0iZmlsbDojZmJiYzA0Ii8+PHBhdGggZD0iTTExNi40IDI1MC4yVjk5TDI1NiAyMDMuNyAzOTUuNiA5OXYxNTEuM0wyNTYgMzU1IiBzdHlsZT0iZmlsbDojZWE0MzM1Ii8+PHBhdGggZD0iTTAgMTE2LjRWMTYzbDExNi40IDg3LjNWOTlMODMuOCA3NC41QzQ5LjIgNDguNiAwIDczLjIgMCAxMTYuNCIgc3R5bGU9ImZpbGw6I2M1MjIxZiIvPjwvc3ZnPg==",
+      "nodes": [
+        {
+          "type": "gmail.api",
+          "label": "Gmail",
+          "description": "Send, read, search, and label emails in Gmail"
+        },
+        {
+          "type": "gmail.trigger",
+          "label": "On new email (Gmail)",
+          "description": "Start a run when a new email matches a search or a label"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/google-calendar",
+      "label": "Google Calendar",
+      "summary": "Events, availability, and new-event triggers",
+      "description": "Create, read, update, and delete events in Google Calendar. List calendars, quick add an event, check free and busy times, and start a workflow on new or changed events. Connect with Google sign-in or a service account.",
+      "version": "1.0.0",
+      "sdk": "^1.2",
+      "icon": "Calendar",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJNMzg3IDExNy41IDI2NS43IDEwNGwtMTQ4LjIgMTMuNUwxMDQgMjUyLjIgMTE3LjUgMzg3bDEzNC43IDE2LjhMMzg3IDM4N2wxMy41LTEzOC4xeiIgc3R5bGU9ImZpbGw6I2ZmZiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMy43NSAzLjc1KSIvPjxwYXRoIGQ9Ik0xNzYuNTUgMzMwLjM1Yy0xMC4xLTYuOC0xNy0xNi43LTIwLjktMjkuOWwyMy40LTkuNmMyLjEgOC4xIDUuOCAxNC4zIDExLjEgMTguOCA1LjMgNC40IDExLjcgNi42IDE5LjEgNi42IDcuNiAwIDE0LjItMi4zIDE5LjctN3M4LjMtMTAuNiA4LjMtMTcuOHEwLTEwLjk1LTguNy0xOGMtNS44LTQuNi0xMy4xLTctMjEuOC03aC0xMy41di0yMy4xaDEyLjFjNy41IDAgMTMuOC0yIDE4LjktNi4xIDUuMS00IDcuNy05LjYgNy43LTE2LjZxMC05LjQ1LTYuOS0xNWMtNC42LTMuNy0xMC40LTUuNi0xNy40LTUuNi02LjkgMC0xMi4zIDEuOC0xNi40IDUuNS00IDMuNy03IDguMi04LjggMTMuNWwtMjMuMS05LjZjMy4xLTguNyA4LjctMTYuNCAxNi45LTIzIDguMy02LjYgMTguOC0xMCAzMS42LTEwIDkuNSAwIDE4IDEuOCAyNS41IDUuNXMxMy41IDguOCAxNy44IDE1LjJjNC4zIDYuNSA2LjQgMTMuOCA2LjQgMjEuOSAwIDguMy0yIDE1LjItNiAyMXEtNiA4LjU1LTE0LjcgMTMuMnYxLjRjNy42IDMuMiAxMy45IDguMSAxOC44IDE0LjdzNy4zIDE0LjQgNy4zIDIzLjYtMi4zIDE3LjMtNyAyNC41Yy00LjYgNy4yLTExLjEgMTIuOC0xOS4yIDE2LjktOC4yIDQuMS0xNy40IDYuMi0yNy42IDYuMi0xMS42IDAtMjIuNS0zLjQtMzIuNi0xMC4ybTE0My40LTExNi0yNS41IDE4LjYtMTIuOC0xOS41IDQ2LTMzLjJoMTcuN3YxNTYuN2gtMjUuM3YtMTIyLjZ6IiBzdHlsZT0iZmlsbDojMWE3M2U4Ii8+PHBhdGggZD0iTTM4NyA1MDguMiA1MDguMiAzODdsLTYwLjYtMjctNjAuNiAyNy0yNyA2MC42eiIgc3R5bGU9ImZpbGw6I2VhNDMzNSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMy43NSAzLjc1KSIvPjxwYXRoIGQ9Im05MC42IDQ0Ny42IDI2LjkgNjAuNkgzODdWMzg3SDExNy41eiIgc3R5bGU9ImZpbGw6IzM0YTg1MyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMy43NSAzLjc1KSIvPjxwYXRoIGQ9Ik0zNi43LTMuOEMxNC4zLTMuOC0zLjggMTQuMy0zLjggMzYuN1YzODdsNjAuNiAyNi45IDYwLjYtMjYuOVYxMTcuNUgzODdsMjYuOS02MC42TDM4Ny0zLjh6IiBzdHlsZT0iZmlsbDojNDI4NWY0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzLjc1IDMuNzUpIi8+PHBhdGggZD0iTS0zLjggMzg3djgwLjhjMCAyMi4zIDE4LjEgNDAuNCA0MC40IDQwLjRoODAuOFYzODd6IiBzdHlsZT0iZmlsbDojMTg4MDM4IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzLjc1IDMuNzUpIi8+PHBhdGggZD0iTTM4NyAxMTcuNVYzODdoMTIxLjNWMTE3LjVsLTYwLjYtMjYuOXoiIHN0eWxlPSJmaWxsOiNmYmJjMDQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMuNzUgMy43NSkiLz48cGF0aCBkPSJNNTA4LjIgMTE3LjVWMzYuN2MwLTIyLjMtMTguMS00MC40LTQwLjQtNDAuNEgzODd2MTIxLjNoMTIxLjJ6IiBzdHlsZT0iZmlsbDojMTk2N2QyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzLjc1IDMuNzUpIi8+PC9zdmc+",
+      "nodes": [
+        {
+          "type": "trigger.google_calendar",
+          "label": "On Google Calendar event",
+          "description": "Check a calendar on a timer and start a run for each new or changed event"
+        },
+        {
+          "type": "google_calendar.api",
+          "label": "Google Calendar",
+          "description": "Create, read, and change events in Google Calendar, and check availability"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/google-drive",
+      "label": "Google Drive",
+      "summary": "Find, upload, download, and share files",
+      "description": "Find, upload, download, copy, move, delete, and share files and folders in Google Drive. Start a workflow when a file is new or changed. Connect with Google sign-in or a service account.",
+      "version": "1.0.0",
+      "sdk": "^1.2",
+      "icon": "HardDrive",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJtMzguNyA0MTkuMyAyMi42IDM5YzQuNyA4LjIgMTEuNCAxNC43IDE5LjQgMTkuNGw4MC42LTEzOS42SDBjMCA5LjEgMi4zIDE4LjIgNyAyNi40eiIgc3R5bGU9ImZpbGw6IzAwNjZkYSIvPjxwYXRoIGQ9Ik0yNTYgMTczLjkgMTc1LjQgMzQuM2MtNy45IDQuNy0xNC43IDExLjEtMTkuNCAxOS40TDcgMzExLjdjLTQuNiA4LTcgMTcuMS03IDI2LjRoMTYxLjN6IiBzdHlsZT0iZmlsbDojMDBhYzQ3Ii8+PHBhdGggZD0iTTQzMS40IDQ3Ny43YzcuOS00LjcgMTQuNy0xMS4xIDE5LjQtMTkuNGw5LjQtMTYuMSA0NC45LTc3LjdjNC43LTguMiA3LTE3LjMgNy0yNi40SDM1MC43bDM0LjMgNjcuNHoiIHN0eWxlPSJmaWxsOiNlYTQzMzUiLz48cGF0aCBkPSJtMjU2IDE3My45IDgwLjYtMTM5LjZjLTcuOS00LjctMTctNy0yNi40LTdIMjAxLjhjLTkuNCAwLTE4LjUgMi42LTI2LjQgN3oiIHN0eWxlPSJmaWxsOiMwMDgzMmQiLz48cGF0aCBkPSJNMzUwLjcgMzM4LjFIMTYxLjNMODAuNiA0NzcuN2M3LjkgNC43IDE3IDcgMjYuNCA3aDI5OGM5LjQgMCAxOC41LTIuNiAyNi40LTd6IiBzdHlsZT0iZmlsbDojMjY4NGZjIi8+PHBhdGggZD0iTTQzMC41IDE4Mi43IDM1NiA1My43Yy00LjctOC4yLTExLjQtMTQuNy0xOS40LTE5LjRMMjU2IDE3My45bDk0LjcgMTY0LjJoMTYxYzAtOS4xLTIuMy0xOC4yLTctMjYuNHoiIHN0eWxlPSJmaWxsOiNmZmJhMDAiLz48L3N2Zz4=",
+      "nodes": [
+        {
+          "type": "trigger.google_drive",
+          "label": "On Google Drive file change",
+          "description": "Check Google Drive on a timer and start a run for each new or changed file"
+        },
+        {
+          "type": "google_drive.api",
+          "label": "Google Drive",
+          "description": "Find, upload, download, and share files in Google Drive"
         }
       ]
     },
@@ -130,6 +218,28 @@
           "type": "higgsfield.api",
           "label": "Higgsfield",
           "description": "Make AI images and videos with any Higgsfield model"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/linear",
+      "label": "Linear",
+      "summary": "Issues, comments, projects, and webhook triggers",
+      "description": "Work with issues, comments, projects, teams, and cycles in Linear, and start a workflow on an event, such as a new issue or comment. Use it to automate your product work.",
+      "version": "1.0.0",
+      "sdk": "^1.1",
+      "icon": "ListChecks",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHBhdGggZmlsbD0iIzIyMjMyNiIgZD0iTTEuMjI1NDEgNjEuNTIyOGMtLjIyMjUtLjk0ODUuOTA3NDgtMS41NDU5IDEuNTk2MzgtLjg1N0wzOS4zMzQyIDk3LjE3ODJjLjY4ODkuNjg4OS4wOTE1IDEuODE4OS0uODU3IDEuNTk2NEMyMC4wNTE1IDk0LjQ1MjIgNS41NDc3OSA3OS45NDg1IDEuMjI1NDEgNjEuNTIyOFpNLjAwMTg5MTM1IDQ2Ljg4OTFjLS4wMTc2NDM3NS4yODMzLjA4ODg3MjE1LjU1OTkuMjg5NTcxNjUuNzYwNkw1Mi4zNTAzIDk5LjcwODVjLjIwMDcuMjAwNy40NzczLjMwNzUuNzYwNi4yODk2IDIuMzY5Mi0uMTQ3NiA0LjY5MzgtLjQ2IDYuOTYyNC0uOTI1OS43NjQ1LS4xNTcgMS4wMzAxLTEuMDk2My40NzgyLTEuNjQ4MUwyLjU3NTk1IDM5LjQ0ODVjLS41NTE4Ni0uNTUxOS0xLjQ5MTE3LS4yODYzLTEuNjQ4MTc0LjQ3ODItLjQ2NTkxNSAyLjI2ODYtLjc3ODMyIDQuNTkzMi0uOTI1ODg0NjUgNi45NjI0Wk00LjIxMDkzIDI5LjcwNTRjLS4xNjY0OS4zNzM4LS4wODE2OS44MTA2LjIwNzY1IDEuMWw2NC43NzYwMiA2NC43NzZjLjI4OTQuMjg5NC43MjYyLjM3NDIgMS4xLjIwNzcgMS43ODYxLS43OTU2IDMuNTE3MS0xLjY5MjcgNS4xODU1LTIuNjg0LjU1MjEtLjMyOC42MzczLTEuMDg2Ny4xODMyLTEuNTQwN0w4LjQzNTY2IDI0LjMzNjdjLS40NTQwOS0uNDU0MS0xLjIxMjcxLS4zNjg5LTEuNTQwNzQuMTgzMi0uOTkxMzIgMS42Njg0LTEuODg4NDMgMy4zOTk0LTIuNjgzOTkgNS4xODU1Wk0xMi42NTg3IDE4LjA3NGMtLjM3MDEtLjM3MDEtLjM5My0uOTYzNy0uMDQ0My0xLjM1NDFDMjEuNzc5NSA2LjQ1OTMxIDM1LjExMTQgMCA0OS45NTE5IDAgNzcuNTkyNyAwIDEwMCAyMi40MDczIDEwMCA1MC4wNDgxYzAgMTQuODQwNS02LjQ1OTMgMjguMTcyNC0xNi43MTk5IDM3LjMzNzUtLjM5MDMuMzQ4Ny0uOTg0LjMyNTgtMS4zNTQyLS4wNDQzTDEyLjY1ODcgMTguMDc0WiIvPjwvc3ZnPg==",
+      "nodes": [
+        {
+          "type": "trigger.linear",
+          "label": "Linear Trigger",
+          "description": "Start the workflow on an event in Linear"
+        },
+        {
+          "type": "linear.api",
+          "label": "Linear",
+          "description": "Work with issues, comments, projects, teams, and cycles in Linear"
         }
       ]
     },
@@ -202,6 +312,23 @@
           "type": "notion.api",
           "label": "Notion",
           "description": "Search a workspace, and read and write pages, databases, and blocks in Notion"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/pdf",
+      "label": "PDF",
+      "summary": "Create, read, merge, split, and rotate PDF files",
+      "description": "Work with PDF files: create a file from text, read the text and page count, merge files, pick pages, split a file, and rotate pages. Use it to prepare or read documents in a workflow.",
+      "version": "1.1.0",
+      "sdk": "^1.1",
+      "icon": "FileText",
+      "iconUrl": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgd2lkdGg9IjEyOCIgaGVpZ2h0PSIxMjgiIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48dGl0bGU+UERGIGZpbGUgaWNvbjwvdGl0bGU+PGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGRmLWJvZHkiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjNDU0QjU2Ii8+PHN0b3Agb2Zmc2V0PSIuNyIgc3RvcC1jb2xvcj0iIzI0MjkzMiIvPjwvbGluZWFyR3JhZGllbnQ+CjxsaW5lYXJHcmFkaWVudCBpZD0icGRmLWNvbG9yIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iI0VENjU3OCIvPjxzdG9wIG9mZnNldD0iLjYiIHN0b3AtY29sb3I9IiNEMDMxNTAiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNBMTFDM0IiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBkZi1mb2xkIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzhDOTQ5RiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzU4NjE2RCIvPjwvbGluZWFyR3JhZGllbnQ+CjxjbGlwUGF0aCBpZD0icGRmLWNsaXAiPjxwYXRoIGQ9Ik0xMy40NCAwSDkyLjE2TDEyOCAzNS44NFYxMTQuNTZRMTI4IDEyOCAxMTQuNTYgMTI4SDEzLjQ0UTAgMTI4IDAgMTE0LjU2VjEzLjQ0UTAgMCAxMy40NCAwWiIvPjwvY2xpcFBhdGg+PC9kZWZzPgo8ZyBjbGlwLXBhdGg9InVybCgjcGRmLWNsaXApIj48cGF0aCBmaWxsPSJ1cmwoI3BkZi1ib2R5KSIgZD0iTTEzLjQ0IDBIOTIuMTZMMTI4IDM1Ljg0VjExNC41NlExMjggMTI4IDExNC41NiAxMjhIMTMuNDRRMCAxMjggMCAxMTQuNTZWMTMuNDRRMCAwIDEzLjQ0IDBaIi8+CjxwYXRoIGZpbGw9InVybCgjcGRmLWNvbG9yKSIgZD0iTTAgNTYuNTc2TDEyOCA0OC42NFYxMjhIMFoiLz4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utb3BhY2l0eT0iLjE2IiBzdHJva2Utd2lkdGg9IjEuMSIgZD0iTTAgNTYuNTc2TDEyOCA0OC42NCIvPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS1vcGFjaXR5PSIuMTYiIHN0cm9rZS13aWR0aD0iMiIgZD0iTTAgMTI3SDEyOCIvPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuMiIgc3Ryb2tlLXdpZHRoPSIxLjIiIGQ9Ik0uNiAxMTNWMTMuNDRRLjYgLjYgMTMuNDQgLjZIOTIuMTYiLz4KPHBhdGggZmlsbD0idXJsKCNwZGYtZm9sZCkiIGQ9Ik05Mi4xNiAwTDEyOCAzNS44NEg5Ny4yOFE5Mi4xNiAzNS44NCA5Mi4xNiAzMC43MloiLz4KPHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTIyLjU1NzQzOTk5OTk5OTk5NiAxMDQuNFY2Ni41NTY4MDAwMDAwMDAwMUgzNS40NjU1OTk5OTk5OTk5OTVRMzkuNDU3MjggNjYuNTU2ODAwMDAwMDAwMDEgNDIuNDM4MDggNjguMDYwMTYwMDAwMDAwMDFRNDUuNDE4ODggNjkuNTYzNTIwMDAwMDAwMDEgNDcuMDUxODQgNzIuMjU5MlE0OC42ODQ3OTk5OTk5OTk5OTYgNzQuOTU0ODggNDguNjg0Nzk5OTk5OTk5OTk2IDc4LjU4MzY4UTQ4LjY4NDc5OTk5OTk5OTk5NiA4Mi4xNjA2NCA0Ny4wMjU5MiA4NC44ODIyNFE0NS4zNjcwNCA4Ny42MDM4NCA0Mi40MTIxNiA4OS4xMDcyUTM5LjQ1NzI4IDkwLjYxMDU2IDM1LjQ2NTU5OTk5OTk5OTk5NSA5MC42MTA1NkgzMC4zMzM0Mzk5OTk5OTk5OTZWMTA0LjRaTTMwLjMzMzQzOTk5OTk5OTk5NiA4My42MTIxNkgzNS40NjU1OTk5OTk5OTk5OTVRMzcuOTUzOTIgODMuNjEyMTYgMzkuNDMxMzYgODIuMjM4NDAwMDAwMDAwMDFRNDAuOTA4OCA4MC44NjQ2NDAwMDAwMDAwMSA0MC45MDg4IDc4LjU4MzY4UTQwLjkwODggNzYuMzAyNzIwMDAwMDAwMDEgMzkuNDMxMzYgNzQuOTI4OTZRMzcuOTUzOTIgNzMuNTU1MiAzNS40NjU1OTk5OTk5OTk5OTUgNzMuNTU1MkgzMC4zMzM0Mzk5OTk5OTk5OTZaIi8+PHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTUxLjcxMzkxOTk5OTk5OTk5NSAxMDQuNFY2Ni41NTY4MDAwMDAwMDAwMUg2My45OTk5OTk5OTk5OTk5OVE2Ny45Mzk4Mzk5OTk5OTk5OSA2Ni41NTY4MDAwMDAwMDAwMSA3MC44Njg4IDY4LjA2MDE2MDAwMDAwMDAxUTczLjc5Nzc2IDY5LjU2MzUyMDAwMDAwMDAxIDc1LjQzMDcyIDcyLjI4NTEyUTc3LjA2MzY3OTk5OTk5OTk5IDc1LjAwNjcyIDc3LjA2MzY3OTk5OTk5OTk5IDc4LjY4NzM2MDAwMDAwMDAxVjkyLjIxNzZRNzcuMDYzNjc5OTk5OTk5OTkgOTUuODQ2NCA3NS40MzA3MiA5OC41OTM5MlE3My43OTc3NiAxMDEuMzQxNDQgNzAuODY4OCAxMDIuODcwNzJRNjcuOTM5ODM5OTk5OTk5OTkgMTA0LjQgNjMuOTk5OTk5OTk5OTk5OTkgMTA0LjRaTTU5LjQ4OTkyIDk3LjE0MjQwMDAwMDAwMDAxSDYzLjk5OTk5OTk5OTk5OTk5UTY2LjM4NDYzOTk5OTk5OTk5IDk3LjE0MjQwMDAwMDAwMDAxIDY3LjgzNjE1OTk5OTk5OTk5IDk1Ljc5NDU2UTY5LjI4NzY4IDk0LjQ0NjcyIDY5LjI4NzY4IDkyLjIxNzZWNzguNjg3MzYwMDAwMDAwMDFRNjkuMjg3NjggNzYuNTEwMDggNjcuODM2MTU5OTk5OTk5OTkgNzUuMTYyMjRRNjYuMzg0NjM5OTk5OTk5OTkgNzMuODE0NCA2My45OTk5OTk5OTk5OTk5OSA3My44MTQ0SDU5LjQ4OTkyWiIvPjxwYXRoIGZpbGw9IiNGRkZGRkYiIGQ9Ik04MS4zODg3OTk5OTk5OTk5OSAxMDQuNFY2Ni41NTY4MDAwMDAwMDAwMUgxMDUuNzUzNTk5OTk5OTk5OTlWNzMuODE0NEg4OS4wNjExMTk5OTk5OTk5OVY4Mi4yMTI0OEgxMDQuNDA1NzU5OTk5OTk5OTlWODkuNDcwMDgwMDAwMDAwMDFIODkuMTY0Nzk5OTk5OTk5OTlWMTA0LjRaIi8+PC9nPjwvc3ZnPgo=",
+      "nodes": [
+        {
+          "type": "file.pdf",
+          "label": "PDF",
+          "description": "Create, read, merge, split, and rotate PDF files"
         }
       ]
     },
@@ -290,6 +417,23 @@
           "type": "slack.api",
           "label": "Slack",
           "description": "Send messages, manage channels, find users, and upload files with a Slack bot"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/spreadsheet",
+      "label": "Spreadsheet File",
+      "summary": "Read and write CSV and XLSX files",
+      "description": "Read and write spreadsheet files: turn a CSV or XLSX file into rows, turn rows into a CSV or XLSX file, convert between the two formats, and list the sheets of a workbook. Use it to move table data in a workflow.",
+      "version": "1.0.0",
+      "sdk": "^1.1",
+      "icon": "FileSpreadsheet",
+      "iconUrl": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KDTwhLS0gVXBsb2FkZWQgdG86IFNWRyBSZXBvLCB3d3cuc3ZncmVwby5jb20sIEdlbmVyYXRvcjogU1ZHIFJlcG8gTWl4ZXIgVG9vbHMgLS0+Cjxzdmcgd2lkdGg9IjgwMHB4IiBoZWlnaHQ9IjgwMHB4IiB2aWV3Qm94PSItNCAwIDY0IDY0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgoNPHBhdGggZD0iTTUuMTA2IDBjLTIuODAyIDAtNS4wNzMgMi4yNzItNS4wNzMgNS4wNzR2NTMuODQxYzAgMi44MDMgMi4yNzEgNS4wNzQgNS4wNzMgNS4wNzRoNDUuNzc0YzIuODAxIDAgNS4wNzQtMi4yNzEgNS4wNzQtNS4wNzR2LTM4LjYwNWwtMTguOTAzLTIwLjMxaC0zMS45NDV6IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzQ1QjA1OCIvPgoNPHBhdGggZD0iTTIwLjMwNiA0My4xOTdjLjEyNi4xNDQuMTk4LjMyNC4xOTguNTIyIDAgLjM3OC0uMzA2LjcyLS43MDMuNzItLjE4IDAtLjM3OC0uMDcyLS41MDQtLjIzNC0uNzAyLS44NDYtMS44OTEtMS4zODctMy4wMDctMS4zODctMi42MjkgMC00LjYyNyAyLjAxNy00LjYyNyA0Ljg4IDAgMi44NDUgMS45OTkgNC44NzkgNC42MjcgNC44NzkgMS4xMzQgMCAyLjI1LS40ODYgMy4wMDctMS4zNjkuMTI1LS4xNDQuMzI0LS4yMzMuNTA0LS4yMzMuNDE1IDAgLjcwMy4zNTkuNzAzLjczOCAwIC4xOC0uMDcyLjM2LS4xOTguNTA0LS45MzcuOTcyLTIuMjE1IDEuNjkzLTQuMDE1IDEuNjkzLTMuNDU3IDAtNi4xNzYtMi41MjEtNi4xNzYtNi4yMTJzMi43MTktNi4yMTIgNi4xNzYtNi4yMTJjMS44LjAwMSAzLjA5Ni43MjEgNC4wMTUgMS43MTF6bTYuODAyIDEwLjcxNGMtMS43ODIgMC0zLjE4Ny0uNTk0LTQuMjEzLTEuNDk1LS4xNjItLjE0NC0uMjM0LS4zNDItLjIzNC0uNTQgMC0uMzYxLjI3LS43NTcuNzAyLS43NTcuMTQ0IDAgLjMwNi4wMzYuNDMyLjE0NC44MjguNzM5IDEuOTggMS4zMTQgMy4zNjcgMS4zMTQgMi4xNDMgMCAyLjgyNy0xLjE1MiAyLjgyNy0yLjA3MSAwLTMuMDk3LTcuMTEyLTEuMzg2LTcuMTEyLTUuNjcyIDAtMS45OCAxLjc2NC0zLjMzMSA0LjEyMy0zLjMzMSAxLjU0OCAwIDIuODgxLjQ2NyAzLjg1MyAxLjI3OC4xNjIuMTQ0LjI1Mi4zNDIuMjUyLjU0IDAgLjM2LS4zMDYuNzItLjcwMy43Mi0uMTQ0IDAtLjMwNi0uMDU0LS40MzItLjE2Mi0uODgyLS43Mi0xLjk4LTEuMDQ0LTMuMDc5LTEuMDQ0LTEuNDQgMC0yLjQ2Ny43NzQtMi40NjcgMS45MDkgMCAyLjcwMSA3LjExMiAxLjE1MiA3LjExMiA1LjYzNi4wMDEgMS43NDgtMS4xODcgMy41MzEtNC40MjggMy41MzF6bTE2Ljk5NC0xMS4yNTRsLTQuMTU5IDEwLjMzNWMtLjE5OC40ODYtLjY4NS44MS0xLjE4OC44MWgtLjAzNmMtLjUyMiAwLTEuMDA4LS4zMjQtMS4yMDctLjgxbC00LjE0Mi0xMC4zMzVjLS4wMzYtLjA5LS4wNTQtLjE4LS4wNTQtLjI4OCAwLS4zNi4zMjMtLjc5My44MS0uNzkzLjMwNiAwIC41OTQuMTguNzIuNDg2bDMuODg5IDkuOTkyIDMuODg5LTkuOTkyYy4xMDgtLjI4OC4zOTYtLjQ4Ni43Mi0uNDg2LjQ2OCAwIC44MS4zNzguODEuNzkzLjAwMS4wOS0uMDE3LjE5OC0uMDUyLjI4OHoiIGZpbGw9IiNmZmZmZmYiLz4KDTxnIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIj4KDTxwYXRoIGQ9Ik01Ni4wMDEgMjAuMzU3djFoLTEyLjhzLTYuMzEyLTEuMjYtNi4xMjgtNi43MDdjMCAwIC4yMDggNS43MDcgNi4wMDMgNS43MDdoMTIuOTI1eiIgZmlsbD0iIzM0OUM0MiIvPgoNPHBhdGggZD0iTTM3LjA5OC4wMDZ2MTQuNTYxYzAgMS42NTYgMS4xMDQgNS43OTEgNi4xMDQgNS43OTFoMTIuOGwtMTguOTA0LTIwLjM1MnoiIG9wYWNpdHk9Ii41IiBmaWxsPSIjZmZmZmZmIi8+Cg08L2c+Cg08L3N2Zz4=",
+      "nodes": [
+        {
+          "type": "file.spreadsheet",
+          "label": "Spreadsheet File",
+          "description": "Read and write CSV and XLSX files"
         }
       ]
     },
