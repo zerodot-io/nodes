@@ -4,6 +4,10 @@ on:
   push:
     tags: ["*@*"]
 
+permissions:
+  contents: read
+  actions: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -34,3 +38,8 @@ jobs:
         run: pnpm publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # Adds the new version to catalog.json now, and not at the next hourly run.
+      - name: Update the catalog
+        run: gh workflow run catalog.yml --ref main
+        env:
+          GH_TOKEN: ${{ github.token }}
