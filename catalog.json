@@ -111,22 +111,6 @@
       ]
     },
     {
-      "name": "@zerodot/pdf",
-      "label": "PDF",
-      "summary": "Read text, merge, split, and rotate PDF files",
-      "description": "Work with PDF files: read the text and page count, merge files, pick pages, split a file, and rotate pages. Use it to prepare or read documents in a workflow.",
-      "version": "1.0.0",
-      "sdk": "^1.1",
-      "icon": "FileText",
-      "nodes": [
-        {
-          "type": "file.pdf",
-          "label": "PDF",
-          "description": "Read text, merge, split, and rotate PDF files"
-        }
-      ]
-    },
-    {
       "name": "@zerodot/postgres",
       "label": "Postgres",
       "summary": "Queries, rows, and change triggers for Postgres",

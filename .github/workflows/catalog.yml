@@ -1,0 +1,37 @@
+name: catalog
+# Runs every hour, or by hand (Actions > catalog > Run workflow).
+# It rebuilds catalog.json and commits it to main when it changed, for example
+# when a new package version reaches npm.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install -g pnpm@12.15.0
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - run: pnpm run catalog
+      - name: Commit catalog.json
+        run: |
+          if git diff --quiet catalog.json; then
+            echo "catalog.json is up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add catalog.json
+          git commit -m "chore: update catalog"
+          git push origin HEAD:main
