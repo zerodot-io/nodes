@@ -2,6 +2,23 @@
   "version": 1,
   "packages": [
     {
+      "name": "@zerodot/ai",
+      "label": "AI",
+      "summary": "Text, images, audio, and embeddings from many AI providers",
+      "description": "Generate text, embeddings, images, and audio with OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, in one node. Use it to add AI steps to a workflow.",
+      "version": "1.0.0",
+      "sdk": "^1.2",
+      "icon": "Sparkles",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik05LjkzNyAxNS41QTIgMiAwIDAgMCA4LjUgMTQuMDYzbC02LjEzNS0xLjU4MmEuNS41IDAgMCAxIDAtLjk2Mkw4LjUgOS45MzZBMiAyIDAgMCAwIDkuOTM3IDguNWwxLjU4Mi02LjEzNWEuNS41IDAgMCAxIC45NjMgMEwxNC4wNjMgOC41QTIgMiAwIDAgMCAxNS41IDkuOTM3bDYuMTM1IDEuNTgxYS41LjUgMCAwIDEgMCAuOTY0TDE1LjUgMTQuMDYzYTIgMiAwIDAgMC0xLjQzNyAxLjQzN2wtMS41ODIgNi4xMzVhLjUuNSAwIDAgMS0uOTYzIDB6Ii8+PHBhdGggZD0iTTIwIDN2NCIvPjxwYXRoIGQ9Ik0yMiA1aC00Ii8+PHBhdGggZD0iTTQgMTd2MiIvPjxwYXRoIGQ9Ik01IDE4SDMiLz48L3N2Zz4K",
+      "nodes": [
+        {
+          "type": "ai.api",
+          "label": "AI",
+          "description": "Write text, call tools, make embeddings and images, and manage files with OpenAI, Anthropic, Google Gemini, or a compatible service"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/discord",
       "label": "Discord",
       "summary": "Bot messages, webhooks, and slash commands",
@@ -150,6 +167,28 @@
       ]
     },
     {
+      "name": "@zerodot/notion",
+      "label": "Notion",
+      "summary": "Search, pages, databases, and blocks",
+      "description": "Search a Notion workspace. Read and write pages, databases, and blocks. Use it to keep notes, tasks, and records the same in other tools.",
+      "version": "1.1.0",
+      "sdk": "^1.2",
+      "icon": "FileText",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJNNDEuOCAyMi4xIDMyNS4xIDEuMmMzNC44LTMgNDMuNy0xIDY1LjYgMTQuOWw5MC40IDYzLjdjMTQuOSAxMSAxOS45IDEzLjkgMTkuOSAyNS45djM0OS40YzAgMjEuOS04IDM0LjktMzUuOCAzNi44bC0zMjkgMTkuOWMtMjAuOSAxLTMwLjgtMi00MS44LTE1LjlsLTY2LjYtODYuNkMxNS45IDM5My40IDExIDM4MS40IDExIDM2Ny41VjU2LjljMC0xNy45IDcuOS0zMi44IDMwLjgtMzQuOCIgc3R5bGU9ImZpbGw6I2ZmZiIvPjxwYXRoIGQ9Ik0zMjUuMSAxLjIgNDEuOCAyMi4xQzE4LjkgMjQuMSAxMSAzOSAxMSA1Ni45djMxMC42YzAgMTMuOSA1IDI1LjkgMTYuOSA0MS44bDY2LjYgODYuNmMxMC45IDEzLjkgMjAuOSAxNi45IDQxLjggMTUuOWwzMjktMTkuOWMyNy44LTIgMzUuOC0xNC45IDM1LjgtMzYuOFYxMDUuN2MwLTExLjMtNC41LTE0LjYtMTcuNi0yNC4ybC05Mi43LTY1LjRDMzY4LjguMiAzNTkuOS0xLjggMzI1LjEgMS4yTTE0My43IDEwMGMtMjYuOSAxLjgtMzMgMi4yLTQ4LjItMTAuMkw1Ni43IDU4LjljLTMuOS00LTItOSA4LTEwTDMzNyAyOS4xYzIyLjktMiAzNC44IDYgNDMuNyAxMi45bDQ2LjcgMzMuOGMyIDEgNyA3IDEgN0wxNDcuMiA5OS43em0tMzEuMyAzNTIuMVYxNTUuNWMwLTEzIDQtMTguOSAxNS45LTE5LjlsMzIzLTE4LjljMTEtMSAxNS45IDYgMTUuOSAxOC45djI5NC42YzAgMTMtMiAyMy45LTE5LjkgMjQuOUwxMzguMiA0NzNjLTE3LjkgMS0yNS44LTUtMjUuOC0yMC45bTMwNS4xLTI4MC43YzIgOSAwIDE3LjktOSAxOC45bC0xNC45IDN2MjE5Yy0xMi45IDctMjQuOCAxMC45LTM0LjggMTAuOS0xNS45IDAtMTkuOS01LTMxLjgtMTkuOUwyMjkuNiAyNTB2MTQ4LjNsMzAuOCA3czAgMTcuOS0yNC45IDE3LjlsLTY4LjYgNGMtMi00IDAtMTMuOSA2LjktMTUuOWwxNy45LTVWMjEwLjJsLTI0LjgtMmMtMi05IDMtMjEuOSAxNi45LTIyLjlsNzMuNi01IDEwMS40IDE1NS4zVjE5OC4zbC0yNS44LTNjLTItMTEgNi0xOC45IDE1LjktMTkuOXoiIHN0eWxlPSJmaWxsLXJ1bGU6ZXZlbm9kZDtjbGlwLXJ1bGU6ZXZlbm9kZCIvPjwvc3ZnPg==",
+      "nodes": [
+        {
+          "type": "trigger.notion",
+          "label": "Notion Trigger",
+          "description": "Check a Notion data source on a timer and start a run for each new or changed page"
+        },
+        {
+          "type": "notion.api",
+          "label": "Notion",
+          "description": "Search a workspace, and read and write pages, databases, and blocks in Notion"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/pdf",
       "label": "PDF",
       "summary": "Read text, merge, split, and rotate PDF files",
@@ -281,6 +320,28 @@
       ]
     },
     {
+      "name": "@zerodot/stripe",
+      "label": "Stripe",
+      "summary": "Customers, payments, subscriptions, and events",
+      "description": "Manage customers, payments, invoices, subscriptions, refunds, and coupons with Stripe. Start a workflow when Stripe sends an event. Use it for billing and payment automation.",
+      "version": "1.0.1",
+      "sdk": "^1.2",
+      "icon": "CreditCard",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjNjM1QkZGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+U3RyaXBlPC90aXRsZT48cGF0aCBkPSJNMTMuOTc2IDkuMTVjLTIuMTcyLS44MDYtMy4zNTYtMS40MjYtMy4zNTYtMi40MDkgMC0uODMxLjY4My0xLjMwNSAxLjkwMS0xLjMwNSAyLjIyNyAwIDQuNTE1Ljg1OCA2LjA5IDEuNjMxbC44OS01LjQ5NEMxOC4yNTIuOTc1IDE1LjY5NyAwIDEyLjE2NSAwIDkuNjY3IDAgNy41ODkuNjU0IDYuMTA0IDEuODcyIDQuNTYgMy4xNDcgMy43NTcgNC45OTIgMy43NTcgNy4yMThjMCA0LjAzOSAyLjQ2NyA1Ljc2IDYuNDc2IDcuMjE5IDIuNTg1LjkyIDMuNDQ1IDEuNTc0IDMuNDQ1IDIuNTgzIDAgLjk4LS44NCAxLjU0NS0yLjM1NCAxLjU0NS0xLjg3NSAwLTQuOTY1LS45MjEtNi45OS0yLjEwOWwtLjkgNS41NTVDNS4xNzUgMjIuOTkgOC4zODUgMjQgMTEuNzE0IDI0YzIuNjQxIDAgNC44NDMtLjYyNCA2LjMyOC0xLjgxMyAxLjY2NC0xLjMwNSAyLjUyNS0zLjIzNiAyLjUyNS01LjczMiAwLTQuMTI4LTIuNTI0LTUuODUxLTYuNTk0LTcuMzA1aC4wMDN6Ii8+PC9zdmc+",
+      "nodes": [
+        {
+          "type": "trigger.stripe",
+          "label": "Stripe Trigger",
+          "description": "Start the workflow when Stripe sends an event, such as a payment or an invoice"
+        },
+        {
+          "type": "stripe.api",
+          "label": "Stripe",
+          "description": "Manage customers, payments, invoices, subscriptions, refunds, and products with Stripe"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/telegram",
       "label": "Telegram",
       "summary": "Send messages and react to bot updates",
@@ -299,6 +360,28 @@
           "type": "telegram.bot",
           "label": "Telegram",
           "description": "Send messages and manage chats with a Telegram bot"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/twilio",
+      "label": "Twilio",
+      "summary": "SMS, WhatsApp, calls, lookups, and message events",
+      "description": "Send and read SMS, MMS, and WhatsApp messages, make and read phone calls, and look up phone numbers with Twilio, and start a workflow on an incoming message or a status update. Use it for alerts, verification, and customer messages.",
+      "version": "1.0.1",
+      "sdk": "^1.2",
+      "icon": "MessageSquare",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cGF0aCBmaWxsPSIjRjEyRTQ1IiBkPSJNMTI4IDBjNzAuNjU2IDAgMTI4IDU3LjM0NCAxMjggMTI4cy01Ny4zNDQgMTI4LTEyOCAxMjhTMCAxOTguNjU2IDAgMTI4IDU3LjM0NCAwIDEyOCAwWm0wIDMzLjc5MmMtNTIuMjI0IDAtOTQuMjA4IDQxLjk4NC05NC4yMDggOTQuMjA4czQxLjk4NCA5NC4yMDggOTQuMjA4IDk0LjIwOCA5NC4yMDgtNDEuOTg0IDk0LjIwOC05NC4yMDhTMTgwLjIyNCAzMy43OTIgMTI4IDMzLjc5MlptMzEuNzQ0IDk5LjMyOGMxNC43MDQgMCAyNi42MjQgMTEuOTIgMjYuNjI0IDI2LjYyNHMtMTEuOTIgMjYuNjI0LTI2LjYyNCAyNi42MjQtMjYuNjI0LTExLjkyLTI2LjYyNC0yNi42MjQgMTEuOTItMjYuNjI0IDI2LjYyNC0yNi42MjRabS02My40ODggMGMxNC43MDQgMCAyNi42MjQgMTEuOTIgMjYuNjI0IDI2LjYyNHMtMTEuOTIgMjYuNjI0LTI2LjYyNCAyNi42MjQtMjYuNjI0LTExLjkyLTI2LjYyNC0yNi42MjQgMTEuOTItMjYuNjI0IDI2LjYyNC0yNi42MjRabTYzLjQ4OC02My40ODhjMTQuNzA0IDAgMjYuNjI0IDExLjkyIDI2LjYyNCAyNi42MjRzLTExLjkyIDI2LjYyNC0yNi42MjQgMjYuNjI0LTI2LjYyNC0xMS45Mi0yNi42MjQtMjYuNjI0IDExLjkyLTI2LjYyNCAyNi42MjQtMjYuNjI0Wm0tNjMuNDg4IDBjMTQuNzA0IDAgMjYuNjI0IDExLjkyIDI2LjYyNCAyNi42MjRzLTExLjkyIDI2LjYyNC0yNi42MjQgMjYuNjI0LTI2LjYyNC0xMS45Mi0yNi42MjQtMjYuNjI0UzgxLjU1MiA2OS42MzIgOTYuMjU2IDY5LjYzMloiLz48L3N2Zz4K",
+      "nodes": [
+        {
+          "type": "trigger.twilio",
+          "label": "Twilio Trigger",
+          "description": "Start the workflow on an incoming message or a status update from Twilio"
+        },
+        {
+          "type": "twilio.api",
+          "label": "Twilio",
+          "description": "Send SMS and WhatsApp messages, make calls, and look up phone numbers with Twilio"
         }
       ]
     }
