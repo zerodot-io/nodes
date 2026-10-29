@@ -2,7 +2,7 @@
 
 Official node packages for [zerodot](https://github.com/zerodot-io/zerodot). zerodot ships with the core nodes only. Install the rest when you need them.
 
-`redis` · `postgres` · `mysql` · `mongodb` · `email` · `ssh` · `s3` · `edit-image` · `mcp` · `telegram` · `github`
+`redis` · `postgres` · `mysql` · `mongodb` · `email` · `ssh` · `s3` · `edit-image` · `mcp` · `telegram` · `github` · `pdf`
 
 ## Use
 
