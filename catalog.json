@@ -25,6 +25,74 @@
       ]
     },
     {
+      "name": "@zerodot/ai-agent",
+      "label": "AI Agent",
+      "summary": "An AI agent with ports for a chat model, memory, and tools",
+      "description": "An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, memory in a data table, and other workflows and MCP servers as tools.",
+      "version": "0.1.1",
+      "sdk": "^1.4",
+      "icon": "BotIcon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiA4VjRIOCIvPjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxMiIgeD0iNCIgeT0iOCIgcng9IjIiLz48cGF0aCBkPSJNMiAxNGgyIi8+PHBhdGggZD0iTTIwIDE0aDIiLz48cGF0aCBkPSJNMTUgMTN2MiIvPjxwYXRoIGQ9Ik05IDEzdjIiLz48L3N2Zz4K",
+      "nodes": [
+        {
+          "type": "agent.run",
+          "label": "AI Agent",
+          "description": "An agent that calls tools until it has an answer"
+        },
+        {
+          "type": "agent.memory.manage",
+          "label": "Chat Memory Manager",
+          "description": "Read, add, or delete the messages in the memory of an AI Agent"
+        },
+        {
+          "type": "agent.model.openai",
+          "label": "OpenAI Chat Model",
+          "description": "A GPT model for the AI Agent"
+        },
+        {
+          "type": "agent.model.anthropic",
+          "label": "Anthropic Chat Model",
+          "description": "A Claude model for the AI Agent"
+        },
+        {
+          "type": "agent.model.gemini",
+          "label": "Gemini Chat Model",
+          "description": "A Google Gemini model for the AI Agent"
+        },
+        {
+          "type": "agent.model.compatible",
+          "label": "OpenAI-compatible Chat Model",
+          "description": "A model of a service with an OpenAI-style API, such as Ollama or a gateway"
+        },
+        {
+          "type": "agent.memory.table",
+          "label": "Data Table Memory",
+          "description": "Keeps the conversation of the AI Agent in a data table of the project"
+        },
+        {
+          "type": "agent.tool.workflow",
+          "label": "Workflow Tool",
+          "description": "Lets the AI Agent run another workflow as a tool"
+        },
+        {
+          "type": "agent.tool.mcp",
+          "label": "MCP Client Tool",
+          "description": "Gives the tools of an MCP server to the AI Agent"
+        },
+        {
+          "type": "agent.tool.code",
+          "label": "Code Tool",
+          "description": "A tool for the AI Agent that runs your JavaScript"
+        }
+      ],
+      "credentialTypes": [
+        "ai.openai",
+        "ai.anthropic",
+        "ai.gemini",
+        "ai.compatible"
+      ]
+    },
+    {
       "name": "@zerodot/discord",
       "label": "Discord",
       "summary": "Bot messages, webhooks, and slash commands",
