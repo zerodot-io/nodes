@@ -12,5 +12,4 @@ export const MEMORY_ICON = fileIcon(import.meta.url, "../memory.svg");
 export const WORKFLOW_ICON = fileIcon(import.meta.url, "../workflow.svg");
 export const MCP_ICON = fileIcon(import.meta.url, "../mcp.svg");
 export const CODE_ICON = fileIcon(import.meta.url, "../code.svg");
-export const HTTP_ICON = fileIcon(import.meta.url, "../http.svg");
 export const MEMORY_MANAGER_ICON = fileIcon(import.meta.url, "../memory-manager.svg");

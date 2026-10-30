@@ -495,7 +495,6 @@ describe("supply nodes", () => {
       "agent.tool.workflow": "ai.tool",
       "agent.tool.mcp": "ai.tool",
       "agent.tool.code": "ai.tool",
-      "agent.tool.http": "ai.tool",
     });
     assert.deepEqual(
       def.supplyPorts?.map((port) => [port.name, port.kind, port.required ?? false]),
@@ -779,7 +778,7 @@ describe("agent.memory.manage", () => {
   });
 });
 
-describe("code and HTTP tools", () => {
+describe("code tool", () => {
   it("a code tool runs the code in the sandbox with the input of the model", async () => {
     await assert.rejects(
       supplyOf("agent.tool.code", { name: "calc", description: "Adds" }),
@@ -806,61 +805,5 @@ describe("code and HTTP tools", () => {
     assert.deepEqual(seen, [
       { code: "return 1", scope: { $input: { a: 1 }, input: { x: 1 } }, timeoutMs: 10_000 },
     ]);
-  });
-
-  it("an HTTP tool builds its schema from the placeholders, and fills them", async () => {
-    const tool = (await supplyOf(
-      "agent.tool.http",
-      {
-        name: "add_contact",
-        description: "Adds a contact",
-        method: "POST",
-        url: "https://api.test/lists/{list}/contacts",
-        body: '{"email": {email}, "vip": {vip}, "source": "agent"}',
-        placeholders: {
-          values: [
-            { name: "email", description: "The email", type: "string" },
-            { name: "vip", description: "", type: "boolean" },
-          ],
-        },
-      },
-      { credential: { type: "http.bearer", data: { token: "tok" } } },
-    )) as Tool;
-    assert.deepEqual(tool.spec.inputSchema, {
-      type: "object",
-      properties: {
-        list: { type: "string" },
-        email: { type: "string", description: "The email" },
-        vip: { type: "boolean" },
-      },
-      required: ["list", "email", "vip"],
-      additionalProperties: false,
-    });
-    const requests: { url: string; init: RequestInit }[] = [];
-    mock.method(globalThis, "fetch", async (url: URL | string, init: RequestInit) => {
-      requests.push({ url: String(url), init });
-      return new Response('{"id":7}', { headers: { "content-type": "application/json" } });
-    });
-    const result = await tool.call({ list: "a b", email: 'x"y@z', vip: true }, signal);
-    assert.deepEqual(result, { id: 7 });
-    assert.equal(requests[0]?.url, "https://api.test/lists/a%20b/contacts");
-    assert.deepEqual(JSON.parse(String(requests[0]?.init.body)), {
-      email: 'x"y@z',
-      vip: true,
-      source: "agent",
-    });
-    const headers = requests[0]?.init.headers as Record<string, string>;
-    assert.equal(headers.authorization, "Bearer tok");
-    await assert.rejects(tool.call({ list: "a" }, signal), /no "email"/);
-  });
-
-  it("an HTTP tool gives the status and the body of an error answer", async () => {
-    const tool = (await supplyOf("agent.tool.http", {
-      name: "get_city",
-      description: "Gets a city",
-      url: "https://api.test/cities/{id}",
-    })) as Tool;
-    mock.method(globalThis, "fetch", async () => new Response("not here", { status: 404 }));
-    await assert.rejects(tool.call({ id: 1 }, signal), /HTTP 404: not here/);
   });
 });

@@ -1,6 +1,6 @@
 # @zerodot/ai-agent
 
-An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint. Memory in a data table. Other workflows, MCP servers, JavaScript, and HTTP requests as tools. Needs zerodot with node SDK 1.4.
+An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint. Memory in a data table. Other workflows, MCP servers, and JavaScript as tools. Needs zerodot with node SDK 1.4.
 
 ## Install
 
@@ -69,10 +69,6 @@ Gives the tools of a Streamable HTTP MCP server to the agent. The credential is 
 ### Code Tool (`agent.tool.code`)
 
 Runs your JavaScript as a tool, in the code sandbox of zerodot. The code is the body of an async function. The input from the model is in `input`, and the scope of the agent (`$input`, `$vars`, and others) is there too. The return value is the result. The worker needs a sandbox (`SANDBOX_URL`).
-
-### HTTP Request Tool (`agent.tool.http`)
-
-Sends one HTTP request. Put `{name}` in the URL or the JSON body where the model gives a value. A value in the URL is encoded, and a value in the body goes in as JSON, so `{"email": {email}}` gets quotes for text. Describe each placeholder and set its type (string, number, boolean, or json) in **Placeholders**. The credential is optional: `http.bearer`, `http.header`, or `http.basic`. An error status gives the model the status and the start of the body.
 
 Supply nodes and supply ports work only in official `@zerodot/*` packages, so this package must keep its name.
 
