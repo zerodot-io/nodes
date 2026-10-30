@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import type { ChatModel, Message, ToolCall, Usage } from "./model";
-import type { Tool } from "./tools";
+import type { ChatModel, Message, Tool, ToolCall, Usage } from "./types";
 
 /** The most tool calls that run at the same time. Workflow tools share the worker. */
 export const TOOL_CONCURRENCY = 3;
@@ -31,8 +30,6 @@ export type AgentOptions = {
   previous: Message[];
   maxIterations: number;
   maxResultChars: number;
-  maxTokens: number | undefined;
-  temperature: number | undefined;
   signal: AbortSignal;
   log?: (message: string) => void;
 };
@@ -108,8 +105,6 @@ export async function runAgent(options: AgentOptions): Promise<AgentResult> {
         system: options.system,
         messages: [...options.previous, ...turn],
         tools: options.tools.map((tool) => tool.spec),
-        maxTokens: options.maxTokens,
-        temperature: options.temperature,
       },
       signal,
     );

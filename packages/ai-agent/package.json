@@ -1,7 +1,7 @@
 {
   "name": "@zerodot/ai-agent",
   "version": "0.1.0",
-  "description": "An AI agent that calls tools until it has an answer. It uses OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, runs other workflows and MCP tools as its tools, and keeps chat memory in a data table.",
+  "description": "An AI agent with n8n-style ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, memory in a data table, and other workflows and MCP servers as tools.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
@@ -19,12 +19,15 @@
   "files": [
     "dist",
     "ai-agent.svg",
-    "ai.svg"
+    "ai.svg",
+    "memory.svg",
+    "workflow.svg",
+    "mcp.svg"
   ],
   "zerodot": {
-    "sdk": "^1.2",
+    "sdk": "^1.4",
     "label": "AI Agent",
-    "summary": "An AI agent that calls workflows and MCP tools"
+    "summary": "An AI agent with ports for a chat model, memory, and tools"
   },
   "scripts": {
     "build": "tsdown",
@@ -39,7 +42,7 @@
     "@modelcontextprotocol/sdk": "1.32.1"
   },
   "peerDependencies": {
-    "@zerodot/node-sdk": "^1.2.0",
+    "@zerodot/node-sdk": "^1.4.0",
     "zod": "^4.0.0"
   },
   "devDependencies": {

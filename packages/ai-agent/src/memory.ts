@@ -1,16 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { isRecord, type NodeRunContext } from "@zerodot/node-sdk";
-import type { Message } from "./model";
+import type { Memory, Message } from "./types";
 
 type TableStore = NonNullable<NodeRunContext<unknown>["tables"]>;
-
-/** The memory of a conversation. A later sub-node port can give one to the agent. */
-export type Memory = {
-  /** The messages of the last turns, oldest first. */
-  load(): Promise<Message[]>;
-  /** Adds the messages of one turn. */
-  save(messages: Message[]): Promise<void>;
-};
 
 const ROLES = new Set(["user", "assistant", "tool"]);
 

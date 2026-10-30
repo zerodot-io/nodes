@@ -1,22 +1,26 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import assert from "node:assert/strict";
 import { afterEach, describe, it, mock } from "node:test";
-import type { NodeRunContext } from "@zerodot/node-sdk";
+import type { NodeDefinition, NodeRunContext, SupplyContext } from "@zerodot/node-sdk";
 import { z } from "zod";
 import { credentialTypes as aiCredentialTypes } from "../../ai/src/index";
 import * as aiModels from "../../ai/src/models";
 import { resultText, runAgent } from "./agent";
 import { credentialTypes, nodes } from "./index";
 import { readMessages, tableMemory } from "./memory";
-import { type ChatModel, chatModelOf, type Message, type ModelTurn } from "./model";
+import { chatModelOf } from "./model";
 import * as models from "./models";
-import { readToolRows, type Tool } from "./tools";
+import type { ChatModel, Message, ModelTurn, Tool } from "./types";
 
 const signal = new AbortController().signal;
 // Built at run time, so secret scanners do not flag a fake key.
 const KEY = `sk-${"test".repeat(8)}`;
-const def = nodes[0];
-if (!def) throw new Error("no node");
+const find = (type: string): NodeDefinition => {
+  const found = nodes.find((entry) => entry.type === type);
+  if (!found) throw new Error(`no node ${type}`);
+  return found;
+};
+const def = find("agent.run");
 
 afterEach(() => mock.restoreAll());
 
@@ -61,8 +65,6 @@ const agentOptions = {
   previous: [],
   maxIterations: 5,
   maxResultChars: 1000,
-  maxTokens: undefined,
-  temperature: undefined,
   signal,
 };
 
@@ -201,8 +203,6 @@ describe("chat models", () => {
     system: "Be brief",
     messages: history,
     tools: [echo.spec],
-    maxTokens: undefined,
-    temperature: 0.2,
   };
 
   it("OpenAI: sends tool calls and results, and reads an answer", async () => {
@@ -225,7 +225,12 @@ describe("chat models", () => {
       apiKey: KEY,
       baseUrl: "https://api.openai.com/v1",
     };
-    const answer = await chatModelOf(access, "gpt-6.1-terra", 5000).chat(request, signal);
+    const answer = await chatModelOf(access, {
+      model: "gpt-6.1-terra",
+      maxTokens: undefined,
+      temperature: 0.2,
+      timeoutMs: 5000,
+    }).chat(request, signal);
     assert.deepEqual(answer.toolCalls, [{ id: "c3", name: "echo", input: { b: 2 } }]);
     assert.deepEqual(answer.usage, { inputTokens: 7, outputTokens: 3 });
     const body = calls[0]?.body ?? {};
@@ -274,10 +279,12 @@ describe("chat models", () => {
       },
       ...history.slice(2),
     ];
-    const answer = await chatModelOf(access, "claude-sonnet-5-5", 5000).chat(
-      { ...request, messages, temperature: undefined },
-      signal,
-    );
+    const answer = await chatModelOf(access, {
+      model: "claude-sonnet-5-5",
+      maxTokens: undefined,
+      temperature: undefined,
+      timeoutMs: 5000,
+    }).chat({ ...request, messages }, signal);
     assert.equal(answer.text, "Done");
     assert.equal(answer.finishReason, "stop");
     const body = calls[0]?.body ?? {};
@@ -315,7 +322,12 @@ describe("chat models", () => {
       apiKey: KEY,
       baseUrl: "https://generativelanguage.googleapis.com/v1beta",
     };
-    const answer = await chatModelOf(access, "gemini-3.8-flash", 5000).chat(request, signal);
+    const answer = await chatModelOf(access, {
+      model: "gemini-3.8-flash",
+      maxTokens: undefined,
+      temperature: 0.2,
+      timeoutMs: 5000,
+    }).chat(request, signal);
     assert.deepEqual(answer.toolCalls, [{ id: "zerodot_call_1", name: "echo", input: { c: 3 } }]);
     assert.equal(answer.finishReason, "tool_calls");
     assert.deepEqual(answer.usage, { inputTokens: 4, outputTokens: 3 });
@@ -338,27 +350,7 @@ describe("chat models", () => {
   });
 });
 
-describe("tool rows and messages", () => {
-  it("reads the rows of the Tools field", () => {
-    const rows = readToolRows({
-      workflow: [{ name: "find", description: "Find a customer", workflowId: "wf1" }],
-    });
-    assert.equal(rows.workflow.length, 1);
-    assert.deepEqual(rows.mcp, []);
-    assert.deepEqual(readToolRows(undefined), { workflow: [], mcp: [] });
-  });
-
-  it("names the row of a bad tool", () => {
-    assert.throws(
-      () => readToolRows({ workflow: [{ name: "bad name", description: "x", workflowId: "w" }] }),
-      /Workflow tool 1: "name" must have/,
-    );
-    assert.throws(
-      () => readToolRows({ mcp: [{ name: "docs", url: "not a url" }] }),
-      /MCP server 1: "url"/,
-    );
-  });
-
+describe("messages", () => {
   it("reads messages from JSON or a list, and rejects bad items", () => {
     assert.deepEqual(readMessages('[{"role":"user","content":"hi"}]', "history"), [
       { role: "user", content: "hi" },
@@ -428,26 +420,108 @@ describe("table memory", () => {
   });
 });
 
-describe("agent.run", () => {
-  const openaiAnswer = (message: Record<string, unknown>) => ({
-    choices: [{ finish_reason: message.tool_calls ? "tool_calls" : "stop", message }],
-    usage: { prompt_tokens: 1, completion_tokens: 1 },
+type Credential = { type: string; data: Record<string, unknown> };
+
+/** Builds the value of a supply node, as the engine does before the parent runs. */
+async function supplyOf(
+  type: string,
+  config: Record<string, unknown>,
+  extra: Partial<SupplyContext<unknown>> & { credential?: Credential | null } = {},
+): Promise<unknown> {
+  const node = find(type);
+  if (!node.supply) throw new Error(`${type} is not a supply node`);
+  return node.supply({
+    config: node.config.parse({ ...(node.defaultConfig as Record<string, unknown>), ...config }),
+    credential: null,
+    signal,
+    scope: {},
+    sandbox: null,
+    tables: null,
+    node: { id: "s1", name: type },
+    ...extra,
+  });
+}
+
+const openaiAnswer = (message: Record<string, unknown>) => ({
+  choices: [{ finish_reason: message.tool_calls ? "tool_calls" : "stop", message }],
+  usage: { prompt_tokens: 1, completion_tokens: 1 },
+});
+
+const openaiModel = () =>
+  supplyOf("agent.model.openai", {}, { credential: { type: "ai.openai", data: { apiKey: KEY } } });
+
+const runAgentNode = async (
+  config: Record<string, unknown>,
+  supplies: Record<string, unknown> | undefined,
+) =>
+  def.run({
+    config: def.config.parse({ ...(def.defaultConfig as Record<string, unknown>), ...config }),
+    input: {},
+    credential: null,
+    signal,
+    scope: {},
+    sandbox: null,
+    tables: null,
+    supplies,
   });
 
-  const run = async (
-    config: Record<string, unknown>,
-    extra: Partial<NodeRunContext<unknown>> = {},
-  ) =>
-    def.run({
-      config: def.config.parse({ ...(def.defaultConfig as Record<string, unknown>), ...config }),
-      input: {},
-      credential: { type: "ai.openai", data: { apiKey: KEY } },
-      signal,
-      scope: {},
-      sandbox: null,
-      tables: null,
-      ...extra,
+describe("supply nodes", () => {
+  it("are supply nodes of the agent kinds, and the agent has the three ports", () => {
+    const kinds = Object.fromEntries(
+      nodes.filter((node) => node.supplies).map((node) => [node.type, node.supplies]),
+    );
+    assert.deepEqual(kinds, {
+      "agent.model.openai": "ai.model",
+      "agent.model.anthropic": "ai.model",
+      "agent.model.gemini": "ai.model",
+      "agent.model.compatible": "ai.model",
+      "agent.memory.table": "ai.memory",
+      "agent.tool.workflow": "ai.tool",
+      "agent.tool.mcp": "ai.tool",
     });
+    assert.deepEqual(
+      def.supplyPorts?.map((port) => [port.name, port.kind, port.required ?? false]),
+      [
+        ["model", "ai.model", true],
+        ["memory", "ai.memory", false],
+        ["tools", "ai.tool", false],
+      ],
+    );
+  });
+
+  it("a chat model needs the credential of its provider, and sends its settings", async () => {
+    await assert.rejects(supplyOf("agent.model.gemini", {}), /credential for Gemini/);
+    const calls = mockFetch([openaiAnswer({ content: "ok" })]);
+    const model = await supplyOf(
+      "agent.model.compatible",
+      { model: "llama4", maxTokens: 50, temperature: 0.3 },
+      { credential: { type: "ai.compatible", data: { baseUrl: "https://llm.test/v1" } } },
+    );
+    await (model as ChatModel).chat({ system: undefined, messages: [], tools: [] }, signal);
+    assert.equal(calls[0]?.url, "https://llm.test/v1/chat/completions");
+    assert.equal(calls[0]?.body.model, "llama4");
+    assert.equal(calls[0]?.body.max_tokens, 50);
+    assert.equal(calls[0]?.body.temperature, 0.3);
+  });
+
+  it("a workflow tool checks its name and needs runWorkflow", async () => {
+    await assert.rejects(
+      supplyOf("agent.tool.workflow", { name: "bad name", description: "d", workflowId: "w" }),
+      /"name" must have/,
+    );
+    await assert.rejects(
+      supplyOf("agent.tool.workflow", { name: "find", description: "d", workflowId: "w" }),
+      /cannot run workflows/,
+    );
+  });
+});
+
+describe("agent.run", () => {
+  it("needs a prompt and a chat model", async () => {
+    await assert.rejects(runAgentNode({ prompt: " " }, {}), /needs "prompt"/);
+    await assert.rejects(runAgentNode({ prompt: "x" }, undefined), /Connect a chat model/);
+    await assert.rejects(runAgentNode({ prompt: "x" }, { model: {} }), /Connect a chat model/);
+  });
 
   it("runs a workflow tool and keeps the turn in memory", async () => {
     const calls = mockFetch([
@@ -466,21 +540,28 @@ describe("agent.run", () => {
       return { name: "Ada" };
     };
     const { store, rows } = fakeTables();
-    const result = await run(
+    const result = await runAgentNode(
+      { prompt: "Who is a@b.c?" },
       {
-        prompt: "Who is a@b.c?",
-        tools: { workflow: [{ name: "find", description: "Find a customer", workflowId: "wf1" }] },
-        memory: "table",
-        memoryTable: "chat",
-        sessionId: "s1",
+        model: await openaiModel(),
+        memory: await supplyOf(
+          "agent.memory.table",
+          { table: "chat", sessionId: "s1" },
+          { tables: store },
+        ),
+        tools: [
+          await supplyOf(
+            "agent.tool.workflow",
+            { name: "find", description: "Find a customer", workflowId: "wf1" },
+            { runWorkflow },
+          ),
+        ],
       },
-      { runWorkflow, tables: store },
     );
     assert.deepEqual(runs, [
       { source: { kind: "database", workflowId: "wf1" }, input: { email: "a@b.c" } },
     ]);
-    const data = result.data as { output: string; history: Message[] };
-    assert.equal(data.output, "Ada");
+    assert.equal((result.data as { output: string }).output, "Ada");
     assert.equal(rows.length, 1);
     assert.equal(readMessages(rows[0]?.messages, "messages").length, 4);
     // The function schema of a tool without one accepts any object.
@@ -494,33 +575,36 @@ describe("agent.run", () => {
 
   it("uses the previous messages before the prompt", async () => {
     const calls = mockFetch([openaiAnswer({ content: "Again" })]);
-    await run({ prompt: "and now?", history: [{ role: "user", content: "before" }] });
+    await runAgentNode(
+      { prompt: "and now?", history: [{ role: "user", content: "before" }] },
+      { model: await openaiModel(), tools: [] },
+    );
     assert.deepEqual(calls[0]?.body.messages, [
       { role: "user", content: "before" },
       { role: "user", content: "and now?" },
     ]);
   });
 
-  it("needs a prompt, the credential of the provider, and runWorkflow for workflow tools", async () => {
-    await assert.rejects(run({ prompt: " " }), /needs "prompt"/);
-    await assert.rejects(run({ prompt: "x", provider: "gemini" }), /credential for Gemini/);
+  it("rejects two tools with the same name, and a value that is not a tool", async () => {
+    const model = await openaiModel();
     await assert.rejects(
-      run({
-        prompt: "x",
-        tools: { workflow: [{ name: "find", description: "d", workflowId: "w" }] },
-      }),
-      /cannot run workflows/,
+      runAgentNode({ prompt: "x" }, { model, tools: [echo, echo] }),
+      /Two tools/,
+    );
+    await assert.rejects(
+      runAgentNode({ prompt: "x" }, { model, tools: [{}] }),
+      /does not give a tool/,
     );
   });
 
-  it("calls the tools of an MCP server", async () => {
+  it("opens an MCP toolset, calls its tools, and closes it", async () => {
     const { McpServer } = await import("@modelcontextprotocol/sdk/server/mcp.js");
     const { WebStandardStreamableHTTPServerTransport } = await import(
       "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js"
     );
     const bodies: Call[] = [];
     let modelCalls = 0;
-    const model = [
+    const answers = [
       openaiAnswer({
         content: null,
         tool_calls: [{ id: "c1", function: { name: "docs__shout", arguments: '{"text":"hi"}' } }],
@@ -532,7 +616,7 @@ describe("agent.run", () => {
       const url = String(input);
       if (url.startsWith("https://api.openai.com")) {
         bodies.push({ url, body: JSON.parse(String(init?.body)) });
-        return new Response(JSON.stringify(model[modelCalls++]), { status: 200 });
+        return new Response(JSON.stringify(answers[modelCalls++]), { status: 200 });
       }
       // A new MCP server for each request, without a session.
       const server = new McpServer({ name: "fake", version: "1" });
@@ -551,20 +635,22 @@ describe("agent.run", () => {
       headers.push(request.headers.get("authorization") ?? "");
       return transport.handleRequest(request);
     });
-    const result = await run({
-      prompt: "shout hi",
-      tools: {
-        mcp: [
-          {
-            name: "docs",
-            url: "https://mcp.test/mcp",
-            headerName: "Authorization",
-            headerValue: "Bearer tok",
-            only: "shout",
-          },
-        ],
-      },
-    });
+    const toolset = await supplyOf(
+      "agent.tool.mcp",
+      { url: "https://mcp.test/mcp", prefix: "docs", only: "shout" },
+      { credential: { type: "http.bearer", data: { token: "tok" } } },
+    );
+    let closed = 0;
+    const set = toolset as { close(): Promise<void> };
+    const close = set.close.bind(set);
+    set.close = async () => {
+      closed++;
+      await close();
+    };
+    const result = await runAgentNode(
+      { prompt: "shout hi" },
+      { model: await openaiModel(), tools: [toolset] },
+    );
     const sent = bodies[0]?.body.tools as { function: { name: string } }[];
     assert.deepEqual(
       sent.map((tool) => tool.function.name),
@@ -573,6 +659,7 @@ describe("agent.run", () => {
     const data = result.data as { output: string; steps: { result: string }[] };
     assert.equal(data.steps[0]?.result, "HI");
     assert.equal(data.output, "HI");
+    assert.equal(closed, 1);
     assert.ok(headers.every((header) => header === "Bearer tok"));
   });
 });

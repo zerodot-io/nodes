@@ -1,50 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { isRecord } from "@zerodot/node-sdk";
 import { type Access, type CallOptions, callApi, PROVIDER_LABEL, type Provider } from "./api";
+import type { ChatModel, FinishReason, Message, ModelTurn } from "./types";
 
 type JsonObject = Record<string, unknown>;
-
-export type ToolCall = { id: string; name: string; input: unknown };
-
-/**
- * One message of the conversation, the same for each provider. `raw` is the answer content as
- * the provider gave it. The agent sends it back to the same provider, because some providers
- * need parts that this shape does not keep, such as thinking signatures.
- */
-export type Message =
-  | { role: "user"; content: string }
-  | {
-      role: "assistant";
-      content: string;
-      toolCalls?: ToolCall[];
-      raw?: { provider: Provider; content: unknown };
-    }
-  | { role: "tool"; toolCallId: string; name: string; content: string; isError?: boolean };
-
-export type ToolSpec = { name: string; description: string; inputSchema: JsonObject };
-
-export type FinishReason = "stop" | "length" | "tool_calls" | "content_filter" | "other";
-
-export type Usage = { inputTokens: number; outputTokens: number };
-
-export type ModelTurn = {
-  text: string;
-  toolCalls: ToolCall[];
-  finishReason: FinishReason;
-  usage: Usage;
-  raw?: { provider: Provider; content: unknown };
-};
-
-export type ChatRequest = {
-  system: string | undefined;
-  messages: Message[];
-  tools: ToolSpec[];
-  maxTokens: number | undefined;
-  temperature: number | undefined;
-};
-
-/** A chat model that can call tools. A later sub-node port can give one to the agent. */
-export type ChatModel = { chat(request: ChatRequest, signal: AbortSignal): Promise<ModelTurn> };
 
 const rec = (value: unknown): JsonObject => (isRecord(value) ? value : {});
 const arr = (value: unknown): unknown[] => (Array.isArray(value) ? value : []);
@@ -277,9 +236,19 @@ function geminiModelPath(model: string): string {
   return id;
 }
 
-/** The chat model of a provider. Each call has its own time limit. */
-export function chatModelOf(access: Access, model: string, timeoutMs: number): ChatModel {
+export type ModelSettings = {
+  model: string;
+  maxTokens: number | undefined;
+  /** Not sent to Anthropic. Its current API version has no temperature. */
+  temperature: number | undefined;
+  /** The time limit of one call. */
+  timeoutMs: number;
+};
+
+/** The chat model of a provider, for the "ai.model" supply. */
+export function chatModelOf(access: Access, settings: ModelSettings): ChatModel {
   const { provider } = access;
+  const { model, maxTokens, temperature, timeoutMs } = settings;
   return {
     async chat(request, signal) {
       const options: CallOptions = { signal, timeoutMs };
@@ -292,7 +261,7 @@ export function chatModelOf(access: Access, model: string, timeoutMs: number): C
             path: "/v1/messages",
             json: {
               model,
-              max_tokens: request.maxTokens ?? 4096,
+              max_tokens: maxTokens ?? 4096,
               system: request.system,
               messages: anthropicMessages(request.messages),
               tools:
@@ -331,8 +300,8 @@ export function chatModelOf(access: Access, model: string, timeoutMs: number): C
                     ]
                   : undefined,
               generationConfig: {
-                temperature: request.temperature,
-                maxOutputTokens: request.maxTokens,
+                temperature,
+                maxOutputTokens: maxTokens,
               },
             },
           },
@@ -348,9 +317,9 @@ export function chatModelOf(access: Access, model: string, timeoutMs: number): C
           json: {
             model,
             messages: openaiMessages(request.system, request.messages),
-            temperature: request.temperature,
+            temperature,
             // Most compatible services know only the older name.
-            [provider === "compatible" ? "max_tokens" : "max_completion_tokens"]: request.maxTokens,
+            [provider === "compatible" ? "max_tokens" : "max_completion_tokens"]: maxTokens,
             tools:
               tools.length > 0
                 ? tools.map((tool) => ({
