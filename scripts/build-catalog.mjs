@@ -43,6 +43,7 @@ for (const folder of readdirSync(join(root, "packages")).sort()) {
       label: node.label,
       ...(node.description ? { description: node.description } : {}),
     })),
+    credentialTypes: (loaded.credentialTypes ?? []).map((credential) => credential.type),
   });
 }
 

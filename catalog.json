@@ -16,6 +16,12 @@
           "label": "AI",
           "description": "Write text, call tools, make embeddings and images, and manage files with OpenAI, Anthropic, Google Gemini, or a compatible service"
         }
+      ],
+      "credentialTypes": [
+        "ai.openai",
+        "ai.anthropic",
+        "ai.gemini",
+        "ai.compatible"
       ]
     },
     {
@@ -38,6 +44,10 @@
           "label": "Discord",
           "description": "Send messages and manage channels and members with a Discord bot or webhook"
         }
+      ],
+      "credentialTypes": [
+        "discord.bot",
+        "discord.webhook"
       ]
     },
     {
@@ -54,7 +64,8 @@
           "label": "Edit Image",
           "description": "Resize, crop, rotate, blur, or convert an image"
         }
-      ]
+      ],
+      "credentialTypes": []
     },
     {
       "name": "@zerodot/email",
@@ -75,6 +86,10 @@
           "label": "On new email (IMAP)",
           "description": "Start a run when a new unread mail arrives in a mailbox"
         }
+      ],
+      "credentialTypes": [
+        "smtp",
+        "imap"
       ]
     },
     {
@@ -97,6 +112,9 @@
           "label": "FeedbackJar",
           "description": "Work with feedback posts, comments, votes, boards, and tags in FeedbackJar"
         }
+      ],
+      "credentialTypes": [
+        "feedbackjar.token"
       ]
     },
     {
@@ -119,6 +137,10 @@
           "label": "GitHub",
           "description": "Work with issues, repositories, files, and releases on GitHub"
         }
+      ],
+      "credentialTypes": [
+        "github.token",
+        "github.oauth2"
       ]
     },
     {
@@ -141,6 +163,10 @@
           "label": "On new email (Gmail)",
           "description": "Start a run when a new email matches a search or a label"
         }
+      ],
+      "credentialTypes": [
+        "gmail.oauth2",
+        "gmail.service_account"
       ]
     },
     {
@@ -163,6 +189,10 @@
           "label": "Google Calendar",
           "description": "Create, read, and change events in Google Calendar, and check availability"
         }
+      ],
+      "credentialTypes": [
+        "google_calendar.oauth2",
+        "google_calendar.service_account"
       ]
     },
     {
@@ -185,6 +215,10 @@
           "label": "Google Drive",
           "description": "Find, upload, download, and share files in Google Drive"
         }
+      ],
+      "credentialTypes": [
+        "google_drive.oauth2",
+        "google_drive.service_account"
       ]
     },
     {
@@ -202,6 +236,10 @@
           "label": "Google Sheets",
           "description": "Read, append, and update rows in Google Sheets"
         }
+      ],
+      "credentialTypes": [
+        "google_sheets.oauth2",
+        "google_sheets.service_account"
       ]
     },
     {
@@ -219,6 +257,9 @@
           "label": "Higgsfield",
           "description": "Make AI images and videos with any Higgsfield model"
         }
+      ],
+      "credentialTypes": [
+        "higgsfield.account"
       ]
     },
     {
@@ -241,6 +282,10 @@
           "label": "Linear",
           "description": "Work with issues, comments, projects, teams, and cycles in Linear"
         }
+      ],
+      "credentialTypes": [
+        "linear.apiKey",
+        "linear.oauth2"
       ]
     },
     {
@@ -258,7 +303,8 @@
           "label": "MCP Call Tool",
           "description": "Call a tool on an MCP server"
         }
-      ]
+      ],
+      "credentialTypes": []
     },
     {
       "name": "@zerodot/mongodb",
@@ -275,6 +321,9 @@
           "label": "MongoDB",
           "description": "Find, insert, update, delete, and aggregate documents in MongoDB"
         }
+      ],
+      "credentialTypes": [
+        "mongodb"
       ]
     },
     {
@@ -292,6 +341,9 @@
           "label": "MySQL",
           "description": "Get, add and update data in MySQL"
         }
+      ],
+      "credentialTypes": [
+        "mysql"
       ]
     },
     {
@@ -314,6 +366,9 @@
           "label": "Notion",
           "description": "Search a workspace, and read and write pages, databases, and blocks in Notion"
         }
+      ],
+      "credentialTypes": [
+        "notion.integration"
       ]
     },
     {
@@ -331,7 +386,8 @@
           "label": "PDF",
           "description": "Create, read, merge, split, and rotate PDF files"
         }
-      ]
+      ],
+      "credentialTypes": []
     },
     {
       "name": "@zerodot/postgres",
@@ -358,6 +414,9 @@
           "label": "On Postgres event",
           "description": "Start a run at once when a row is added, changed or removed"
         }
+      ],
+      "credentialTypes": [
+        "postgres"
       ]
     },
     {
@@ -380,6 +439,9 @@
           "label": "On Redis message",
           "description": "Start a run when a message arrives on a Redis channel"
         }
+      ],
+      "credentialTypes": [
+        "redis"
       ]
     },
     {
@@ -397,6 +459,9 @@
           "label": "S3",
           "description": "Work with buckets and objects in Amazon S3 and S3-compatible storage"
         }
+      ],
+      "credentialTypes": [
+        "s3"
       ]
     },
     {
@@ -419,6 +484,9 @@
           "label": "Slack",
           "description": "Send messages, manage channels, find users, and upload files with a Slack bot"
         }
+      ],
+      "credentialTypes": [
+        "slack.bot"
       ]
     },
     {
@@ -436,7 +504,8 @@
           "label": "Spreadsheet File",
           "description": "Read and write CSV and XLSX files"
         }
-      ]
+      ],
+      "credentialTypes": []
     },
     {
       "name": "@zerodot/ssh",
@@ -462,6 +531,10 @@
           "label": "SFTP",
           "description": "List, download, upload, rename, and delete files on an SFTP server"
         }
+      ],
+      "credentialTypes": [
+        "ssh",
+        "ftp"
       ]
     },
     {
@@ -484,6 +557,9 @@
           "label": "Stripe",
           "description": "Manage customers, payments, invoices, subscriptions, refunds, and products with Stripe"
         }
+      ],
+      "credentialTypes": [
+        "stripe.account"
       ]
     },
     {
@@ -506,6 +582,9 @@
           "label": "Telegram",
           "description": "Send messages and manage chats with a Telegram bot"
         }
+      ],
+      "credentialTypes": [
+        "telegram.bot"
       ]
     },
     {
@@ -528,6 +607,9 @@
           "label": "Twilio",
           "description": "Send SMS and WhatsApp messages, make calls, and look up phone numbers with Twilio"
         }
+      ],
+      "credentialTypes": [
+        "twilio.account"
       ]
     }
   ]
