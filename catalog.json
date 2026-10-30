@@ -2,6 +2,28 @@
   "version": 1,
   "packages": [
     {
+      "name": "@zerodot/discord",
+      "label": "Discord",
+      "summary": "Bot messages, webhooks, and slash commands",
+      "description": "Send, edit, and react to messages, manage channels, members, and roles with a Discord bot, post with a webhook, and start a workflow on a slash command or a button click. Use it to build Discord bots, alerts, and moderation flows.",
+      "version": "1.0.1",
+      "sdk": "^1.2",
+      "icon": "Message01Icon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAuMDIgNTcuOCA1MTEuOTIgMzk2LjMiPjxwYXRoIGQ9Ik00MzMuNyA5MWE0MTYuNSA0MTYuNSAwIDAgMC0xMDUuNi0zMy4yYy00LjYgOC4yLTkuOSAxOS4zLTEzLjUgMjguMS0zOS40LTUuOS03OC40LTUuOS0xMTcuMSAwLTMuNy04LjgtOS4xLTE5LjktMTMuNy0yOC4xLTM3LjEgNi40LTcyLjYgMTcuNy0xMDUuNyAzMy4zLTY2LjggMTAxLTg1IDE5OS41LTc1LjkgMjk2LjYgNDQuMyAzMy4xIDg3LjMgNTMuMiAxMjkuNiA2Ni40IDEwLjQtMTQuNCAxOS43LTI5LjYgMjcuNy00NS43LTE1LjMtNS44LTI5LjktMTMtNDMuNy0yMS4zIDMuNy0yLjcgNy4yLTUuNiAxMC43LTguNSA4NC4yIDM5LjQgMTc1LjggMzkuNCAyNTkgMCAzLjUgMi45IDcuMSA1LjggMTAuNyA4LjUtMTMuOSA4LjMtMjguNSAxNS41LTQzLjggMjEuMyA4IDE2IDE3LjMgMzEuMyAyNy43IDQ1LjcgNDIuMy0xMy4yIDg1LjMtMzMuMyAxMjkuNi02Ni40IDEwLjgtMTEyLjUtMTgtMjEwLjEtNzYtMjk2LjdNMTcwLjkgMzI4Yy0yNS4zIDAtNDYtMjMuNi00Ni01Mi40czIwLjMtNTIuNCA0Ni01Mi40IDQ2LjUgMjMuNiA0NiA1Mi40Yy4xIDI4LjgtMjAuMiA1Mi40LTQ2IDUyLjRtMTcwLjIgMGMtMjUuMyAwLTQ2LTIzLjYtNDYtNTIuNHMyMC4zLTUyLjQgNDYtNTIuNCA0Ni41IDIzLjYgNDYgNTIuNGMwIDI4LjgtMjAuMyA1Mi40LTQ2IDUyLjQiIHN0eWxlPSJmaWxsOiM1ODY1ZjIiLz48L3N2Zz4=",
+      "nodes": [
+        {
+          "type": "trigger.discord",
+          "label": "Discord Trigger",
+          "description": "Start the workflow on a slash command, button click, or modal of a Discord app"
+        },
+        {
+          "type": "discord.api",
+          "label": "Discord",
+          "description": "Send messages and manage channels and members with a Discord bot or webhook"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/edit-image",
       "label": "Edit Image",
       "summary": "Resize, crop, rotate, and convert images",
@@ -39,6 +61,28 @@
       ]
     },
     {
+      "name": "@zerodot/feedbackjar",
+      "label": "FeedbackJar",
+      "summary": "Posts, comments, votes, and webhook triggers",
+      "description": "Manage feedback posts, comments, votes, boards, and tags in FeedbackJar, and start a workflow when a post or comment changes. Use it to move user feedback into your other tools.",
+      "version": "1.0.1",
+      "sdk": "^1.2",
+      "icon": "BubbleChatIcon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDY2IiBoZWlnaHQ9IjM1NSIgdmlld0JveD0iMCAwIDQ2NiAzNTUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik0xNS40NDQgMzU0Ljk5MUgyMDcuODI4SDQwMy45NDZDNDM4LjAwOSAzNTQuOTkxIDQ2NS42MjQgMzI3LjM0OSA0NjUuNjI0IDI5My4yNTJWNjEuNzQ0MUM0NjUuNjI0IDI3LjY0NjkgNDM4LjAwOSAwLjAwNTYyMTM1IDQwMy45NDYgMC4wMDUwMDY4NkwxMjYuMzk5IDEuMDI0NTRlLTA4QzkyLjMzNDcgLTAuMDAwNjE0NDg4IDY0LjcyMDIgMjcuNjQxMSA2NC43MjAyIDYxLjczOTFWMjIyLjY2N0M2NC43MjAyIDIyOC40NTMgNjMuMDk1OCAyMzQuMTIyIDYwLjAzMjEgMjM5LjAyOUwyLjM2ODcyIDMzMS4zNzZDLTQuMDUwNTQgMzQxLjY1NSAzLjMzMjgzIDM1NC45OTEgMTUuNDQ0IDM1NC45OTFaTTM2NS4zOTcgMTc3LjQ5OEMzMjAuOTcyIDE1Ny4yODIgMjg1LjM2NyAxMjEuNjQyIDI2NS4xNzEgNzcuMTcyOEMyNDQuOTczIDEyMS42NDIgMjA5LjM2OCAxNTcuMjgyIDE2NC45NDUgMTc3LjQ5OEMyMDkuMzY4IDE5Ny43MTYgMjQ0Ljk3MyAyMzMuMzU3IDI2NS4xNzEgMjc3LjgyNUMyODUuMzY3IDIzMy4zNTcgMzIwLjk3MiAxOTcuNzE2IDM2NS4zOTcgMTc3LjQ5OFoiIGZpbGw9IiNGNjQyNDIiLz48L3N2Zz4K",
+      "nodes": [
+        {
+          "type": "trigger.feedbackjar",
+          "label": "FeedbackJar Trigger",
+          "description": "Start the workflow when a post, comment, or tag changes in FeedbackJar"
+        },
+        {
+          "type": "feedbackjar.api",
+          "label": "FeedbackJar",
+          "description": "Work with feedback posts, comments, votes, boards, and tags in FeedbackJar"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/gmail",
       "label": "Gmail",
       "summary": "Send, read, and label emails in Gmail",
@@ -57,6 +101,28 @@
           "type": "gmail.trigger",
           "label": "On new email (Gmail)",
           "description": "Start a run when a new email matches a search or a label"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/google-calendar",
+      "label": "Google Calendar",
+      "summary": "Events, availability, and new-event triggers",
+      "description": "Create, read, update, and delete events in Google Calendar. List calendars, quick add an event, check free and busy times, and start a workflow on new or changed events. Connect with Google sign-in or a service account.",
+      "version": "1.0.1",
+      "sdk": "^1.2",
+      "icon": "Calendar01Icon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJNMzg3IDExNy41IDI2NS43IDEwNGwtMTQ4LjIgMTMuNUwxMDQgMjUyLjIgMTE3LjUgMzg3bDEzNC43IDE2LjhMMzg3IDM4N2wxMy41LTEzOC4xeiIgc3R5bGU9ImZpbGw6I2ZmZiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMy43NSAzLjc1KSIvPjxwYXRoIGQ9Ik0xNzYuNTUgMzMwLjM1Yy0xMC4xLTYuOC0xNy0xNi43LTIwLjktMjkuOWwyMy40LTkuNmMyLjEgOC4xIDUuOCAxNC4zIDExLjEgMTguOCA1LjMgNC40IDExLjcgNi42IDE5LjEgNi42IDcuNiAwIDE0LjItMi4zIDE5LjctN3M4LjMtMTAuNiA4LjMtMTcuOHEwLTEwLjk1LTguNy0xOGMtNS44LTQuNi0xMy4xLTctMjEuOC03aC0xMy41di0yMy4xaDEyLjFjNy41IDAgMTMuOC0yIDE4LjktNi4xIDUuMS00IDcuNy05LjYgNy43LTE2LjZxMC05LjQ1LTYuOS0xNWMtNC42LTMuNy0xMC40LTUuNi0xNy40LTUuNi02LjkgMC0xMi4zIDEuOC0xNi40IDUuNS00IDMuNy03IDguMi04LjggMTMuNWwtMjMuMS05LjZjMy4xLTguNyA4LjctMTYuNCAxNi45LTIzIDguMy02LjYgMTguOC0xMCAzMS42LTEwIDkuNSAwIDE4IDEuOCAyNS41IDUuNXMxMy41IDguOCAxNy44IDE1LjJjNC4zIDYuNSA2LjQgMTMuOCA2LjQgMjEuOSAwIDguMy0yIDE1LjItNiAyMXEtNiA4LjU1LTE0LjcgMTMuMnYxLjRjNy42IDMuMiAxMy45IDguMSAxOC44IDE0LjdzNy4zIDE0LjQgNy4zIDIzLjYtMi4zIDE3LjMtNyAyNC41Yy00LjYgNy4yLTExLjEgMTIuOC0xOS4yIDE2LjktOC4yIDQuMS0xNy40IDYuMi0yNy42IDYuMi0xMS42IDAtMjIuNS0zLjQtMzIuNi0xMC4ybTE0My40LTExNi0yNS41IDE4LjYtMTIuOC0xOS41IDQ2LTMzLjJoMTcuN3YxNTYuN2gtMjUuM3YtMTIyLjZ6IiBzdHlsZT0iZmlsbDojMWE3M2U4Ii8+PHBhdGggZD0iTTM4NyA1MDguMiA1MDguMiAzODdsLTYwLjYtMjctNjAuNiAyNy0yNyA2MC42eiIgc3R5bGU9ImZpbGw6I2VhNDMzNSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMy43NSAzLjc1KSIvPjxwYXRoIGQ9Im05MC42IDQ0Ny42IDI2LjkgNjAuNkgzODdWMzg3SDExNy41eiIgc3R5bGU9ImZpbGw6IzM0YTg1MyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMy43NSAzLjc1KSIvPjxwYXRoIGQ9Ik0zNi43LTMuOEMxNC4zLTMuOC0zLjggMTQuMy0zLjggMzYuN1YzODdsNjAuNiAyNi45IDYwLjYtMjYuOVYxMTcuNUgzODdsMjYuOS02MC42TDM4Ny0zLjh6IiBzdHlsZT0iZmlsbDojNDI4NWY0IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzLjc1IDMuNzUpIi8+PHBhdGggZD0iTS0zLjggMzg3djgwLjhjMCAyMi4zIDE4LjEgNDAuNCA0MC40IDQwLjRoODAuOFYzODd6IiBzdHlsZT0iZmlsbDojMTg4MDM4IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzLjc1IDMuNzUpIi8+PHBhdGggZD0iTTM4NyAxMTcuNVYzODdoMTIxLjNWMTE3LjVsLTYwLjYtMjYuOXoiIHN0eWxlPSJmaWxsOiNmYmJjMDQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMuNzUgMy43NSkiLz48cGF0aCBkPSJNNTA4LjIgMTE3LjVWMzYuN2MwLTIyLjMtMTguMS00MC40LTQwLjQtNDAuNEgzODd2MTIxLjNoMTIxLjJ6IiBzdHlsZT0iZmlsbDojMTk2N2QyIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzLjc1IDMuNzUpIi8+PC9zdmc+",
+      "nodes": [
+        {
+          "type": "trigger.google_calendar",
+          "label": "On Google Calendar event",
+          "description": "Check a calendar on a timer and start a run for each new or changed event"
+        },
+        {
+          "type": "google_calendar.api",
+          "label": "Google Calendar",
+          "description": "Create, read, and change events in Google Calendar, and check availability"
         }
       ]
     },
@@ -100,6 +166,23 @@
       ]
     },
     {
+      "name": "@zerodot/higgsfield",
+      "label": "Higgsfield",
+      "summary": "AI image and video generation",
+      "description": "Make images and videos with the Higgsfield API: run any Higgsfield model, wait for the result or check it later, and cancel or delete a request. Use it for AI video, ads, and image steps in a workflow.",
+      "version": "1.0.1",
+      "sdk": "^1.2",
+      "icon": "Video01Icon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8yMDU5XzI1KSI+CjxyZWN0IHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiByeD0iOTIiIGZpbGw9IiNEMUZFMTciLz4KPHBhdGggZD0iTTQxOS4wNTUgMjUzLjkxMUw0MTguNzUzIDI1MC41MDVDNDE1Ljg5MyAyMTcuODIzIDM5NS4yOCAxNTYuMzM0IDMzOC4wOTkgMTU2LjMzNEMyOTUuNjY4IDE1Ni4zMzQgMjYzLjYxNCAxOTkuNTQ4IDIzNS4zMjYgMjM3LjY0N0MyMTIuNzU0IDI2OC4xNTggMTkzLjE5NiAyOTQuMzMzIDE3MS42NzYgMjk0LjMzM0MxNjUuOTU2IDI5My43MTUgMTU4LjU4NSAyOTAuNzcxIDE1NC4wNzMgMjg0LjExMkMxNTAuMDA5IDI3OC4wNjkgMTQ4Ljk1NyAyNzAuMzI2IDE1MS4wNjIgMjYxLjAzMkMxNTQuMzcgMjQ2LjMxOCAxNzMuMzMyIDIzMi42ODggMTkzLjM0MyAyMTguMTI5QzIwNC4zMjUgMjEwLjM4NiAyMTUuNjEzIDIwMi4xNzYgMjIzLjQzOCAxOTQuMjc4QzI0Ni4wMTEgMTcxLjgyIDI1Ny40NDYgMTU1LjU1NyAyNTcuNDQ2IDEyOS4zODNDMjU3LjQ0NiAxMDMuMjEgMjQzLjQ1MyA5MC4xOTY0IDIzMS43MTYgODQuNjE5OEMyMDguMjQyIDczLjQ3MSAxNzMuNzg1IDc5Ljk3NTYgMTUxLjgxNyA5OS40OTM3QzE0OC41MDggMTAyLjU5MyAxNDUuMTk1IDEwNS41MzIgMTQyLjE4NSAxMDguMzJDMTIwLjA2NSAxMjguNjExIDEwNS4xNyAxNDIuMzk3IDcxLjAxMTcgMTMxLjg2MVYxNzQuMjk4QzExNi4zMDQgMTk0Ljg5OSAxNTQuMzc1IDE1NS41NTcgMTY4LjgyMSAxMzcuNDM3QzE3OS45NTQgMTI1LjUxMiAxOTEuNjkxIDExOC41NDEgMjAwLjQyMSAxMTguNTQxSDIwMC44NzRDMjA0Ljc4NyAxMTguNjk2IDIwOC4wOTUgMTIwLjI0NiAyMTAuNTA2IDEyMy4wMzRDMjE0LjQxOSAxMjcuNjgzIDIxNS45MjQgMTMzLjEwNCAyMTUuMTY5IDEzOS4xNDJDMjEzLjUxMyAxNTEuODQ1IDIwMC43MjMgMTY2LjcxIDE3Ny4yNDkgMTgyLjk3NEMxNDkuNzEyIDIwMi4wMjUgMTAzLjY2OSAyMzMuOTMxIDEwMC4wNTUgMjc0LjA0NkM5Ny4zNDU3IDMwMi44NTcgMTExLjc5MiAzMzEuNjY0IDEzNC4zNjQgMzQyLjgxM0MxODcuMDI4IDM2OC41MjMgMjE5LjA4MiAzMjQuMjI3IDI1My4wODUgMjc3LjQ1MkMyNzkuMTE3IDI0MS4zNjQgMzAzLjc5NSAyMDcuMTM2IDMzOC4xMDMgMjA3LjEzNkMzNjguOTQ5IDIwNy4xMzYgMzgwLjM4NSAyMzMuNDY1IDM4MC4zODUgMjUwLjAzOVYyNTMuMjk0TDM3Ny4zNzUgMjUzLjkxMUMzMDIuNTkxIDI2Ny41NDIgMjYxLjgxMiAzMzkuNzE4IDI2MS44MTIgMzczLjAxNkMyNjEuODEyIDQwNi4zMTcgMjg5LjE5OCA0MzQuODE3IDMyMi45MDMgNDM0LjgxN0MzNjIuMzI4IDQzNC44MTcgNDExLjA3OSA0MDAuMTIyIDQxOC45MDUgMzAyLjU0Nkw0MTkuMjA3IDI5OC45ODZINDUwLjM1NFYyNTMuOTE1TDQxOS4wNTUgMjUzLjkxMVpNMzc4LjI3NiAzMDMuOTM2QzM3Mi4yNTkgMzYyLjMyNiAzNDMuMjE1IDM4OS41ODggMzI1LjYxMSAzODkuNTg4QzMxNy42MzYgMzg5LjU4OCAzMDYuNTA0IDM4Mi43NzEgMzA2LjUwNCAzNzAuMDczQzMwNi41MDQgMzU1LjgyNiAzMjcuMTE3IDMxMi42MTIgMzczLjQ2MiAyOTkuNzU4TDM3OC44NzkgMjk4LjM2NEwzNzguMjc2IDMwMy45MzZaIiBmaWxsPSJibGFjayIvPgo8L2c+CjxkZWZzPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzIwNTlfMjUiPgo8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K",
+      "nodes": [
+        {
+          "type": "higgsfield.api",
+          "label": "Higgsfield",
+          "description": "Make AI images and videos with any Higgsfield model"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/linear",
       "label": "Linear",
       "summary": "Issues, comments, projects, and webhook triggers",
@@ -139,6 +222,45 @@
       ]
     },
     {
+      "name": "@zerodot/mongodb",
+      "label": "MongoDB",
+      "summary": "Documents in MongoDB",
+      "description": "Find, insert, update, delete, and aggregate documents in a MongoDB collection. Use it to read and write the data of your app in MongoDB.",
+      "version": "1.1.1",
+      "sdk": "^1.1",
+      "icon": "Database01Icon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjE0MS4xNCAwIDIyOS43NCA1MTIuMSI+PHBhdGggZD0iTTM2Ni44IDIwMy44Yy0yNy0xMTktODMuMi0xNTAuNy05Ny41LTE3My4xLTUuOS05LjktMTEuMi0yMC4xLTE1LjctMzAuNy0uOCAxMC42LTIuMSAxNy4yLTExLjEgMjUuMi0xOCAxNi4xLTk0LjcgNzguNS0xMDEuMSAyMTMuNy02IDEyNi4xIDkyLjcgMjAzLjggMTA1LjcgMjExLjggMTAgNC45IDIyLjIuMSAyOC4yLTQuNCA0Ny41LTMyLjYgMTEyLjUtMTE5LjYgOTEuNS0yNDIuNSIgc3R5bGU9ImZpbGw6IzEwYWE1MCIvPjxwYXRoIGQ9Ik0yNTcuNyAzODMuN2MtMi41IDMxLjItNC4zIDQ5LjMtMTAuNiA2Ny4yIDAgMCA0LjEgMjkuNyA3IDYxLjJoMTAuM2MyLjUtMjIuMiA2LjItNDQuMiAxMS4yLTY1LjktMTMuMi02LjYtMTcuNC0zNS4yLTE3LjktNjIuNSIgc3R5bGU9ImZpbGw6I2I4YzRjMiIvPjxwYXRoIGQ9Ik0yNzUuNyA0NDYuMWMtMTMuNS02LjItMTcuNC0zNS4zLTE4LTYyLjUgMy4zLTQ0LjggNC4zLTg5LjcgMi45LTEzNC41LS43LTIzLjUuMy0yMTgtNS44LTI0Ni41IDQuMiA5LjYgOSAxOSAxNC41IDI4IDE0LjMgMjIuNCA3MC42IDU0LjEgOTcuNSAxNzMuMSAyMSAxMjIuOC00My42IDIwOS42LTkxLjEgMjQyLjQiIHN0eWxlPSJmaWxsOiMxMjkyNGYiLz48L3N2Zz4=",
+      "nodes": [
+        {
+          "type": "mongodb.documents",
+          "label": "MongoDB",
+          "description": "Find, insert, update, delete, and aggregate documents in MongoDB"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/notion",
+      "label": "Notion",
+      "summary": "Search, pages, databases, and blocks",
+      "description": "Search a Notion workspace. Read and write pages, databases, and blocks. Use it to keep notes, tasks, and records the same in other tools.",
+      "version": "1.1.1",
+      "sdk": "^1.2",
+      "icon": "File01Icon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJNNDEuOCAyMi4xIDMyNS4xIDEuMmMzNC44LTMgNDMuNy0xIDY1LjYgMTQuOWw5MC40IDYzLjdjMTQuOSAxMSAxOS45IDEzLjkgMTkuOSAyNS45djM0OS40YzAgMjEuOS04IDM0LjktMzUuOCAzNi44bC0zMjkgMTkuOWMtMjAuOSAxLTMwLjgtMi00MS44LTE1LjlsLTY2LjYtODYuNkMxNS45IDM5My40IDExIDM4MS40IDExIDM2Ny41VjU2LjljMC0xNy45IDcuOS0zMi44IDMwLjgtMzQuOCIgc3R5bGU9ImZpbGw6I2ZmZiIvPjxwYXRoIGQ9Ik0zMjUuMSAxLjIgNDEuOCAyMi4xQzE4LjkgMjQuMSAxMSAzOSAxMSA1Ni45djMxMC42YzAgMTMuOSA1IDI1LjkgMTYuOSA0MS44bDY2LjYgODYuNmMxMC45IDEzLjkgMjAuOSAxNi45IDQxLjggMTUuOWwzMjktMTkuOWMyNy44LTIgMzUuOC0xNC45IDM1LjgtMzYuOFYxMDUuN2MwLTExLjMtNC41LTE0LjYtMTcuNi0yNC4ybC05Mi43LTY1LjRDMzY4LjguMiAzNTkuOS0xLjggMzI1LjEgMS4yTTE0My43IDEwMGMtMjYuOSAxLjgtMzMgMi4yLTQ4LjItMTAuMkw1Ni43IDU4LjljLTMuOS00LTItOSA4LTEwTDMzNyAyOS4xYzIyLjktMiAzNC44IDYgNDMuNyAxMi45bDQ2LjcgMzMuOGMyIDEgNyA3IDEgN0wxNDcuMiA5OS43em0tMzEuMyAzNTIuMVYxNTUuNWMwLTEzIDQtMTguOSAxNS45LTE5LjlsMzIzLTE4LjljMTEtMSAxNS45IDYgMTUuOSAxOC45djI5NC42YzAgMTMtMiAyMy45LTE5LjkgMjQuOUwxMzguMiA0NzNjLTE3LjkgMS0yNS44LTUtMjUuOC0yMC45bTMwNS4xLTI4MC43YzIgOSAwIDE3LjktOSAxOC45bC0xNC45IDN2MjE5Yy0xMi45IDctMjQuOCAxMC45LTM0LjggMTAuOS0xNS45IDAtMTkuOS01LTMxLjgtMTkuOUwyMjkuNiAyNTB2MTQ4LjNsMzAuOCA3czAgMTcuOS0yNC45IDE3LjlsLTY4LjYgNGMtMi00IDAtMTMuOSA2LjktMTUuOWwxNy45LTVWMjEwLjJsLTI0LjgtMmMtMi05IDMtMjEuOSAxNi45LTIyLjlsNzMuNi01IDEwMS40IDE1NS4zVjE5OC4zbC0yNS44LTNjLTItMTEgNi0xOC45IDE1LjktMTkuOXoiIHN0eWxlPSJmaWxsLXJ1bGU6ZXZlbm9kZDtjbGlwLXJ1bGU6ZXZlbm9kZCIvPjwvc3ZnPg==",
+      "nodes": [
+        {
+          "type": "trigger.notion",
+          "label": "Notion Trigger",
+          "description": "Check a Notion data source on a timer and start a run for each new or changed page"
+        },
+        {
+          "type": "notion.api",
+          "label": "Notion",
+          "description": "Search a workspace, and read and write pages, databases, and blocks in Notion"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/s3",
       "label": "S3",
       "summary": "Files and buckets in S3 and compatible storage",
@@ -152,6 +274,50 @@
           "type": "s3.storage",
           "label": "S3",
           "description": "Work with buckets and objects in Amazon S3 and S3-compatible storage"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/slack",
+      "label": "Slack",
+      "summary": "Messages, channels, files, and Slack events",
+      "description": "Send and change messages, manage channels, find users, add reactions, and upload files with a Slack bot, and start a workflow on a Slack event, such as a new message or a mention. Use it for team notifications and chat bots.",
+      "version": "1.0.1",
+      "sdk": "^1.2",
+      "icon": "BubbleChatIcon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJNMTA3LjkgMzIzLjZjMCAyOS43LTI0IDUzLjgtNTMuOCA1My44Uy4zIDM1My40LjMgMzIzLjZjMC0yOS43IDI0LTUzLjggNTMuOC01My44aDUzLjh6bTI2LjkgMGMwLTI5LjcgMjQtNTMuOCA1My44LTUzLjhzNTMuOCAyNCA1My44IDUzLjhWNDU4YzAgMjkuNy0yNCA1My44LTUzLjggNTMuOHMtNTMuOC0yNC01My44LTUzLjh6IiBzdHlsZT0iZmlsbDojZTAxZTVhIi8+PHBhdGggZD0iTTE4OC42IDEwNy43Yy0yOS43IDAtNTMuOC0yNC01My44LTUzLjhTMTU4LjguMSAxODguNi4xczUzLjggMjQgNTMuOCA1My44djUzLjh6bTAgMjcuM2MyOS43IDAgNTMuOCAyNCA1My44IDUzLjhzLTI0IDUzLjgtNTMuOCA1My44SDUzLjhDMjQgMjQyLjYgMCAyMTguNSAwIDE4OC44UzI0IDEzNSA1My44IDEzNXoiIHN0eWxlPSJmaWxsOiMzNmM1ZjAiLz48cGF0aCBkPSJNNDA0LjEgMTg4LjhjMC0yOS43IDI0LTUzLjggNTMuOC01My44czUzLjggMjQgNTMuOCA1My44LTI0IDUzLjgtNTMuOCA1My44aC01My44em0tMjYuOSAwYzAgMjkuNy0yNCA1My44LTUzLjggNTMuOC0yOS43IDAtNTMuOC0yNC01My44LTUzLjhWNTRjMC0yOS43IDI0LTUzLjggNTMuOC01My44czUzLjggMjQgNTMuOCA1My44eiIgc3R5bGU9ImZpbGw6IzJlYjY3ZCIvPjxwYXRoIGQ9Ik0zMjMuNCA0MDQuM2MyOS43IDAgNTMuOCAyNCA1My44IDUzLjggMCAyOS43LTI0IDUzLjgtNTMuOCA1My44LTI5LjcgMC01My44LTI0LTUzLjgtNTMuOHYtNTMuOHptMC0yNi45Yy0yOS43IDAtNTMuOC0yNC01My44LTUzLjhzMjQtNTMuOCA1My44LTUzLjhoMTM0LjhjMjkuNyAwIDUzLjggMjQgNTMuOCA1My44IDAgMjkuNy0yNCA1My44LTUzLjggNTMuOHoiIHN0eWxlPSJmaWxsOiNlY2IyMmUiLz48L3N2Zz4=",
+      "nodes": [
+        {
+          "type": "trigger.slack",
+          "label": "Slack Trigger",
+          "description": "Start the workflow on a Slack event, such as a message or a mention"
+        },
+        {
+          "type": "slack.api",
+          "label": "Slack",
+          "description": "Send messages, manage channels, find users, and upload files with a Slack bot"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/twilio",
+      "label": "Twilio",
+      "summary": "SMS, WhatsApp, calls, lookups, and message events",
+      "description": "Send and read SMS, MMS, and WhatsApp messages, make and read phone calls, and look up phone numbers with Twilio, and start a workflow on an incoming message or a status update. Use it for alerts, verification, and customer messages.",
+      "version": "1.0.2",
+      "sdk": "^1.2",
+      "icon": "BubbleChatIcon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgMjU2Ij48cGF0aCBmaWxsPSIjRjEyRTQ1IiBkPSJNMTI4IDBjNzAuNjU2IDAgMTI4IDU3LjM0NCAxMjggMTI4cy01Ny4zNDQgMTI4LTEyOCAxMjhTMCAxOTguNjU2IDAgMTI4IDU3LjM0NCAwIDEyOCAwWm0wIDMzLjc5MmMtNTIuMjI0IDAtOTQuMjA4IDQxLjk4NC05NC4yMDggOTQuMjA4czQxLjk4NCA5NC4yMDggOTQuMjA4IDk0LjIwOCA5NC4yMDgtNDEuOTg0IDk0LjIwOC05NC4yMDhTMTgwLjIyNCAzMy43OTIgMTI4IDMzLjc5MlptMzEuNzQ0IDk5LjMyOGMxNC43MDQgMCAyNi42MjQgMTEuOTIgMjYuNjI0IDI2LjYyNHMtMTEuOTIgMjYuNjI0LTI2LjYyNCAyNi42MjQtMjYuNjI0LTExLjkyLTI2LjYyNC0yNi42MjQgMTEuOTItMjYuNjI0IDI2LjYyNC0yNi42MjRabS02My40ODggMGMxNC43MDQgMCAyNi42MjQgMTEuOTIgMjYuNjI0IDI2LjYyNHMtMTEuOTIgMjYuNjI0LTI2LjYyNCAyNi42MjQtMjYuNjI0LTExLjkyLTI2LjYyNC0yNi42MjQgMTEuOTItMjYuNjI0IDI2LjYyNC0yNi42MjRabTYzLjQ4OC02My40ODhjMTQuNzA0IDAgMjYuNjI0IDExLjkyIDI2LjYyNCAyNi42MjRzLTExLjkyIDI2LjYyNC0yNi42MjQgMjYuNjI0LTI2LjYyNC0xMS45Mi0yNi42MjQtMjYuNjI0IDExLjkyLTI2LjYyNCAyNi42MjQtMjYuNjI0Wm0tNjMuNDg4IDBjMTQuNzA0IDAgMjYuNjI0IDExLjkyIDI2LjYyNCAyNi42MjRzLTExLjkyIDI2LjYyNC0yNi42MjQgMjYuNjI0LTI2LjYyNC0xMS45Mi0yNi42MjQtMjYuNjI0UzgxLjU1MiA2OS42MzIgOTYuMjU2IDY5LjYzMloiLz48L3N2Zz4K",
+      "nodes": [
+        {
+          "type": "trigger.twilio",
+          "label": "Twilio Trigger",
+          "description": "Start the workflow on an incoming message or a status update from Twilio"
+        },
+        {
+          "type": "twilio.api",
+          "label": "Twilio",
+          "description": "Send SMS and WhatsApp messages, make calls, and look up phone numbers with Twilio"
         }
       ]
     }
