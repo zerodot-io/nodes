@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/discord",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Send, edit, and react to messages, manage channels, members, and roles with a Discord bot, post with a webhook, and start a workflow on a slash command or a button click. Use it to build Discord bots, alerts, and moderation flows.",
   "license": "AGPL-3.0-only",
   "repository": {

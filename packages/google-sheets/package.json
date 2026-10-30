@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/google-sheets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Read, append, update, and delete rows in Google Sheets, with a header row that maps each row to an object. Create spreadsheets and tabs, and clear ranges. Connect with Google sign-in or a service account.",
   "license": "AGPL-3.0-only",
   "repository": {

@@ -249,7 +249,7 @@ export default defineNode({
     { label: "List permissions", config: { resource: "permission", operation: "list" } },
     { label: "Remove a permission", config: { resource: "permission", operation: "delete" } },
   ],
-  icon: "HardDrive",
+  icon: "HardDriveIcon",
   iconUrl: DRIVE_ICON,
   config: driveConfig,
   defaultConfig: {

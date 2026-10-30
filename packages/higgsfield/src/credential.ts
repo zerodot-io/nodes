@@ -21,7 +21,7 @@ export const higgsfieldCredential: CredentialTypeDefinition = {
     keySecret: z.string().min(1).meta({ title: "API Key Secret" }),
   }),
   secretFields: ["keySecret"],
-  icon: "Video",
+  icon: "Video01Icon",
   iconUrl: HIGGSFIELD_ICON,
   async test(credential) {
     const access = higgsfieldAccess(credential);

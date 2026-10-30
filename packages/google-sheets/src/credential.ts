@@ -81,7 +81,7 @@ export const sheetsOAuth2Credential: CredentialTypeDefinition = {
   secretFields: ["clientSecret", "accessToken", "refreshToken"],
   serverFields: [...OAUTH2_TOKEN_FIELDS],
   oauth2: GOOGLE_OAUTH2,
-  icon: "Sheet",
+  icon: "Table01Icon",
   iconUrl: SHEETS_ICON,
   test: check,
 };
@@ -98,7 +98,7 @@ export const sheetsServiceAccountCredential: CredentialTypeDefinition = {
       .meta({ placeholder: '{ "type": "service_account", "client_email": "…", … }' }),
   }),
   secretFields: ["serviceAccountKey"],
-  icon: "Sheet",
+  icon: "Table01Icon",
   iconUrl: SHEETS_ICON,
   test: check,
 };

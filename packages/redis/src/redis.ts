@@ -407,7 +407,7 @@ export default defineNode({
     { label: "Set the value of a key in Redis", config: { operation: "set" } },
     { label: "Return information about the Redis server", config: { operation: "info" } },
   ],
-  icon: "Database",
+  icon: "Database01Icon",
   iconUrl: REDIS_ICON,
   config,
   defaultConfig: { operation: "get", key: "", propertyName: "propertyName" },

@@ -29,7 +29,7 @@ export const smtpCredential: CredentialTypeDefinition = {
     hostName: z.string().min(1).optional(),
   }),
   secretFields: ["password"],
-  icon: "Mail",
+  icon: "Mail01Icon",
   async test(credential) {
     const nodemailer = await import("nodemailer");
     const transport = nodemailer.createTransport({
@@ -64,7 +64,7 @@ export const imapCredential: CredentialTypeDefinition = {
     allowUnauthorizedCerts: z.enum(["true", "false"]).optional(),
   }),
   secretFields: ["password"],
-  icon: "Mail",
+  icon: "Mail01Icon",
   async test(credential) {
     const { ImapFlow } = await import("imapflow");
     const client = new ImapFlow({ ...imapOptions(credential), connectionTimeout: TIMEOUT_MS });

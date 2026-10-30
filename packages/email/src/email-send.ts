@@ -104,7 +104,7 @@ export default defineNode({
   label: "Send Email",
   description: "Sends an email using SMTP protocol",
   category: "integration",
-  icon: "Mail",
+  icon: "Mail01Icon",
   config: z.object({
     fromEmail: z.string().min(1).meta({
       title: "From Email",

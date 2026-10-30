@@ -26,7 +26,7 @@ export default defineNode({
     { label: "List calls", config: { resource: "call", operation: "list" } },
     { label: "Look up a phone number", config: { resource: "phoneNumber", operation: "lookup" } },
   ],
-  icon: "MessageSquare",
+  icon: "BubbleChatIcon",
   iconUrl: TWILIO_ICON,
   config: twilioConfig,
   defaultConfig: {

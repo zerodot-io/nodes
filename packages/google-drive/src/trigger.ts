@@ -98,7 +98,7 @@ export default defineNode({
   description: "Check Google Drive on a timer and start a run for each new or changed file",
   category: "trigger",
   app: "Google Drive",
-  icon: "HardDrive",
+  icon: "HardDriveIcon",
   iconUrl: DRIVE_ICON,
   config: triggerConfig,
   defaultConfig: {

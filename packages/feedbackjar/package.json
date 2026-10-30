@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/feedbackjar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Manage feedback posts, comments, votes, boards, and tags in FeedbackJar, and start a workflow when a post or comment changes. Use it to move user feedback into your other tools.",
   "license": "AGPL-3.0-only",
   "repository": {

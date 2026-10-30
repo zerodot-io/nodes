@@ -50,7 +50,7 @@ export const feedbackjarCredential: CredentialTypeDefinition = {
     server: z.url().optional().meta({ placeholder: "https://api.feedbackjar.com/api/v1" }),
   }),
   secretFields: ["apiToken", "signingSecret"],
-  icon: "KeyRound",
+  icon: "Key01Icon",
   iconUrl: FEEDBACKJAR_ICON,
   test: check,
 };

@@ -73,7 +73,7 @@ export const driveOAuth2Credential: CredentialTypeDefinition = {
   secretFields: ["clientSecret", "accessToken", "refreshToken"],
   serverFields: [...OAUTH2_TOKEN_FIELDS],
   oauth2: GOOGLE_OAUTH2,
-  icon: "HardDrive",
+  icon: "HardDriveIcon",
   iconUrl: DRIVE_ICON,
   test: check,
 };
@@ -90,7 +90,7 @@ export const driveServiceAccountCredential: CredentialTypeDefinition = {
       .meta({ placeholder: '{ "type": "service_account", "client_email": "…", … }' }),
   }),
   secretFields: ["serviceAccountKey"],
-  icon: "HardDrive",
+  icon: "HardDriveIcon",
   iconUrl: DRIVE_ICON,
   test: check,
 };

@@ -266,7 +266,7 @@ export default defineNode({
   description: "Start the workflow on a slash command, button click, or modal of a Discord app",
   category: "trigger",
   app: "Discord",
-  icon: "MessageCircle",
+  icon: "Message01Icon",
   iconUrl: DISCORD_ICON,
   config: triggerConfig,
   defaultConfig: {

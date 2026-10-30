@@ -40,7 +40,7 @@ export default defineNode({
     { label: "Get a user", config: { resource: "user", operation: "get" } },
     { label: "List users", config: { resource: "user", operation: "list" } },
   ],
-  icon: "FileText",
+  icon: "File01Icon",
   iconUrl: NOTION_ICON,
   config: notionConfig,
   defaultConfig: {

@@ -71,7 +71,7 @@ export default remoteFilesNode({
   label: "SFTP",
   description: "List, download, upload, rename, and delete files on an SFTP server",
   app: "SFTP",
-  icon: "FolderOpen",
+  icon: "FolderOpenIcon",
   credentialTypes: SSH_CREDENTIAL_TYPES,
   async connect(credential) {
     const client = await connectSsh(credential);

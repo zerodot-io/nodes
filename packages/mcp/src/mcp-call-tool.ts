@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { defineNode } from "@zerodot/node-sdk";
 import { z } from "zod";
+import { MCP_ICON } from "./icon";
 import { callMcpTool, MCP_CREDENTIAL_TYPES } from "./mcp-client";
 
 export default defineNode({
@@ -8,7 +9,8 @@ export default defineNode({
   label: "MCP Call Tool",
   description: "Call a tool on an MCP server",
   category: "integration",
-  icon: "Plug",
+  icon: "PlugSocketIcon",
+  iconUrl: MCP_ICON,
   config: z.object({
     // Streamable HTTP endpoint of the MCP server. No stdio servers in v1.
     url: z.url(),

@@ -123,7 +123,7 @@ export default defineNode({
   description: "Start the workflow when a post, comment, or tag changes in FeedbackJar",
   category: "trigger",
   app: "FeedbackJar",
-  icon: "MessageSquare",
+  icon: "BubbleChatIcon",
   iconUrl: FEEDBACKJAR_ICON,
   config: triggerConfig,
   defaultConfig: { events: ["post.created"] },

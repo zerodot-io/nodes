@@ -14,7 +14,7 @@ export const notionCredential: CredentialTypeDefinition = {
     token: z.string().min(1).meta({ placeholder: "ntn_…" }),
   }),
   secretFields: ["token"],
-  icon: "FileText",
+  icon: "File01Icon",
   iconUrl: NOTION_ICON,
   async test(credential) {
     const access = notionAccess(credential);

@@ -76,7 +76,7 @@ export default defineNode({
     { label: "Dispatch a workflow", config: { resource: "workflow", operation: "dispatch" } },
     { label: "List workflows", config: { resource: "workflow", operation: "list" } },
   ],
-  icon: "GitBranch",
+  icon: "GitBranchIcon",
   iconUrl: GITHUB_ICON,
   config: githubConfig,
   defaultConfig: {

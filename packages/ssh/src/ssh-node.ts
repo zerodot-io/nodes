@@ -9,7 +9,7 @@ export default defineNode({
   description: "Run a command on a server over SSH",
   category: "integration",
   app: "SSH",
-  icon: "Terminal",
+  icon: "ComputerTerminal01Icon",
   config: z.object({
     command: z.string().min(1).meta({
       title: "Command",

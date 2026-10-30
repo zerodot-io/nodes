@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/email",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Send email through an SMTP server, and start a workflow when a new email arrives in an IMAP mailbox. Use it for notifications and reports, or to react to incoming mail.",
   "license": "AGPL-3.0-only",
   "repository": {

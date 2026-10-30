@@ -43,7 +43,7 @@ export default defineNode({
   description: "Start a run when a new unread mail arrives in a mailbox",
   category: "trigger",
   app: "Email",
-  icon: "Mail",
+  icon: "Mail01Icon",
   config,
   defaultConfig: { mailbox: "INBOX", postProcessAction: "read", format: "simple" },
   credentialTypes: IMAP_CREDENTIAL_TYPES,

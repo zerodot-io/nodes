@@ -281,7 +281,7 @@ export default defineNode({
     { label: "Remove the password from a PDF", config: { operation: "unlock" } },
     { label: "Add a password to a PDF", config: { operation: "protect" } },
   ],
-  icon: "FileText",
+  icon: "File01Icon",
   iconUrl: PDF_ICON,
   config,
   defaultConfig: {

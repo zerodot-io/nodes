@@ -73,7 +73,7 @@ export const calendarOAuth2Credential: CredentialTypeDefinition = {
   secretFields: ["clientSecret", "accessToken", "refreshToken"],
   serverFields: [...OAUTH2_TOKEN_FIELDS],
   oauth2: GOOGLE_OAUTH2,
-  icon: "Calendar",
+  icon: "Calendar01Icon",
   iconUrl: CALENDAR_ICON,
   test: check,
 };
@@ -90,7 +90,7 @@ export const calendarServiceAccountCredential: CredentialTypeDefinition = {
       .meta({ placeholder: '{ "type": "service_account", "client_email": "…", … }' }),
   }),
   secretFields: ["serviceAccountKey"],
-  icon: "Calendar",
+  icon: "Calendar01Icon",
   iconUrl: CALENDAR_ICON,
   test: check,
 };

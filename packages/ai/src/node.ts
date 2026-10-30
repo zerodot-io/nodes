@@ -49,7 +49,7 @@ export default defineNode({
     },
     { label: "List models", config: { resource: "model", operation: "list" } },
   ],
-  icon: "Sparkles",
+  icon: "SparklesIcon",
   iconUrl: AI_ICON,
   config: aiConfig,
   defaultConfig: {

@@ -25,7 +25,7 @@ export const postgresCredential: CredentialTypeDefinition = {
       .meta({ placeholder: "5432" }),
   }),
   secretFields: ["password"],
-  icon: "Database",
+  icon: "Database01Icon",
   iconUrl: POSTGRES_ICON,
   async test(credential) {
     const postgres = await loadPostgres();

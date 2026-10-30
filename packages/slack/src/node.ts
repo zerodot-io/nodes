@@ -81,7 +81,7 @@ export default defineNode({
     { label: "Remove a reaction", config: { resource: "reaction", operation: "remove" } },
     { label: "Upload a file", config: { resource: "file", operation: "upload" } },
   ],
-  icon: "MessageSquare",
+  icon: "BubbleChatIcon",
   iconUrl: SLACK_ICON,
   config: slackConfig,
   defaultConfig: {

@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/stripe",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Manage customers, payments, invoices, subscriptions, refunds, and coupons with Stripe. Start a workflow when Stripe sends an event. Use it for billing and payment automation.",
   "license": "AGPL-3.0-only",
   "repository": {

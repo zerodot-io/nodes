@@ -26,7 +26,7 @@ export const discordBotCredential: CredentialTypeDefinition = {
       .meta({ placeholder: "64 hex characters from the Developer Portal" }),
   }),
   secretFields: ["botToken"],
-  icon: "Bot",
+  icon: "Robot01Icon",
   iconUrl: DISCORD_ICON,
   async test(credential) {
     const token = botToken(credential);
@@ -51,7 +51,7 @@ export const discordWebhookCredential: CredentialTypeDefinition = {
   }),
   // The token of the webhook is in the address.
   secretFields: ["webhookUrl"],
-  icon: "Webhook",
+  icon: "WebhookIcon",
   iconUrl: DISCORD_ICON,
   async test(credential) {
     const { id, token } = webhookOf(credential);

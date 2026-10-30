@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/higgsfield",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Make images and videos with the Higgsfield API: run any Higgsfield model, wait for the result or check it later, and cancel or delete a request. Use it for AI video, ads, and image steps in a workflow.",
   "license": "AGPL-3.0-only",
   "repository": {

@@ -175,7 +175,7 @@ export default defineNode({
   description: "Start the workflow on a Slack event, such as a message or a mention",
   category: "trigger",
   app: "Slack",
-  icon: "MessageSquare",
+  icon: "BubbleChatIcon",
   iconUrl: SLACK_ICON,
   config: triggerConfig,
   defaultConfig: { events: ["message"], additionalFields: {} },

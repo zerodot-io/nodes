@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/github",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Work with issues, repositories, files, and releases on GitHub, and start a workflow on an event in a repository, such as a push or a new issue. Use it to automate your development work.",
   "license": "AGPL-3.0-only",
   "repository": {

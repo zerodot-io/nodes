@@ -121,7 +121,7 @@ export default defineNode({
   description: "Start the workflow on an event in Linear",
   category: "trigger",
   app: "Linear",
-  icon: "ListChecks",
+  icon: "CheckListIcon",
   iconUrl: LINEAR_ICON,
   config: triggerConfig,
   defaultConfig: { authentication: "apiKey", resourceTypes: ["Issue"], actions: [] },

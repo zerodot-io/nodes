@@ -123,7 +123,7 @@ export default defineNode({
   description: "Start the workflow on an incoming message or a status update from Twilio",
   category: "trigger",
   app: "Twilio",
-  icon: "MessageSquare",
+  icon: "BubbleChatIcon",
   iconUrl: TWILIO_ICON,
   config: triggerConfig,
   defaultConfig: { events: ["message"], additionalFields: {} },

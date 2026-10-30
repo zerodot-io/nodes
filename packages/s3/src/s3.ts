@@ -478,7 +478,7 @@ export default defineNode({
     { label: "Delete an object", config: { operation: "deleteObject" } },
     { label: "Create a presigned URL", config: { operation: "presignUrl" } },
   ],
-  icon: "HardDrive",
+  icon: "HardDriveIcon",
   iconUrl: S3_ICON,
   config,
   defaultConfig: { operation: "listObjects", bucket: "" },

@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/google-calendar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create, read, update, and delete events in Google Calendar. List calendars, quick add an event, check free and busy times, and start a workflow on new or changed events. Connect with Google sign-in or a service account.",
   "license": "AGPL-3.0-only",
   "repository": {

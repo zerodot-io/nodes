@@ -19,6 +19,6 @@ export const s3Credential: CredentialTypeDefinition = {
     forcePathStyle: z.enum(["true", "false"]).optional(),
   }),
   secretFields: ["secretAccessKey", "sessionToken"],
-  icon: "HardDrive",
+  icon: "HardDriveIcon",
   iconUrl: S3_ICON,
 };

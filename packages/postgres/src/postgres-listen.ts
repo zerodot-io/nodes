@@ -91,7 +91,7 @@ export default defineNode({
   description: "Start a run at once when a row is added, changed or removed",
   category: "trigger",
   app: "Postgres",
-  icon: "Database",
+  icon: "Database01Icon",
   iconUrl: POSTGRES_ICON,
   config,
   defaultConfig: { schema: "public", table: "", events: ["INSERT"] },

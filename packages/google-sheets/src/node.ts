@@ -218,7 +218,7 @@ export default defineNode({
     { label: "Create a tab", config: { resource: "sheet", operation: "create" } },
     { label: "Delete a tab", config: { resource: "sheet", operation: "delete" } },
   ],
-  icon: "Sheet",
+  icon: "Table01Icon",
   iconUrl: SHEETS_ICON,
   config: sheetsConfig,
   defaultConfig: {

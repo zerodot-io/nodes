@@ -19,7 +19,7 @@ export const mongodbCredential: CredentialTypeDefinition = {
     database: z.string().min(1).meta({ placeholder: "mydb" }),
   }),
   secretFields: ["connectionString"],
-  icon: "Database",
+  icon: "Database01Icon",
   iconUrl: MONGODB_ICON,
   async test(credential) {
     const { connectionString } = mongoSettings(credential);

@@ -210,7 +210,7 @@ export default defineNode({
     { label: "Convert a spreadsheet file between CSV and XLSX", config: { operation: "convert" } },
     { label: "List the sheets of an XLSX file", config: { operation: "sheets" } },
   ],
-  icon: "FileSpreadsheet",
+  icon: "Xls01Icon",
   iconUrl: SPREADSHEET_ICON,
   config,
   defaultConfig: {

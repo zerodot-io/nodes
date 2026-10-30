@@ -50,7 +50,7 @@ export default defineNode({
   description: "Check a table on a timer and start a run for each new row",
   category: "trigger",
   app: "Postgres",
-  icon: "Database",
+  icon: "Database01Icon",
   iconUrl: POSTGRES_ICON,
   config,
   defaultConfig: { schema: "public", table: "", trackingColumn: "id", intervalSeconds: 60 },

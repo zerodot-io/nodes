@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/pdf",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Work with PDF files: create a file from text, read the text and page count, merge files, pick pages, split a file, and rotate pages. Use it to prepare or read documents in a workflow.",
   "license": "AGPL-3.0-only",
   "repository": {

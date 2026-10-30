@@ -27,7 +27,7 @@ export const sshCredential: CredentialTypeDefinition = {
     passphrase: z.string().min(1).optional(),
   }),
   secretFields: ["password", "privateKey", "passphrase"],
-  icon: "Terminal",
+  icon: "ComputerTerminal01Icon",
   async test(credential) {
     const client = await connectSsh(credential);
     client.end();
@@ -51,7 +51,7 @@ export const ftpCredential: CredentialTypeDefinition = {
     secure: z.enum(["true", "false"]).optional(),
   }),
   secretFields: ["password"],
-  icon: "FolderOpen",
+  icon: "FolderOpenIcon",
   async test({ data }) {
     const host = text(data.host);
     if (!host) throw new Error('The credential has no "host"');

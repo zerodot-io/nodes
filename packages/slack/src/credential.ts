@@ -16,7 +16,7 @@ export const slackCredential: CredentialTypeDefinition = {
     signingSecret: z.string().optional().meta({ placeholder: "Signing secret of the app" }),
   }),
   secretFields: ["accessToken", "signingSecret"],
-  icon: "MessageSquare",
+  icon: "BubbleChatIcon",
   iconUrl: SLACK_ICON,
   async test(credential) {
     const access = slackAccess(credential);

@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/google-drive",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Find, upload, download, copy, move, delete, and share files and folders in Google Drive. Start a workflow when a file is new or changed. Connect with Google sign-in or a service account.",
   "license": "AGPL-3.0-only",
   "repository": {

@@ -170,7 +170,7 @@ export default defineNode({
     { label: "Make an image grayscale", config: { operation: "grayscale" } },
     { label: "Convert the format of an image", config: { operation: "convert" } },
   ],
-  icon: "Image",
+  icon: "Image01Icon",
   config,
   defaultConfig: {
     operation: "resize",

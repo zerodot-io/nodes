@@ -26,7 +26,7 @@ export default defineNode({
     { label: "Cancel a request", config: { operation: "cancel" } },
     { label: "Delete request data", config: { operation: "delete" } },
   ],
-  icon: "Video",
+  icon: "Video01Icon",
   iconUrl: HIGGSFIELD_ICON,
   config: higgsfieldConfig,
   defaultConfig: {

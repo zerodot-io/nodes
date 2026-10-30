@@ -62,7 +62,7 @@ export const linearApiKeyCredential: CredentialTypeDefinition = {
     apiKey: z.string().min(1).meta({ placeholder: "lin_api_…" }),
   }),
   secretFields: ["apiKey"],
-  icon: "KeyRound",
+  icon: "Key01Icon",
   iconUrl: LINEAR_ICON,
   test: check,
 };
@@ -80,7 +80,7 @@ export const linearOAuth2Credential: CredentialTypeDefinition = {
   secretFields: ["clientSecret", "accessToken", "refreshToken"],
   serverFields: [...OAUTH2_TOKEN_FIELDS],
   oauth2: linearOAuth2,
-  icon: "KeyRound",
+  icon: "Key01Icon",
   iconUrl: LINEAR_ICON,
   test: check,
 };

@@ -17,7 +17,7 @@ export const telegramCredential: CredentialTypeDefinition = {
     baseUrl: z.url().optional().meta({ placeholder: "https://api.telegram.org" }),
   }),
   secretFields: ["accessToken"],
-  icon: "Send",
+  icon: "SentIcon",
   iconUrl: TELEGRAM_ICON,
   async test({ data }) {
     const token = text(data.accessToken);

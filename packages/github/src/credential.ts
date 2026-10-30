@@ -76,7 +76,7 @@ export const githubTokenCredential: CredentialTypeDefinition = {
     server: z.url().optional().meta({ placeholder: "https://api.github.com" }),
   }),
   secretFields: ["accessToken"],
-  icon: "KeyRound",
+  icon: "Key01Icon",
   iconUrl: GITHUB_ICON,
   test: check,
 };
@@ -96,7 +96,7 @@ export const githubOAuth2Credential: CredentialTypeDefinition = {
   secretFields: ["clientSecret", "accessToken", "refreshToken"],
   serverFields: [...OAUTH2_TOKEN_FIELDS],
   oauth2: githubOAuth2,
-  icon: "KeyRound",
+  icon: "Key01Icon",
   iconUrl: GITHUB_ICON,
   test: check,
 };

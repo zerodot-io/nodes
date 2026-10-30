@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/slack",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Send and change messages, manage channels, find users, add reactions, and upload files with a Slack bot, and start a workflow on a Slack event, such as a new message or a mention. Use it for team notifications and chat bots.",
   "license": "AGPL-3.0-only",
   "repository": {

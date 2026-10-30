@@ -37,7 +37,7 @@ export default defineNode({
     { label: "Reply to a post", config: { resource: "comment", operation: "create" } },
     { label: "Vote on a post for a person", config: { resource: "vote", operation: "create" } },
   ],
-  icon: "MessageSquare",
+  icon: "BubbleChatIcon",
   iconUrl: FEEDBACKJAR_ICON,
   config: feedbackjarConfig,
   defaultConfig: {

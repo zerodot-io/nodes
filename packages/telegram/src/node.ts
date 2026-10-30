@@ -76,7 +76,7 @@ export default defineNode({
     },
     { label: "Get a file", config: { resource: "file", operation: "get" } },
   ],
-  icon: "Send",
+  icon: "SentIcon",
   iconUrl: TELEGRAM_ICON,
   config: telegramConfig,
   defaultConfig: {

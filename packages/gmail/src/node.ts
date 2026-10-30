@@ -304,7 +304,7 @@ export default defineNode({
       config: { resource: "thread", operation: "removeLabels" },
     },
   ],
-  icon: "Mail",
+  icon: "Mail01Icon",
   iconUrl: GMAIL_ICON,
   config: gmailConfig,
   defaultConfig: {

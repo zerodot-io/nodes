@@ -68,7 +68,7 @@ export default defineNode({
       config: { authentication: "webhook", resource: "webhook", operation: "execute" },
     },
   ],
-  icon: "MessageCircle",
+  icon: "Message01Icon",
   iconUrl: DISCORD_ICON,
   config: discordConfig,
   defaultConfig: {

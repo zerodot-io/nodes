@@ -65,7 +65,7 @@ export default defineNode({
     },
     { label: "Get a Checkout Session", config: { resource: "checkoutSession", operation: "get" } },
   ],
-  icon: "CreditCard",
+  icon: "CreditCardIcon",
   iconUrl: STRIPE_ICON,
   config: stripeConfig,
   defaultConfig: {

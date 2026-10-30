@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/ai",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generate text, embeddings, images, and audio with OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, in one node. Use it to add AI steps to a workflow.",
   "license": "AGPL-3.0-only",
   "repository": {

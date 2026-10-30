@@ -309,7 +309,7 @@ export default defineNode({
     { label: "Find and update a document", config: { operation: "findOneAndUpdate" } },
     { label: "Find and replace a document", config: { operation: "findOneAndReplace" } },
   ],
-  icon: "Database",
+  icon: "Database01Icon",
   iconUrl: MONGODB_ICON,
   config,
   defaultConfig: {

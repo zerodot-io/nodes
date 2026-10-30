@@ -101,7 +101,7 @@ export default defineNode({
   description: "Check a calendar on a timer and start a run for each new or changed event",
   category: "trigger",
   app: "Google Calendar",
-  icon: "Calendar",
+  icon: "Calendar01Icon",
   iconUrl: CALENDAR_ICON,
   config: triggerConfig,
   defaultConfig: {

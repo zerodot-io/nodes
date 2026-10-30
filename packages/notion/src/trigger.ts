@@ -66,7 +66,7 @@ export default defineNode({
   description: "Check a Notion data source on a timer and start a run for each new or changed page",
   category: "trigger",
   app: "Notion",
-  icon: "FileText",
+  icon: "File01Icon",
   iconUrl: NOTION_ICON,
   config: triggerConfig,
   defaultConfig: { event: "pageAdded", dataSourceId: "", simplify: true, intervalSeconds: 60 },

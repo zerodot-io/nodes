@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/mcp",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Call a tool on an MCP server over Streamable HTTP, and use the result in your workflow. Use it to connect to any service that has an MCP server.",
   "license": "AGPL-3.0-only",
   "repository": {
@@ -17,10 +17,11 @@
     ".": "./dist/index.cjs"
   },
   "files": [
-    "dist"
+    "dist",
+    "mcp.svg"
   ],
   "zerodot": {
-    "sdk": "^1.1",
+    "sdk": "^1.2",
     "label": "MCP Call Tool",
     "summary": "Call tools on an MCP server"
   },
@@ -37,7 +38,7 @@
     "@modelcontextprotocol/sdk": "1.32.1"
   },
   "peerDependencies": {
-    "@zerodot/node-sdk": "^1.1.1",
+    "@zerodot/node-sdk": "^1.2.0",
     "zod": "^4.0.0"
   },
   "devDependencies": {

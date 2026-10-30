@@ -16,7 +16,7 @@ export const twilioCredential: CredentialTypeDefinition = {
     authToken: z.string().min(1).meta({ placeholder: "Auth Token" }),
   }),
   secretFields: ["authToken"],
-  icon: "MessageSquare",
+  icon: "BubbleChatIcon",
   iconUrl: TWILIO_ICON,
   async test(credential) {
     const access = twilioAccess(credential);

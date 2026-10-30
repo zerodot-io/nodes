@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/notion",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Search a Notion workspace. Read and write pages, databases, and blocks. Use it to keep notes, tasks, and records the same in other tools.",
   "license": "AGPL-3.0-only",
   "repository": {

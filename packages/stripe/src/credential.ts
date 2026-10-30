@@ -16,7 +16,7 @@ export const stripeCredential: CredentialTypeDefinition = {
     webhookSecret: z.string().optional().meta({ placeholder: "whsec_…" }),
   }),
   secretFields: ["secretKey", "webhookSecret"],
-  icon: "CreditCard",
+  icon: "CreditCardIcon",
   iconUrl: STRIPE_ICON,
   async test(credential) {
     const access = stripeAccess(credential);

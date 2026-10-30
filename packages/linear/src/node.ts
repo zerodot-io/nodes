@@ -40,7 +40,7 @@ export default defineNode({
     { label: "Get many users", config: { resource: "user", operation: "getAll" } },
     { label: "Get many cycles", config: { resource: "cycle", operation: "getAll" } },
   ],
-  icon: "ListChecks",
+  icon: "CheckListIcon",
   iconUrl: LINEAR_ICON,
   config: linearConfig,
   defaultConfig: {

@@ -138,7 +138,7 @@ export default defineNode({
     { label: "Quick add an event", config: { resource: "event", operation: "quickAdd" } },
     { label: "Check availability", config: { resource: "availability", operation: "check" } },
   ],
-  icon: "Calendar",
+  icon: "Calendar01Icon",
   iconUrl: CALENDAR_ICON,
   config: calendarConfig,
   defaultConfig: {

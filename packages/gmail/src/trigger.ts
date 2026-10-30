@@ -158,7 +158,7 @@ export default defineNode({
   description: "Start a run when a new email matches a search or a label",
   category: "trigger",
   app: "Gmail",
-  icon: "Mail",
+  icon: "Mail01Icon",
   iconUrl: GMAIL_ICON,
   config,
   defaultConfig: {

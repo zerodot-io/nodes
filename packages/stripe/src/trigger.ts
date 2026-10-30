@@ -237,7 +237,7 @@ export default defineNode({
   description: "Start the workflow when Stripe sends an event, such as a payment or an invoice",
   category: "trigger",
   app: "Stripe",
-  icon: "CreditCard",
+  icon: "CreditCardIcon",
   iconUrl: STRIPE_ICON,
   config: triggerConfig,
   defaultConfig: { events: ["payment_intent.succeeded"], additionalFields: {} },

@@ -23,7 +23,7 @@ export const redisCredential: CredentialTypeDefinition = {
     ssl: z.enum(["true", "false"]).optional(),
   }),
   secretFields: ["password"],
-  icon: "Database",
+  icon: "Database01Icon",
   iconUrl: REDIS_ICON,
   async test(credential) {
     const client = await connectRedis(credential);

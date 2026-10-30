@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/linear",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Work with issues, comments, projects, teams, and cycles in Linear, and start a workflow on an event, such as a new issue or comment. Use it to automate your product work.",
   "license": "AGPL-3.0-only",
   "repository": {

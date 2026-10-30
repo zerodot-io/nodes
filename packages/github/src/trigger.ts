@@ -154,7 +154,7 @@ export default defineNode({
   description: "Start the workflow on an event in a GitHub repository",
   category: "trigger",
   app: "GitHub",
-  icon: "GitBranch",
+  icon: "GitBranchIcon",
   iconUrl: GITHUB_ICON,
   config: triggerConfig,
   defaultConfig: { authentication: "accessToken", owner: "", repository: "", events: ["push"] },

@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/mongodb",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Find, insert, update, delete, and aggregate documents in a MongoDB collection. Use it to read and write the data of your app in MongoDB.",
   "license": "AGPL-3.0-only",
   "repository": {

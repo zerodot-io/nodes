@@ -181,7 +181,7 @@ export default defineNode({
   description: "Start the workflow on a Telegram bot update",
   category: "trigger",
   app: "Telegram",
-  icon: "Send",
+  icon: "SentIcon",
   iconUrl: TELEGRAM_ICON,
   config: triggerConfig,
   defaultConfig: { updates: ["message"], additionalFields: {} },

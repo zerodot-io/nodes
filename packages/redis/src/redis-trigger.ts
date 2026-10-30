@@ -50,7 +50,7 @@ export default defineNode({
   description: "Start a run when a message arrives on a Redis channel",
   category: "trigger",
   app: "Redis",
-  icon: "Database",
+  icon: "Database01Icon",
   iconUrl: REDIS_ICON,
   config,
   defaultConfig: { channels: "", jsonParseBody: false, onlyMessage: false },

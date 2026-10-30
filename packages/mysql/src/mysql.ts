@@ -447,7 +447,7 @@ export default defineNode({
     { label: "Select rows from a table", config: { operation: "select" } },
     { label: "Update rows in a table", config: { operation: "update" } },
   ],
-  icon: "Database",
+  icon: "Database01Icon",
   iconUrl: MYSQL_ICON,
   config,
   defaultConfig: { operation: "insert", database: "", table: "" },

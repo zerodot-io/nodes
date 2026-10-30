@@ -20,7 +20,7 @@ const testOf =
     );
   };
 
-const common = { secretFields: ["apiKey"], icon: "Sparkles", iconUrl: AI_ICON };
+const common = { secretFields: ["apiKey"], icon: "SparklesIcon", iconUrl: AI_ICON };
 
 export const openaiCredential: CredentialTypeDefinition = {
   type: CREDENTIAL_OF.openai,

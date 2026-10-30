@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/spreadsheet",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Read and write spreadsheet files: turn a CSV or XLSX file into rows, turn rows into a CSV or XLSX file, convert between the two formats, and list the sheets of a workbook. Use it to move table data in a workflow.",
   "license": "AGPL-3.0-only",
   "repository": {

@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/s3",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Manage buckets and files in Amazon S3 or in an S3-compatible service such as MinIO or Cloudflare R2: upload, download, list, and delete objects, and make signed links. Use it to store and share files.",
   "license": "AGPL-3.0-only",
   "repository": {

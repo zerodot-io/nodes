@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/gmail",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Send, reply to, and draft emails in Gmail. Read, search, label, trash, and delete messages and threads, with attachments as binary data. A trigger starts a run for each new email that matches a query. Connect with Google sign-in or a service account.",
   "license": "AGPL-3.0-only",
   "repository": {

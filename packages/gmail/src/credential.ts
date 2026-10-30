@@ -68,7 +68,7 @@ export const gmailOAuth2Credential: CredentialTypeDefinition = {
   secretFields: ["clientSecret", "accessToken", "refreshToken"],
   serverFields: [...OAUTH2_TOKEN_FIELDS],
   oauth2: GOOGLE_OAUTH2,
-  icon: "Mail",
+  icon: "Mail01Icon",
   iconUrl: GMAIL_ICON,
   test: check,
 };
@@ -87,7 +87,7 @@ export const gmailServiceAccountCredential: CredentialTypeDefinition = {
     impersonatedUser: z.string().min(1).meta({ placeholder: "user@example.com" }),
   }),
   secretFields: ["serviceAccountKey"],
-  icon: "Mail",
+  icon: "Mail01Icon",
   iconUrl: GMAIL_ICON,
   test: check,
 };

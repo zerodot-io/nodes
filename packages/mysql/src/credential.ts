@@ -25,7 +25,7 @@ export const mysqlCredential: CredentialTypeDefinition = {
     allowUnauthorizedCerts: z.enum(["true", "false"]).optional(),
   }),
   secretFields: ["password"],
-  icon: "Database",
+  icon: "Database01Icon",
   iconUrl: MYSQL_ICON,
   async test(credential) {
     const mysql = await import("mysql2/promise");

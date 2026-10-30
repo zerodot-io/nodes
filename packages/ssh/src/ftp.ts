@@ -72,7 +72,7 @@ export default remoteFilesNode({
   label: "FTP",
   description: "List, download, upload, rename, and delete files on an FTP server",
   app: "FTP",
-  icon: "FolderOpen",
+  icon: "FolderOpenIcon",
   credentialTypes: ["ftp"],
   async connect(credential: ResolvedCredential | null) {
     if (credential?.type !== "ftp") throw new Error("Pick an FTP credential");

@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/telegram",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Send messages and files with a Telegram bot, and start a workflow when the bot gets a message or other update. Use it to build chat bots and notifications.",
   "license": "AGPL-3.0-only",
   "repository": {
