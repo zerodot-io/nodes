@@ -2,7 +2,7 @@
 import { defineSupplyNode, type NodeDefinition } from "@zerodot/node-sdk";
 import { z } from "zod";
 import { accessOf, CREDENTIAL_OF, type Provider } from "./api";
-import { AI_ICON } from "./icon";
+import { AI_ICON, ANTHROPIC_ICON, GEMINI_ICON, OPENAI_ICON } from "./icon";
 import { chatModelOf } from "./model";
 import {
   ANTHROPIC_MODELS,
@@ -61,6 +61,7 @@ type Spec = {
   description: string;
   models: readonly ModelEntry[];
   first: string;
+  iconUrl: string;
 };
 
 const SPECS: Spec[] = [
@@ -70,6 +71,7 @@ const SPECS: Spec[] = [
     description: "A GPT model for the AI Agent",
     models: OPENAI_TEXT_MODELS,
     first: "gpt-6.1-terra",
+    iconUrl: OPENAI_ICON,
   },
   {
     provider: "anthropic",
@@ -77,6 +79,7 @@ const SPECS: Spec[] = [
     description: "A Claude model for the AI Agent",
     models: ANTHROPIC_MODELS,
     first: "claude-sonnet-5-5",
+    iconUrl: ANTHROPIC_ICON,
   },
   {
     provider: "gemini",
@@ -84,6 +87,7 @@ const SPECS: Spec[] = [
     description: "A Google Gemini model for the AI Agent",
     models: GEMINI_TEXT_MODELS,
     first: "gemini-3.8-flash",
+    iconUrl: GEMINI_ICON,
   },
 ];
 
@@ -102,7 +106,7 @@ const listed = SPECS.map((spec) =>
     description: spec.description,
     category: "integration",
     icon: "SparklesIcon",
-    iconUrl: AI_ICON,
+    iconUrl: spec.iconUrl,
     supplies: KIND.model,
     config: z.object({
       model: modelField(spec.models, spec.first),

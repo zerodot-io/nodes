@@ -24,7 +24,10 @@
     "workflow.svg",
     "mcp.svg",
     "code.svg",
-    "memory-manager.svg"
+    "memory-manager.svg",
+    "openai.svg",
+    "anthropic.svg",
+    "gemini.svg"
   ],
   "zerodot": {
     "sdk": "^1.4",

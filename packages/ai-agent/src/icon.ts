@@ -13,3 +13,8 @@ export const WORKFLOW_ICON = fileIcon(import.meta.url, "../workflow.svg");
 export const MCP_ICON = fileIcon(import.meta.url, "../mcp.svg");
 export const CODE_ICON = fileIcon(import.meta.url, "../code.svg");
 export const MEMORY_MANAGER_ICON = fileIcon(import.meta.url, "../memory-manager.svg");
+
+// The logos of the model providers.
+export const OPENAI_ICON = fileIcon(import.meta.url, "../openai.svg");
+export const ANTHROPIC_ICON = fileIcon(import.meta.url, "../anthropic.svg");
+export const GEMINI_ICON = fileIcon(import.meta.url, "../gemini.svg");
