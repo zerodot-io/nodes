@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { defineSupplyNode, type NodeDefinition } from "@zerodot/node-sdk";
+import type { NodeDefinition } from "@zerodot/node-sdk";
 import { z } from "zod";
 import { CODE_ICON, MCP_ICON, MEMORY_ICON, WORKFLOW_ICON } from "./icon";
 import { tableMemory } from "./memory";
+import { defineSupplyNode } from "./supply";
 import { MCP_CREDENTIAL_TYPES, mcpToolset, schemaOf, TOOL_NAME, workflowTool } from "./tools";
 import { KIND, type Tool } from "./types";
 
