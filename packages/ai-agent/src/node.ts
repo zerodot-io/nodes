@@ -63,6 +63,8 @@ export default defineNode({
   config,
   defaultConfig: { systemPrompt: "", prompt: "", maxIterations: 10, maxResultChars: 20_000 },
   ports: { in: ["in"], out: ["out"] },
+  // Not a tool yet: a tool run does not build the supplies of the agent.
+  usableAsTool: false,
   supplyPorts: [
     { name: "model", kind: KIND.model, label: "Chat Model", required: true },
     { name: "memory", kind: KIND.memory, label: "Memory" },

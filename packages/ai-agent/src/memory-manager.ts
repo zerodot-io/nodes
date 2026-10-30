@@ -152,6 +152,8 @@ export default defineNode({
   }),
   defaultConfig: { operation: "get", scope: "all", simplify: true },
   ports: { in: ["in"], out: ["out"] },
+  // Not a tool: a tool run does not build the memory supply.
+  usableAsTool: false,
   supplyPorts: [{ name: "memory", kind: KIND.memory, label: "Memory", required: true }],
   subtitle: (config) => (typeof config.operation === "string" ? config.operation : undefined),
   // The output is the messages of the session after the operation.
