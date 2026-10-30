@@ -2,6 +2,22 @@
   "version": 1,
   "packages": [
     {
+      "name": "@zerodot/edit-image",
+      "label": "Edit Image",
+      "summary": "Resize, crop, rotate, and convert images",
+      "description": "Change an image: get its size, resize, crop, rotate, blur, make it gray, or convert it to JPEG, PNG, WebP, or AVIF. Use it to prepare images before you upload or send them.",
+      "version": "1.1.1",
+      "sdk": "^1.1",
+      "icon": "Image01Icon",
+      "nodes": [
+        {
+          "type": "file.edit_image",
+          "label": "Edit Image",
+          "description": "Resize, crop, rotate, blur, or convert an image"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/email",
       "label": "Email",
       "summary": "Send email and react to new mail",
@@ -19,6 +35,123 @@
           "type": "trigger.email_imap",
           "label": "On new email (IMAP)",
           "description": "Start a run when a new unread mail arrives in a mailbox"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/gmail",
+      "label": "Gmail",
+      "summary": "Send, read, and label emails in Gmail",
+      "description": "Send, reply to, and draft emails in Gmail. Read, search, label, trash, and delete messages and threads, with attachments as binary data. A trigger starts a run for each new email that matches a query. Connect with Google sign-in or a service account.",
+      "version": "1.0.1",
+      "sdk": "^1.2",
+      "icon": "Mail01Icon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJNMzQuOSA0NDhoODEuNVYyNTAuMkwwIDE2M3YyNTAuMkMwIDQzMi41IDE1LjcgNDQ4IDM0LjkgNDQ4IiBzdHlsZT0iZmlsbDojNDI4NWY0Ii8+PHBhdGggZD0iTTM5NS42IDQ0OGg4MS41YzE5LjMgMCAzNC45LTE1LjcgMzQuOS0zNC45VjE2M2wtMTE2LjQgODcuMyIgc3R5bGU9ImZpbGw6IzM0YTg1MyIvPjxwYXRoIGQ9Ik0zOTUuNiA5OXYxNTEuM0w1MTIgMTYzdi00Ni41YzAtNDMuMi00OS4zLTY3LjgtODMuOC00MS45IiBzdHlsZT0iZmlsbDojZmJiYzA0Ii8+PHBhdGggZD0iTTExNi40IDI1MC4yVjk5TDI1NiAyMDMuNyAzOTUuNiA5OXYxNTEuM0wyNTYgMzU1IiBzdHlsZT0iZmlsbDojZWE0MzM1Ii8+PHBhdGggZD0iTTAgMTE2LjRWMTYzbDExNi40IDg3LjNWOTlMODMuOCA3NC41QzQ5LjIgNDguNiAwIDczLjIgMCAxMTYuNCIgc3R5bGU9ImZpbGw6I2M1MjIxZiIvPjwvc3ZnPg==",
+      "nodes": [
+        {
+          "type": "gmail.api",
+          "label": "Gmail",
+          "description": "Send, read, search, and label emails in Gmail"
+        },
+        {
+          "type": "gmail.trigger",
+          "label": "On new email (Gmail)",
+          "description": "Start a run when a new email matches a search or a label"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/google-drive",
+      "label": "Google Drive",
+      "summary": "Find, upload, download, and share files",
+      "description": "Find, upload, download, copy, move, delete, and share files and folders in Google Drive. Start a workflow when a file is new or changed. Connect with Google sign-in or a service account.",
+      "version": "1.0.1",
+      "sdk": "^1.2",
+      "icon": "HardDriveIcon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJtMzguNyA0MTkuMyAyMi42IDM5YzQuNyA4LjIgMTEuNCAxNC43IDE5LjQgMTkuNGw4MC42LTEzOS42SDBjMCA5LjEgMi4zIDE4LjIgNyAyNi40eiIgc3R5bGU9ImZpbGw6IzAwNjZkYSIvPjxwYXRoIGQ9Ik0yNTYgMTczLjkgMTc1LjQgMzQuM2MtNy45IDQuNy0xNC43IDExLjEtMTkuNCAxOS40TDcgMzExLjdjLTQuNiA4LTcgMTcuMS03IDI2LjRoMTYxLjN6IiBzdHlsZT0iZmlsbDojMDBhYzQ3Ii8+PHBhdGggZD0iTTQzMS40IDQ3Ny43YzcuOS00LjcgMTQuNy0xMS4xIDE5LjQtMTkuNGw5LjQtMTYuMSA0NC45LTc3LjdjNC43LTguMiA3LTE3LjMgNy0yNi40SDM1MC43bDM0LjMgNjcuNHoiIHN0eWxlPSJmaWxsOiNlYTQzMzUiLz48cGF0aCBkPSJtMjU2IDE3My45IDgwLjYtMTM5LjZjLTcuOS00LjctMTctNy0yNi40LTdIMjAxLjhjLTkuNCAwLTE4LjUgMi42LTI2LjQgN3oiIHN0eWxlPSJmaWxsOiMwMDgzMmQiLz48cGF0aCBkPSJNMzUwLjcgMzM4LjFIMTYxLjNMODAuNiA0NzcuN2M3LjkgNC43IDE3IDcgMjYuNCA3aDI5OGM5LjQgMCAxOC41LTIuNiAyNi40LTd6IiBzdHlsZT0iZmlsbDojMjY4NGZjIi8+PHBhdGggZD0iTTQzMC41IDE4Mi43IDM1NiA1My43Yy00LjctOC4yLTExLjQtMTQuNy0xOS40LTE5LjRMMjU2IDE3My45bDk0LjcgMTY0LjJoMTYxYzAtOS4xLTIuMy0xOC4yLTctMjYuNHoiIHN0eWxlPSJmaWxsOiNmZmJhMDAiLz48L3N2Zz4=",
+      "nodes": [
+        {
+          "type": "trigger.google_drive",
+          "label": "On Google Drive file change",
+          "description": "Check Google Drive on a timer and start a run for each new or changed file"
+        },
+        {
+          "type": "google_drive.api",
+          "label": "Google Drive",
+          "description": "Find, upload, download, and share files in Google Drive"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/google-sheets",
+      "label": "Google Sheets",
+      "summary": "Read and write rows in spreadsheets",
+      "description": "Read, append, update, and delete rows in Google Sheets, with a header row that maps each row to an object. Create spreadsheets and tabs, and clear ranges. Connect with Google sign-in or a service account.",
+      "version": "1.0.1",
+      "sdk": "^1.2",
+      "icon": "Table01Icon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNDkiIGhlaWdodD0iNjciPjxkZWZzPjxwYXRoIGlkPSJhIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxwYXRoIGlkPSJjIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxwYXRoIGlkPSJlIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxwYXRoIGlkPSJoIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxwYXRoIGlkPSJqIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxwYXRoIGlkPSJsIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxwYXRoIGlkPSJuIiBkPSJNMjkuNTgzIDBINC40MzhBNC40NSA0LjQ1IDAgMCAwIDAgNC40Mzh2NTYuMjA4YTQuNDUgNC40NSAwIDAgMCA0LjQzOCA0LjQzN2gzOC40NThhNC40NSA0LjQ1IDAgMCAwIDQuNDM3LTQuNDM3VjE3Ljc1eiIvPjxyYWRpYWxHcmFkaWVudCBpZD0icCIgY3g9IjMuMTY4JSIgY3k9IjIuNzE3JSIgcj0iMTYxLjI0OSUiIGZ4PSIzLjE2OCUiIGZ5PSIyLjcxNyUiIGdyYWRpZW50VHJhbnNmb3JtPSJtYXRyaXgoMSAwIDAgLjcyNzI3IDAgLjAwNykiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNGRkYiIHN0b3Atb3BhY2l0eT0iLjEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNGRkYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJmIiB4MT0iNTAuMDA1JSIgeDI9IjUwLjAwNSUiIHkxPSI4LjU4NiUiIHkyPSIxMDAuMDE0JSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzI2MzIzOCIgc3RvcC1vcGFjaXR5PSIuMiIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzI2MzIzOCIgc3RvcC1vcGFjaXR5PSIuMDIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC44MzMgLjk1OCkiPjxtYXNrIGlkPSJiIiBmaWxsPSIjZmZmIj48dXNlIHhsaW5rOmhyZWY9IiNhIi8+PC9tYXNrPjxwYXRoIGZpbGw9IiMwRjlENTgiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTI5LjU4MyAwSDQuNDM4QTQuNDUgNC40NSAwIDAgMCAwIDQuNDM4djU2LjIwOGE0LjQ1IDQuNDUgMCAwIDAgNC40MzggNC40MzdoMzguNDU4YTQuNDUgNC40NSAwIDAgMCA0LjQzNy00LjQzN1YxNy43NUwzNi45OCAxMC4zNTR6IiBtYXNrPSJ1cmwoI2IpIi8+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC44MzMgLjk1OCkiPjxtYXNrIGlkPSJkIiBmaWxsPSIjZmZmIj48dXNlIHhsaW5rOmhyZWY9IiNjIi8+PC9tYXNrPjxwYXRoIGZpbGw9IiNGMUYxRjEiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTExLjgzMyAzMS44MDJWNTMuMjVIMzUuNVYzMS44MDJ6bTEwLjM1NSAxOC40OWgtNy4zOTZ2LTMuNjk4aDcuMzk2em0wLTUuOTE3aC03LjM5NnYtMy42OThoNy4zOTZ6bTAtNS45MTdoLTcuMzk2VjM0Ljc2aDcuMzk2em0xMC4zNTQgMTEuODM0aC03LjM5NnYtMy42OThoNy4zOTZ6bTAtNS45MTdoLTcuMzk2di0zLjY5OGg3LjM5NnptMC01LjkxN2gtNy4zOTZWMzQuNzZoNy4zOTZ6IiBtYXNrPSJ1cmwoI2QpIi8+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC44MzMgLjk1OCkiPjxtYXNrIGlkPSJnIiBmaWxsPSIjZmZmIj48dXNlIHhsaW5rOmhyZWY9IiNlIi8+PC9tYXNrPjxwYXRoIGZpbGw9InVybCgjZikiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTMwLjg4MSAxNi40NTIgNDcuMzMzIDMyLjlWMTcuNzV6IiBtYXNrPSJ1cmwoI2cpIi8+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC44MzMgLjk1OCkiPjxtYXNrIGlkPSJpIiBmaWxsPSIjZmZmIj48dXNlIHhsaW5rOmhyZWY9IiNoIi8+PC9tYXNrPjxnIG1hc2s9InVybCgjaSkiPjxwYXRoIGZpbGw9IiM4N0NFQUMiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTI5LjU4MyAwdjEzLjMxM2E0LjQzNiA0LjQzNiAwIDAgMCA0LjQzOCA0LjQzN2gxMy4zMTJ6Ii8+PC9nPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSguODMzIC45NTgpIj48bWFzayBpZD0iayIgZmlsbD0iI2ZmZiI+PHVzZSB4bGluazpocmVmPSIjaiIvPjwvbWFzaz48cGF0aCBmaWxsPSIjRkZGIiBmaWxsLW9wYWNpdHk9Ii4yIiBmaWxsLXJ1bGU9Im5vbnplcm8iIGQ9Ik00LjQzOCAwQTQuNDUgNC40NSAwIDAgMCAwIDQuNDM4di4zN0E0LjQ1IDQuNDUgMCAwIDEgNC40MzguMzdoMjUuMTQ1VjB6IiBtYXNrPSJ1cmwoI2spIi8+PC9nPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC44MzMgLjk1OCkiPjxtYXNrIGlkPSJtIiBmaWxsPSIjZmZmIj48dXNlIHhsaW5rOmhyZWY9IiNsIi8+PC9tYXNrPjxwYXRoIGZpbGw9IiMyNjMyMzgiIGZpbGwtb3BhY2l0eT0iLjIiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTQyLjg5NiA2NC43MTRINC40MzhBNC40NSA0LjQ1IDAgMCAxIDAgNjAuMjc2di4zN2E0LjQ1IDQuNDUgMCAwIDAgNC40MzggNC40MzdoMzguNDU4YTQuNDUgNC40NSAwIDAgMCA0LjQzNy00LjQzN3YtLjM3YTQuNDUgNC40NSAwIDAgMS00LjQzNyA0LjQzOCIgbWFzaz0idXJsKCNtKSIvPjwvZz48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSguODMzIC45NTgpIj48bWFzayBpZD0ibyIgZmlsbD0iI2ZmZiI+PHVzZSB4bGluazpocmVmPSIjbiIvPjwvbWFzaz48cGF0aCBmaWxsPSIjMjYzMjM4IiBmaWxsLW9wYWNpdHk9Ii4xIiBmaWxsLXJ1bGU9Im5vbnplcm8iIGQ9Ik0zNC4wMiAxNy43NWE0LjQzNiA0LjQzNiAwIDAgMS00LjQzNy00LjQzN3YuMzdhNC40MzYgNC40MzYgMCAwIDAgNC40MzggNC40MzdoMTMuMzEydi0uMzd6IiBtYXNrPSJ1cmwoI28pIi8+PC9nPjxwYXRoIGZpbGw9InVybCgjcCkiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTI5LjU4MyAwSDQuNDM4QTQuNDUgNC40NSAwIDAgMCAwIDQuNDM4djU2LjIwOGE0LjQ1IDQuNDUgMCAwIDAgNC40MzggNC40MzdoMzguNDU4YTQuNDUgNC40NSAwIDAgMCA0LjQzNy00LjQzN1YxNy43NXoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC44MzMgLjk1OCkiLz48L2c+PC9zdmc+",
+      "nodes": [
+        {
+          "type": "google_sheets.api",
+          "label": "Google Sheets",
+          "description": "Read, append, and update rows in Google Sheets"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/linear",
+      "label": "Linear",
+      "summary": "Issues, comments, projects, and webhook triggers",
+      "description": "Work with issues, comments, projects, teams, and cycles in Linear, and start a workflow on an event, such as a new issue or comment. Use it to automate your product work.",
+      "version": "1.0.1",
+      "sdk": "^1.1",
+      "icon": "CheckListIcon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHBhdGggZmlsbD0iIzIyMjMyNiIgZD0iTTEuMjI1NDEgNjEuNTIyOGMtLjIyMjUtLjk0ODUuOTA3NDgtMS41NDU5IDEuNTk2MzgtLjg1N0wzOS4zMzQyIDk3LjE3ODJjLjY4ODkuNjg4OS4wOTE1IDEuODE4OS0uODU3IDEuNTk2NEMyMC4wNTE1IDk0LjQ1MjIgNS41NDc3OSA3OS45NDg1IDEuMjI1NDEgNjEuNTIyOFpNLjAwMTg5MTM1IDQ2Ljg4OTFjLS4wMTc2NDM3NS4yODMzLjA4ODg3MjE1LjU1OTkuMjg5NTcxNjUuNzYwNkw1Mi4zNTAzIDk5LjcwODVjLjIwMDcuMjAwNy40NzczLjMwNzUuNzYwNi4yODk2IDIuMzY5Mi0uMTQ3NiA0LjY5MzgtLjQ2IDYuOTYyNC0uOTI1OS43NjQ1LS4xNTcgMS4wMzAxLTEuMDk2My40NzgyLTEuNjQ4MUwyLjU3NTk1IDM5LjQ0ODVjLS41NTE4Ni0uNTUxOS0xLjQ5MTE3LS4yODYzLTEuNjQ4MTc0LjQ3ODItLjQ2NTkxNSAyLjI2ODYtLjc3ODMyIDQuNTkzMi0uOTI1ODg0NjUgNi45NjI0Wk00LjIxMDkzIDI5LjcwNTRjLS4xNjY0OS4zNzM4LS4wODE2OS44MTA2LjIwNzY1IDEuMWw2NC43NzYwMiA2NC43NzZjLjI4OTQuMjg5NC43MjYyLjM3NDIgMS4xLjIwNzcgMS43ODYxLS43OTU2IDMuNTE3MS0xLjY5MjcgNS4xODU1LTIuNjg0LjU1MjEtLjMyOC42MzczLTEuMDg2Ny4xODMyLTEuNTQwN0w4LjQzNTY2IDI0LjMzNjdjLS40NTQwOS0uNDU0MS0xLjIxMjcxLS4zNjg5LTEuNTQwNzQuMTgzMi0uOTkxMzIgMS42Njg0LTEuODg4NDMgMy4zOTk0LTIuNjgzOTkgNS4xODU1Wk0xMi42NTg3IDE4LjA3NGMtLjM3MDEtLjM3MDEtLjM5My0uOTYzNy0uMDQ0My0xLjM1NDFDMjEuNzc5NSA2LjQ1OTMxIDM1LjExMTQgMCA0OS45NTE5IDAgNzcuNTkyNyAwIDEwMCAyMi40MDczIDEwMCA1MC4wNDgxYzAgMTQuODQwNS02LjQ1OTMgMjguMTcyNC0xNi43MTk5IDM3LjMzNzUtLjM5MDMuMzQ4Ny0uOTg0LjMyNTgtMS4zNTQyLS4wNDQzTDEyLjY1ODcgMTguMDc0WiIvPjwvc3ZnPg==",
+      "nodes": [
+        {
+          "type": "trigger.linear",
+          "label": "Linear Trigger",
+          "description": "Start the workflow on an event in Linear"
+        },
+        {
+          "type": "linear.api",
+          "label": "Linear",
+          "description": "Work with issues, comments, projects, teams, and cycles in Linear"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/mcp",
+      "label": "MCP Call Tool",
+      "summary": "Call tools on an MCP server",
+      "description": "Call a tool on an MCP server over Streamable HTTP, and use the result in your workflow. Use it to connect to any service that has an MCP server.",
+      "version": "1.1.1",
+      "sdk": "^1.2",
+      "icon": "PlugSocketIcon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzcxNzE3YSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTUuNjg4IDIuMzQzYTIuNTg4IDIuNTg4IDAgMDAtMy42MSAwbC05LjYyNiA5LjQ0YS44NjMuODYzIDAgMDEtMS4yMDMgMCAuODIzLjgyMyAwIDAxMC0xLjE4bDkuNjI2LTkuNDRhNC4zMTMgNC4zMTMgMCAwMTYuMDE2IDAgNC4xMTYgNC4xMTYgMCAwMTEuMjA0IDMuNTQgNC4zIDQuMyAwIDAxMy42MDkgMS4xOGwuMDUuMDVhNC4xMTUgNC4xMTUgMCAwMTAgNS45bC04LjcwNiA4LjUzN2EuMjc0LjI3NCAwIDAwMCAuMzkzbDEuNzg4IDEuNzU0YS44MjMuODIzIDAgMDEwIDEuMTguODYzLjg2MyAwIDAxLTEuMjAzIDBsLTEuNzg4LTEuNzUzYTEuOTIgMS45MiAwIDAxMC0yLjc1NGw4LjcwNi04LjUzOGEyLjQ3IDIuNDcgMCAwMDAtMy41NGwtLjA1LS4wNDlhMi41ODggMi41ODggMCAwMC0zLjYwNy0uMDAzbC03LjE3MiA3LjAzNC0uMDAyLjAwMi0uMDk4LjA5N2EuODYzLjg2MyAwIDAxLTEuMjA0IDAgLjgyMy44MjMgMCAwMTAtMS4xOGw3LjI3My03LjEzM2EyLjQ3IDIuNDcgMCAwMC0uMDAzLTMuNTM3eiIvPjxwYXRoIGQ9Ik0xNC40ODUgNC43MDNhLjgyMy44MjMgMCAwMDAtMS4xOC44NjMuODYzIDAgMDAtMS4yMDQgMGwtNy4xMTkgNi45ODJhNC4xMTUgNC4xMTUgMCAwMDAgNS45IDQuMzE0IDQuMzE0IDAgMDA2LjAxNiAwbDcuMTItNi45ODJhLjgyMy44MjMgMCAwMDAtMS4xOC44NjMuODYzIDAgMDAtMS4yMDQgMGwtNy4xMTkgNi45ODJhMi41ODggMi41ODggMCAwMS0zLjYxIDAgMi40NyAyLjQ3IDAgMDEwLTMuNTRsNy4xMi02Ljk4MnoiLz48L3N2Zz4K",
+      "nodes": [
+        {
+          "type": "mcp.call_tool",
+          "label": "MCP Call Tool",
+          "description": "Call a tool on an MCP server"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/s3",
+      "label": "S3",
+      "summary": "Files and buckets in S3 and compatible storage",
+      "description": "Manage buckets and files in Amazon S3 or in an S3-compatible service such as MinIO or Cloudflare R2: upload, download, list, and delete objects, and make signed links. Use it to store and share files.",
+      "version": "1.1.1",
+      "sdk": "^1.1",
+      "icon": "HardDriveIcon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIGlkPSJhbWF6b24tczNfc3ZnX19MYXllcl8xIiB4PSIwIiB5PSIwIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48c3R5bGU+LmFtYXpvbi1zM19zdmdfX3N0MCwuYW1hem9uLXMzX3N2Z19fc3Qxe2ZpbGwtcnVsZTpldmVub2RkO2NsaXAtcnVsZTpldmVub2RkO2ZpbGw6I2UyNTQ0NH0uYW1hem9uLXMzX3N2Z19fc3Qxe2ZpbGw6IzdiMWQxM308L3N0eWxlPjxwYXRoIGQ9Ik00MzAuOSA4OC41djMzNy4xbDM2LjMtMjAuM1YxMDguOHoiIGNsYXNzPSJhbWF6b24tczNfc3ZnX19zdDAiLz48cGF0aCBkPSJNMjUzLjkgMTA4Ljh2MjkuNmguMnYyNDEuOGwtLjIuMXYyNWwxNzcgMjAuM1Y4OC41eiIgY2xhc3M9ImFtYXpvbi1zM19zdmdfX3N0MSIvPjxwYXRoIGQ9Im03My4yIDg4LjctMjguNCAxMi42djMxMS41bDI4LjQgMTIuNnoiIHN0eWxlPSJmaWxsLXJ1bGU6ZXZlbm9kZDtjbGlwLXJ1bGU6ZXZlbm9kZDtmaWxsOiM1ODE1MGQiLz48cGF0aCBkPSJtNzMuMiA4OC4yIDE4MC45IDUwLjN2MjQxLjhMNzMuMiA0MjUuN3oiIGNsYXNzPSJhbWF6b24tczNfc3ZnX19zdDAiLz48cGF0aCBkPSJtMzMwLjIgMzYyLjEtNzYuMSAxOS4xLTc2LjEtMTkuMSA3Ni4yLTE0LjF6bS41LTIwOS42LTc2LjgtMjEuM3YtLjNsLTc2LjIgMjEuNS0uMi4zIDc2LjggMTIuMyA3Ni42LTEyLjN6IiBzdHlsZT0iZmlsbDojNTgxNTBkIi8+PHBhdGggZD0ibTI1My45IDAtNzYuOCA0MC41djExMmw3Ny0yMS43em0uMiAxOTIuNS03Ni43IDguM3YxMTEuOGw3Ni43IDguOHptMCAxODguN0wxNzcuNCAzNjJ2MTA5LjlsNzYuNyA0MC4xeiIgY2xhc3M9ImFtYXpvbi1zM19zdmdfX3N0MSIvPjxwYXRoIGQ9Im0zMzAuOCAzNjEuOS03Ni43IDE5LjJWNTEybDc2LjctNDAuMXptLTc2LjctMTY5LjQgNzYuNyA4LjN2MTExLjhsLTc2LjcgOC44ek0yNTMuOSAwbDc2LjggNDAuNXYxMTJsLTc2LjgtMjEuM3oiIGNsYXNzPSJhbWF6b24tczNfc3ZnX19zdDAiLz48L3N2Zz4=",
+      "nodes": [
+        {
+          "type": "s3.storage",
+          "label": "S3",
+          "description": "Work with buckets and objects in Amazon S3 and S3-compatible storage"
         }
       ]
     }
