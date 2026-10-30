@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import assert from "node:assert/strict";
+import { readdirSync, readFileSync } from "node:fs";
 import { afterEach, describe, it, mock } from "node:test";
 import type { NodeDefinition, NodeRunContext, SupplyContext } from "@zerodot/node-sdk";
 import { z } from "zod";
@@ -805,5 +806,51 @@ describe("code tool", () => {
     assert.deepEqual(seen, [
       { code: "return 1", scope: { $input: { a: 1 }, input: { x: 1 } }, timeoutMs: 10_000 },
     ]);
+  });
+});
+
+describe("node SDK", () => {
+  // The values that the node SDK 1.2 exports. A running zerodot can keep an old SDK in memory
+  // after npm updates the SDK in the nodes folder, so the package uses only these at run time.
+  const SDK_1_2 = new Set([
+    "FORM_FIELD_TYPES",
+    "POLL_MAX_ITEMS",
+    "SDK_VERSION",
+    "defineNode",
+    "fileIcon",
+    "isRecord",
+    "mimeTypeOf",
+    "readBinary",
+    "resolveConfig",
+    "resolveTemplate",
+    "satisfiesSdk",
+    "toBinary",
+    "toItems",
+  ]);
+
+  it("uses only values of the SDK 1.2 at run time", () => {
+    const dir = new URL(".", import.meta.url);
+    const used = readdirSync(dir)
+      .filter((file) => file.endsWith(".ts") && !file.endsWith(".test.ts"))
+      .flatMap((file) => {
+        const text = readFileSync(new URL(file, dir), "utf8");
+        return [...text.matchAll(/import \{([^}]*)\} from "@zerodot\/node-sdk"/g)].flatMap(
+          ([, names = ""]) =>
+            names
+              .split(",")
+              .map((name) => name.trim())
+              .filter((name) => name !== "" && !name.startsWith("type ")),
+        );
+      });
+    assert.deepEqual(
+      used.filter((name) => !SDK_1_2.has(name)),
+      [],
+    );
+  });
+
+  it("makes a supply node with no ports and no step", () => {
+    const node = nodes.find((n) => n.type === "agent.memory.table");
+    assert.deepEqual(node?.ports, { in: [], out: [] });
+    assert.throws(() => node?.run({} as NodeRunContext<unknown>), /does not run as a step/);
   });
 });

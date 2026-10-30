@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { defineSupplyNode, type NodeDefinition } from "@zerodot/node-sdk";
+import type { NodeDefinition } from "@zerodot/node-sdk";
 import { z } from "zod";
 import { accessOf, CREDENTIAL_OF, type Provider } from "./api";
 import { AI_ICON, ANTHROPIC_ICON, GEMINI_ICON, OPENAI_ICON } from "./icon";
@@ -12,6 +12,7 @@ import {
   type ModelEntry,
   OPENAI_TEXT_MODELS,
 } from "./models";
+import { defineSupplyNode } from "./supply";
 import { KIND } from "./types";
 
 /** The model select of a provider. The last option is Custom. */

@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/ai-agent",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, memory in a data table, and other workflows and MCP servers as tools.",
   "license": "AGPL-3.0-only",
   "repository": {
