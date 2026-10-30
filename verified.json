@@ -1,3 +1,10 @@
 {
-  "packages": []
+  "packages": [
+    {
+      "name": "zerodot-example",
+      "version": "0.1.0",
+      "integrity": "sha512-7wBl6UElg64zvLJ7UtSkX5HBLBacQhbcL7zIbsXS1CZygtI+EMnOIuG3dIZxsi33yU/dCPntmBLMmlmnxBSPng==",
+      "source": "https://github.com/zerodot-io/create/tree/9e297ac0161c929e20e293d95e2da33e3560a37a/packages/example"
+    }
+  ]
 }
