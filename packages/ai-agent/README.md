@@ -40,6 +40,16 @@ The output:
 
 `finishReason` is `stop`, `length`, `content_filter`, `other`, or `max_iterations`.
 
+### Chat Memory Manager (`agent.memory.manage`)
+
+A normal step with a **Memory** port (required), like the Chat Memory Manager of n8n. It works on the memory of a conversation outside the agent, for example to clear a chat on `/reset`, or to add context as if the user said it. The Session ID of the memory node reads the input of this node.
+
+- **Get Messages**: all messages of the session, or only the turns that the agent reads.
+- **Insert Messages**: add User or AI messages, or replace all messages of the session.
+- **Delete Messages**: the last N messages, or all. A tool call never stays without its result: when the cut separates them, the tool call goes too.
+
+The output is `{ messages }`: the messages of the session after the operation. **Simplify Output** (on by default) keeps only `role` and `content`.
+
 ### Chat models
 
 `agent.model.openai`, `agent.model.anthropic`, `agent.model.gemini`, and `agent.model.compatible`. Each one has the credential of its provider, the model, Max Tokens, Temperature (not for Anthropic), and a timeout for each call. The model must support tool calls.

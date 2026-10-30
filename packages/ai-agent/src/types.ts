@@ -52,6 +52,12 @@ export type Memory = {
   load(): Promise<Message[]>;
   /** Adds the messages of one turn. */
   save(messages: Message[]): Promise<void>;
+  /** Optional, for the Chat Memory Manager: all messages of the session, oldest first. */
+  loadAll?(): Promise<Message[]>;
+  /** Optional, for the Chat Memory Manager: deletes all messages of the session. */
+  clear?(): Promise<void>;
+  /** Optional, for the Chat Memory Manager: deletes the last `count` messages. */
+  deleteLast?(count: number): Promise<void>;
 };
 
 /** A value of an "ai.tool" supply: one tool that the model can call. */

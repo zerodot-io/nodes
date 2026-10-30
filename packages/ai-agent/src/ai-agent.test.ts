@@ -378,7 +378,7 @@ function fakeTables() {
   const store = {
     async insert(_table: string, added: Record<string, unknown>[]) {
       const made = added.map((row) => ({
-        id: String(rows.length + 1),
+        id: String(clock + 1),
         createdAt: new Date(Date.UTC(2026, 0, 1, 0, 0, clock++)).toISOString(),
         updatedAt: "",
         ...row,
@@ -386,12 +386,28 @@ function fakeTables() {
       rows.push(...made);
       return made;
     },
-    async query(_table: string, query: { filter?: unknown; limit?: number }) {
-      const found = rows
+    // The cursor is the offset, so a small limit reads many pages.
+    async query(
+      _table: string,
+      query: {
+        filter?: unknown;
+        limit?: number;
+        cursor?: string | null;
+        sort?: { direction: string }[];
+      },
+    ) {
+      const asc = query.sort?.[0]?.direction === "asc";
+      const all = rows
         .filter((row) => matches(row, query.filter))
-        .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
-        .slice(0, query.limit);
-      return { rows: found, nextCursor: null };
+        .sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)) * (asc ? 1 : -1));
+      const start = Number(query.cursor ?? 0);
+      const end = start + (query.limit ?? all.length);
+      return { rows: all.slice(start, end), nextCursor: end < all.length ? String(end) : null };
+    },
+    async update(_table: string, input: { filter?: unknown; set?: Record<string, unknown> }) {
+      const changed = rows.filter((row) => matches(row, input.filter));
+      for (const row of changed) Object.assign(row, input.set);
+      return { count: changed.length, rows: changed };
     },
     async delete(_table: string, input: { filter?: unknown }) {
       const before = rows.length;
@@ -661,5 +677,102 @@ describe("agent.run", () => {
     assert.equal(data.output, "HI");
     assert.equal(closed, 1);
     assert.ok(headers.every((header) => header === "Bearer tok"));
+  });
+});
+
+describe("agent.memory.manage", () => {
+  const manager = find("agent.memory.manage");
+  const user = (content: string): Message => ({ role: "user", content });
+  const toolTurn: Message[] = [
+    user("find a@b.c"),
+    { role: "assistant", content: "", toolCalls: [{ id: "c1", name: "find", input: {} }] },
+    { role: "tool", toolCallId: "c1", name: "find", content: "Ada" },
+    { role: "assistant", content: "It is Ada" },
+  ];
+
+  async function setup(turns: Message[][]) {
+    const { store, rows } = fakeTables();
+    for (const turn of turns) await tableMemory(store, "chat", "s1", 10, false).save(turn);
+    await tableMemory(store, "chat", "other", 10, false).save([user("not mine")]);
+    const memory = await supplyOf(
+      "agent.memory.table",
+      { table: "chat", sessionId: "s1", turns: 1 },
+      { tables: store },
+    );
+    const run = async (config: Record<string, unknown>) => {
+      const result = await manager.run({
+        config: manager.config.parse({
+          ...(manager.defaultConfig as Record<string, unknown>),
+          ...config,
+        }),
+        input: {},
+        credential: null,
+        signal,
+        scope: {},
+        sandbox: null,
+        tables: null,
+        supplies: { memory },
+      });
+      return (result.data as { messages: Message[] }).messages;
+    };
+    return { run, rows };
+  }
+
+  it("needs a memory", async () => {
+    await assert.rejects(
+      async () =>
+        manager.run({
+          config: manager.config.parse(manager.defaultConfig),
+          input: {},
+          credential: null,
+          signal,
+          scope: {},
+          sandbox: null,
+          tables: null,
+        }),
+      /Connect a memory/,
+    );
+  });
+
+  it("gets all messages, or only the window, of the session", async () => {
+    const { run } = await setup([[user("one")], [user("two")]]);
+    assert.deepEqual(await run({ operation: "get" }), [user("one"), user("two")]);
+    assert.deepEqual(await run({ operation: "get", scope: "window" }), [user("two")]);
+  });
+
+  it("adds messages, or replaces all of them", async () => {
+    const { run, rows } = await setup([[user("one")]]);
+    const messages = {
+      values: [
+        { role: "assistant", content: "hi" },
+        { role: "user", content: " " },
+      ],
+    };
+    assert.deepEqual(await run({ operation: "insert", messages }), [
+      user("one"),
+      { role: "assistant", content: "hi" },
+    ]);
+    assert.deepEqual(await run({ operation: "insert", insertMode: "override", messages }), [
+      { role: "assistant", content: "hi" },
+    ]);
+    // The other session stays.
+    assert.ok(rows.some((row) => row.sessionId === "other"));
+  });
+
+  it("deletes the last messages, and never keeps a tool call without its result", async () => {
+    const { run } = await setup([[user("one")], toolTurn]);
+    // Deleting the last 2 cuts the tool result, so the open tool call goes too.
+    assert.deepEqual(await run({ operation: "delete", count: 2 }), [
+      user("one"),
+      user("find a@b.c"),
+    ]);
+    assert.deepEqual(await run({ operation: "delete", count: 1 }), [user("one")]);
+    assert.deepEqual(await run({ operation: "delete", deleteMode: "all" }), []);
+  });
+
+  it("returns the full messages when Simplify Output is off", async () => {
+    const { run } = await setup([toolTurn]);
+    const messages = await run({ operation: "get", simplify: false });
+    assert.deepEqual(messages[1], toolTurn[1]);
   });
 });

@@ -7,6 +7,7 @@ import {
   geminiCredential,
   openaiCredential,
 } from "./credential";
+import memoryManager from "./memory-manager";
 import agent from "./node";
 import { supplyNodes } from "./supply-nodes";
 
@@ -25,7 +26,7 @@ export type {
 } from "./types";
 export { KIND } from "./types";
 
-export const nodes: NodeDefinition[] = [agent, ...chatModelNodes, ...supplyNodes];
+export const nodes: NodeDefinition[] = [agent, memoryManager, ...chatModelNodes, ...supplyNodes];
 export const credentialTypes: CredentialTypeDefinition[] = [
   openaiCredential,
   anthropicCredential,

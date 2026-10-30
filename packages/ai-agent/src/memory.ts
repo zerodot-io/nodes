@@ -3,6 +3,10 @@ import { isRecord, type NodeRunContext } from "@zerodot/node-sdk";
 import type { Memory, Message } from "./types";
 
 type TableStore = NonNullable<NodeRunContext<unknown>["tables"]>;
+type TableRow = Awaited<ReturnType<TableStore["query"]>>["rows"][number];
+
+/** Rows for each page when the memory reads all turns of a session. */
+const PAGE_SIZE = 100;
 
 const ROLES = new Set(["user", "assistant", "tool"]);
 
@@ -46,12 +50,29 @@ export function tableMemory(
   trim: boolean,
 ): Memory {
   const bySession = { field: "sessionId", op: "eq" as const, value: sessionId };
+  const byId = (id: string) => ({ field: "id", op: "eq" as const, value: id });
   const latest = () =>
     tables.query(table, {
       filter: bySession,
       sort: [{ field: "createdAt", direction: "desc" }],
       limit: window,
     });
+  /** Every row of the session, in the order of `direction`. */
+  const allRows = async (direction: "asc" | "desc") => {
+    const rows: TableRow[] = [];
+    let cursor: string | null = null;
+    do {
+      const page = await tables.query(table, {
+        filter: bySession,
+        sort: [{ field: "createdAt", direction }],
+        limit: PAGE_SIZE,
+        cursor,
+      });
+      rows.push(...page.rows);
+      cursor = page.nextCursor;
+    } while (cursor);
+    return rows;
+  };
   return {
     async load() {
       const { rows } = await latest();
@@ -68,5 +89,50 @@ export function tableMemory(
         filter: { and: [bySession, { field: "createdAt", op: "lt", value: oldest.createdAt }] },
       });
     },
+    async loadAll() {
+      const rows = await allRows("asc");
+      return rows.flatMap((row) => readMessages(row.messages, "messages"));
+    },
+    async clear() {
+      await tables.delete(table, { filter: bySession });
+    },
+    async deleteLast(count) {
+      let left = count;
+      for (const row of await allRows("desc")) {
+        if (left <= 0) return;
+        const messages = readMessages(row.messages, "messages");
+        if (messages.length <= left) {
+          left -= messages.length;
+          await tables.delete(table, { filter: byId(row.id) });
+          continue;
+        }
+        // The cut is inside this turn. A tool call without its result cannot stay.
+        const kept = withoutOpenToolCall(messages.slice(0, messages.length - left));
+        left = 0;
+        if (kept.length === 0) await tables.delete(table, { filter: byId(row.id) });
+        else
+          await tables.update(table, {
+            filter: byId(row.id),
+            set: { messages: JSON.stringify(kept) },
+          });
+      }
+    },
   };
+}
+
+/**
+ * The messages without an assistant tool call at the end whose results are not all there.
+ * A provider refuses a tool call without a result.
+ */
+export function withoutOpenToolCall(messages: Message[]): Message[] {
+  for (let index = messages.length - 1; index >= 0; index--) {
+    const message = messages[index];
+    if (message?.role !== "assistant" || !message.toolCalls?.length) continue;
+    const answered = new Set(
+      messages.slice(index + 1).flatMap((next) => (next.role === "tool" ? [next.toolCallId] : [])),
+    );
+    const open = message.toolCalls.some((call) => !answered.has(call.id));
+    return open ? messages.slice(0, index) : messages;
+  }
+  return messages;
 }
