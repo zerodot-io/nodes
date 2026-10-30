@@ -1,6 +1,6 @@
 {
   "name": "@zerodot/ssh",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Run commands on a server over SSH, and list, download, upload, rename, and delete files over FTP and SFTP. Use it to manage servers and to move files.",
   "license": "AGPL-3.0-only",
   "repository": {
@@ -44,7 +44,7 @@
   "devDependencies": {
     "@types/node": "26.6.5",
     "@types/ssh2": "1.15.6",
-    "@zerodot/node-sdk": "^1.2.1",
+    "@zerodot/node-sdk": "^1.4.0",
     "tsdown": "0.23.2",
     "tsx": "4.23.15",
     "typescript": "7.0.2",

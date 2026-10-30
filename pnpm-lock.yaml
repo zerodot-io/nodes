@@ -194,6 +194,31 @@ importers:
         specifier: 4.6.7
         version: 4.6.7
 
+  packages/ai-agent:
+    dependencies:
+      '@modelcontextprotocol/sdk':
+        specifier: 1.32.1
+        version: 1.32.1(zod@4.6.7)
+    devDependencies:
+      '@types/node':
+        specifier: 26.6.5
+        version: 26.6.5
+      '@zerodot/node-sdk':
+        specifier: ^1.4.0
+        version: 1.4.0(zod@4.6.7)
+      tsdown:
+        specifier: 0.23.2
+        version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
+      tsx:
+        specifier: 4.23.15
+        version: 4.23.15
+      typescript:
+        specifier: 7.0.2
+        version: 7.0.2
+      zod:
+        specifier: 4.6.7
+        version: 4.6.7
+
   packages/discord:
     devDependencies:
       '@types/node':
@@ -462,8 +487,8 @@ importers:
         specifier: 26.6.5
         version: 26.6.5
       '@zerodot/node-sdk':
-        specifier: ^1.2.1
-        version: 1.2.1(zod@4.6.7)
+        specifier: ^1.4.0
+        version: 1.4.0(zod@4.6.7)
       tsdown:
         specifier: 0.23.2
         version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
@@ -722,8 +747,8 @@ importers:
         specifier: 1.15.6
         version: 1.15.6
       '@zerodot/node-sdk':
-        specifier: ^1.2.1
-        version: 1.2.1(zod@4.6.7)
+        specifier: ^1.4.0
+        version: 1.4.0(zod@4.6.7)
       tsdown:
         specifier: 0.23.2
         version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
@@ -1547,6 +1572,11 @@ packages:
 
   '@zerodot/node-sdk@1.2.1':
     resolution: {integrity: sha512-s67rGWP1ugUGh08z3An0/TwHqm3dhw+CuGe9hgrecbVsR7eAz+KS/7CrJ/RXbJw9HoFuyuo1+ARtD1cu/EN/dg==}
+    peerDependencies:
+      zod: ^4.0.0
+
+  '@zerodot/node-sdk@1.4.0':
+    resolution: {integrity: sha512-6NI7YD6MkE4T/BIFru/sFfhWZoku6JzM6Et/dPxS5xSsTiR8taONqm2TsDGhi/Abn5+jA4d3m21HsItm31/pvg==}
     peerDependencies:
       zod: ^4.0.0
 
@@ -2940,6 +2970,10 @@ snapshots:
   '@yuku-toolchain/types@0.19.0': {}
 
   '@zerodot/node-sdk@1.2.1(zod@4.6.7)':
+    dependencies:
+      zod: 4.6.7
+
+  '@zerodot/node-sdk@1.4.0(zod@4.6.7)':
     dependencies:
       zod: 4.6.7
 

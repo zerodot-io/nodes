@@ -9,6 +9,8 @@ export default defineNode({
   label: "MCP Call Tool",
   description: "Call a tool on an MCP server",
   category: "integration",
+  // Not a tool: the MCP Client Tool of @zerodot/ai-agent gives the tools of a server to an agent.
+  usableAsTool: false,
   icon: "PlugSocketIcon",
   iconUrl: MCP_ICON,
   config: z.object({

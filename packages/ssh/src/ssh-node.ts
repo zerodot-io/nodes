@@ -8,6 +8,8 @@ export default defineNode({
   label: "SSH",
   description: "Run a command on a server over SSH",
   category: "integration",
+  // Not a tool: a model must not run commands on a server.
+  usableAsTool: false,
   app: "SSH",
   icon: "ComputerTerminal01Icon",
   config: z.object({
