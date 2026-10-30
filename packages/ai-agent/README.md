@@ -1,6 +1,6 @@
 # @zerodot/ai-agent
 
-An AI agent with ports for a chat model, memory, and tools, like the AI Agent of n8n. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint. Memory in a data table. Other workflows and MCP servers as tools. Needs zerodot with node SDK 1.4.
+An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint. Memory in a data table. Other workflows, MCP servers, JavaScript, and HTTP requests as tools. Needs zerodot with node SDK 1.4.
 
 ## Install
 
@@ -10,7 +10,7 @@ Manual: install `@zerodot/ai-agent` where the web app and the worker run, and ad
 
 ## Nodes
 
-Like the AI Agent of n8n: the agent has ports at the bottom, and small supply nodes connect to them. A supply node is not a step. zerodot builds its value each time the agent runs, with the input of the agent, so a field such as `{{ $input.chatId }}` reads the agent input.
+The agent has ports at the bottom, and small supply nodes connect to them. A supply node is not a step. zerodot builds its value each time the agent runs, with the input of the agent, so a field such as `{{ $input.chatId }}` reads the agent input.
 
 ### AI Agent (`agent.run`)
 
@@ -42,7 +42,7 @@ The output:
 
 ### Chat Memory Manager (`agent.memory.manage`)
 
-A normal step with a **Memory** port (required), like the Chat Memory Manager of n8n. It works on the memory of a conversation outside the agent, for example to clear a chat on `/reset`, or to add context as if the user said it. The Session ID of the memory node reads the input of this node.
+A normal step with a **Memory** port (required). It works on the memory of a conversation outside the agent, for example to clear a chat on `/reset`, or to add context as if the user said it. The Session ID of the memory node reads the input of this node.
 
 - **Get Messages**: all messages of the session, or only the turns that the agent reads.
 - **Insert Messages**: add User or AI messages, or replace all messages of the session.
@@ -65,6 +65,14 @@ Runs another workflow of the project and waits for it. The input from the model 
 ### MCP Client Tool (`agent.tool.mcp`)
 
 Gives the tools of a Streamable HTTP MCP server to the agent. The credential is optional: `http.bearer`, `http.header`, or `http.basic`. Use **Tool Name Prefix** when two servers have a tool with the same name.
+
+### Code Tool (`agent.tool.code`)
+
+Runs your JavaScript as a tool, in the code sandbox of zerodot. The code is the body of an async function. The input from the model is in `input`, and the scope of the agent (`$input`, `$vars`, and others) is there too. The return value is the result. The worker needs a sandbox (`SANDBOX_URL`).
+
+### HTTP Request Tool (`agent.tool.http`)
+
+Sends one HTTP request. Put `{name}` in the URL or the JSON body where the model gives a value. A value in the URL is encoded, and a value in the body goes in as JSON, so `{"email": {email}}` gets quotes for text. Describe each placeholder and set its type (string, number, boolean, or json) in **Placeholders**. The credential is optional: `http.bearer`, `http.header`, or `http.basic`. An error status gives the model the status and the start of the body.
 
 Supply nodes and supply ports work only in official `@zerodot/*` packages, so this package must keep its name.
 

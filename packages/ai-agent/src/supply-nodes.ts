@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { defineSupplyNode, type NodeDefinition } from "@zerodot/node-sdk";
+import { defineSupplyNode, type FieldSpec, type NodeDefinition } from "@zerodot/node-sdk";
 import { z } from "zod";
-import { MCP_ICON, MEMORY_ICON, WORKFLOW_ICON } from "./icon";
+import { httpTool, PLACEHOLDER_TYPES } from "./http-tool";
+import { CODE_ICON, HTTP_ICON, MCP_ICON, MEMORY_ICON, WORKFLOW_ICON } from "./icon";
 import { tableMemory } from "./memory";
-import { MCP_CREDENTIAL_TYPES, mcpToolset, TOOL_NAME, workflowTool } from "./tools";
-import { KIND } from "./types";
+import { MCP_CREDENTIAL_TYPES, mcpToolset, schemaOf, TOOL_NAME, workflowTool } from "./tools";
+import { KIND, type Tool } from "./types";
 
 const tableMemoryNode = defineSupplyNode({
   type: "agent.memory.table",
@@ -141,4 +142,166 @@ const mcpToolNode = defineSupplyNode({
     }),
 });
 
-export const supplyNodes: NodeDefinition[] = [tableMemoryNode, workflowToolNode, mcpToolNode];
+/** The Tool Name and Description fields of a tool node. */
+const toolFields = {
+  name: z.string().default("").meta({
+    title: "Tool Name",
+    placeholder: "get_weather",
+    description: "Letters, digits, _ and -. Each tool of the agent needs its own name",
+  }),
+  description: z.string().default("").meta({
+    ui: "textarea",
+    title: "Description",
+    description: "What the tool does and when to use it. The model reads it",
+  }),
+};
+
+/** The checked name and description of a tool node. */
+function nameAndDescription(config: { name: string; description: string }) {
+  const name = config.name.trim();
+  if (!TOOL_NAME.test(name)) throw new Error('"name" must have 1 to 64 letters, digits, _ or -');
+  const description = config.description.trim();
+  if (!description) throw new Error('The node needs "description". The model reads it');
+  return { name, description };
+}
+
+/** The most code and time that the sandbox takes. The same limits as the Code node. */
+const MAX_CODE_CHARS = 200_000;
+const MAX_TIMEOUT_MS = 60_000;
+
+const DEFAULT_CODE = `// The input from the model is in \`input\`. Return the result for the model.
+// console.log shows in the logs of the agent.
+return { received: input };`;
+
+const codeToolNode = defineSupplyNode({
+  type: "agent.tool.code",
+  label: "Code Tool",
+  description: "A tool for the AI Agent that runs your JavaScript",
+  category: "integration",
+  icon: "SourceCodeIcon",
+  iconUrl: CODE_ICON,
+  supplies: KIND.tool,
+  config: z.object({
+    ...toolFields,
+    inputSchema: z.string().optional().meta({
+      ui: "code",
+      title: "Input Schema",
+      placeholder: '{"type":"object","properties":{"city":{"type":"string"}}}',
+      description: "Optional. A JSON Schema with type object. Empty means any object",
+    }),
+    // The body of an async function, as in the Code node.
+    code: z.string().min(1).max(MAX_CODE_CHARS).meta({ ui: "code", title: "JavaScript" }),
+    timeoutMs: z.number().int().min(1).max(MAX_TIMEOUT_MS).default(10_000).meta({
+      title: "Timeout (ms)",
+      description: "The time limit of one call",
+    }),
+  }),
+  defaultConfig: { name: "", description: "", code: DEFAULT_CODE, timeoutMs: 10_000 },
+  // JavaScript is not an expression. `{{ }}` in code stays as it is.
+  rawConfigKeys: ["code"],
+  subtitle: (config) =>
+    typeof config.name === "string" && config.name !== "" ? config.name : undefined,
+  supply: ({ config, sandbox, scope, log }): Tool => {
+    const { name, description } = nameAndDescription(config);
+    if (!sandbox) throw new Error("Code cannot run here: the worker has no SANDBOX_URL");
+    const inputSchema = schemaOf(config.inputSchema, name);
+    return {
+      spec: { name, description, inputSchema },
+      call: (input, signal) =>
+        sandbox.run(
+          { code: config.code, scope: { ...scope, input }, timeoutMs: config.timeoutMs },
+          signal,
+          log,
+        ),
+    };
+  },
+});
+
+export const placeholdersSpec: FieldSpec = {
+  name: "placeholders",
+  label: "Placeholders",
+  kind: "fixed",
+  multiple: true,
+  description: "Optional. Describe each {name} of the URL and the body for the model",
+  groups: [
+    {
+      name: "values",
+      label: "Placeholder",
+      fields: [
+        { name: "name", label: "Name", kind: "string", placeholder: "city" },
+        { name: "description", label: "Description", kind: "string" },
+        {
+          name: "type",
+          label: "Type",
+          kind: "options",
+          default: "string",
+          options: PLACEHOLDER_TYPES.map((type) => ({ value: type, label: type })),
+        },
+      ],
+    },
+  ],
+};
+
+const httpToolNode = defineSupplyNode({
+  type: "agent.tool.http",
+  label: "HTTP Request Tool",
+  description: "A tool for the AI Agent that sends an HTTP request",
+  category: "integration",
+  icon: "Globe02Icon",
+  iconUrl: HTTP_ICON,
+  supplies: KIND.tool,
+  config: z.object({
+    ...toolFields,
+    method: z.enum(["GET", "POST", "PUT", "PATCH", "DELETE"]).default("GET").meta({
+      title: "Method",
+    }),
+    url: z.string().default("https://").meta({
+      title: "URL",
+      placeholder: "https://api.example.com/weather?city={city}",
+      description: "Put {name} where the model gives a value. A value in the URL is encoded",
+    }),
+    body: z
+      .string()
+      .default("")
+      .meta({
+        ui: "code",
+        title: "JSON Body",
+        placeholder: '{"email": {email}, "plan": "pro"}',
+        showWhen: { method: ["POST", "PUT", "PATCH", "DELETE"] },
+        description:
+          "Optional. A {name} becomes the JSON value from the model, with quotes for text",
+      }),
+    placeholders: z.record(z.string(), z.unknown()).optional().meta({
+      title: "Placeholders",
+      ui: "field-collection",
+      fieldSpec: placeholdersSpec,
+    }),
+    timeoutMs: z.number().int().min(1000).max(300_000).default(30_000).meta({
+      title: "Timeout (ms)",
+      description: "The time limit of one request",
+    }),
+  }),
+  defaultConfig: { name: "", description: "", method: "GET", url: "https://", timeoutMs: 30_000 },
+  // Optional. The credential gives the header of each request.
+  credentialTypes: MCP_CREDENTIAL_TYPES,
+  subtitle: (config) =>
+    typeof config.name === "string" && config.name !== "" ? config.name : undefined,
+  supply: ({ config, credential }) =>
+    httpTool({
+      ...nameAndDescription(config),
+      method: config.method,
+      url: config.url,
+      body: config.body,
+      placeholders: config.placeholders,
+      credential,
+      timeoutMs: config.timeoutMs,
+    }),
+});
+
+export const supplyNodes: NodeDefinition[] = [
+  tableMemoryNode,
+  workflowToolNode,
+  mcpToolNode,
+  codeToolNode,
+  httpToolNode,
+];

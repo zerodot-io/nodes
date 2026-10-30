@@ -1,7 +1,7 @@
 {
   "name": "@zerodot/ai-agent",
   "version": "0.1.0",
-  "description": "An AI agent with n8n-style ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, memory in a data table, and other workflows and MCP servers as tools.",
+  "description": "An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, memory in a data table, and other workflows and MCP servers as tools.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
@@ -22,7 +22,9 @@
     "ai.svg",
     "memory.svg",
     "workflow.svg",
-    "mcp.svg"
+    "mcp.svg",
+    "code.svg",
+    "http.svg"
   ],
   "zerodot": {
     "sdk": "^1.4",
