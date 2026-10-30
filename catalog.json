@@ -289,24 +289,6 @@
       ]
     },
     {
-      "name": "@zerodot/mcp",
-      "label": "MCP Call Tool",
-      "summary": "Call tools on an MCP server",
-      "description": "Call a tool on an MCP server over Streamable HTTP, and use the result in your workflow. Use it to connect to any service that has an MCP server.",
-      "version": "1.1.1",
-      "sdk": "^1.2",
-      "icon": "PlugSocketIcon",
-      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzcxNzE3YSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTUuNjg4IDIuMzQzYTIuNTg4IDIuNTg4IDAgMDAtMy42MSAwbC05LjYyNiA5LjQ0YS44NjMuODYzIDAgMDEtMS4yMDMgMCAuODIzLjgyMyAwIDAxMC0xLjE4bDkuNjI2LTkuNDRhNC4zMTMgNC4zMTMgMCAwMTYuMDE2IDAgNC4xMTYgNC4xMTYgMCAwMTEuMjA0IDMuNTQgNC4zIDQuMyAwIDAxMy42MDkgMS4xOGwuMDUuMDVhNC4xMTUgNC4xMTUgMCAwMTAgNS45bC04LjcwNiA4LjUzN2EuMjc0LjI3NCAwIDAwMCAuMzkzbDEuNzg4IDEuNzU0YS44MjMuODIzIDAgMDEwIDEuMTguODYzLjg2MyAwIDAxLTEuMjAzIDBsLTEuNzg4LTEuNzUzYTEuOTIgMS45MiAwIDAxMC0yLjc1NGw4LjcwNi04LjUzOGEyLjQ3IDIuNDcgMCAwMDAtMy41NGwtLjA1LS4wNDlhMi41ODggMi41ODggMCAwMC0zLjYwNy0uMDAzbC03LjE3MiA3LjAzNC0uMDAyLjAwMi0uMDk4LjA5N2EuODYzLjg2MyAwIDAxLTEuMjA0IDAgLjgyMy44MjMgMCAwMTAtMS4xOGw3LjI3My03LjEzM2EyLjQ3IDIuNDcgMCAwMC0uMDAzLTMuNTM3eiIvPjxwYXRoIGQ9Ik0xNC40ODUgNC43MDNhLjgyMy44MjMgMCAwMDAtMS4xOC44NjMuODYzIDAgMDAtMS4yMDQgMGwtNy4xMTkgNi45ODJhNC4xMTUgNC4xMTUgMCAwMDAgNS45IDQuMzE0IDQuMzE0IDAgMDA2LjAxNiAwbDcuMTItNi45ODJhLjgyMy44MjMgMCAwMDAtMS4xOC44NjMuODYzIDAgMDAtMS4yMDQgMGwtNy4xMTkgNi45ODJhMi41ODggMi41ODggMCAwMS0zLjYxIDAgMi40NyAyLjQ3IDAgMDEwLTMuNTRsNy4xMi02Ljk4MnoiLz48L3N2Zz4K",
-      "nodes": [
-        {
-          "type": "mcp.call_tool",
-          "label": "MCP Call Tool",
-          "description": "Call a tool on an MCP server"
-        }
-      ],
-      "credentialTypes": []
-    },
-    {
       "name": "@zerodot/mongodb",
       "label": "MongoDB",
       "summary": "Documents in MongoDB",
@@ -506,36 +488,6 @@
         }
       ],
       "credentialTypes": []
-    },
-    {
-      "name": "@zerodot/ssh",
-      "label": "SSH, FTP and SFTP",
-      "summary": "Remote commands and file transfer",
-      "description": "Run commands on a server over SSH, and list, download, upload, rename, and delete files over FTP and SFTP. Use it to manage servers and to move files.",
-      "version": "1.1.1",
-      "sdk": "^1.1",
-      "icon": "ComputerTerminal01Icon",
-      "nodes": [
-        {
-          "type": "ssh.execute",
-          "label": "SSH",
-          "description": "Run a command on a server over SSH"
-        },
-        {
-          "type": "ftp.files",
-          "label": "FTP",
-          "description": "List, download, upload, rename, and delete files on an FTP server"
-        },
-        {
-          "type": "sftp.files",
-          "label": "SFTP",
-          "description": "List, download, upload, rename, and delete files on an SFTP server"
-        }
-      ],
-      "credentialTypes": [
-        "ssh",
-        "ftp"
-      ]
     },
     {
       "name": "@zerodot/stripe",
