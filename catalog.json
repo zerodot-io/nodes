@@ -2,6 +2,23 @@
   "version": 1,
   "packages": [
     {
+      "name": "@zerodot/ai",
+      "label": "AI",
+      "summary": "Text, images, audio, and embeddings from many AI providers",
+      "description": "Generate text, embeddings, images, and audio with OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, in one node. Use it to add AI steps to a workflow.",
+      "version": "1.0.1",
+      "sdk": "^1.2",
+      "icon": "SparklesIcon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik05LjkzNyAxNS41QTIgMiAwIDAgMCA4LjUgMTQuMDYzbC02LjEzNS0xLjU4MmEuNS41IDAgMCAxIDAtLjk2Mkw4LjUgOS45MzZBMiAyIDAgMCAwIDkuOTM3IDguNWwxLjU4Mi02LjEzNWEuNS41IDAgMCAxIC45NjMgMEwxNC4wNjMgOC41QTIgMiAwIDAgMCAxNS41IDkuOTM3bDYuMTM1IDEuNTgxYS41LjUgMCAwIDEgMCAuOTY0TDE1LjUgMTQuMDYzYTIgMiAwIDAgMC0xLjQzNyAxLjQzN2wtMS41ODIgNi4xMzVhLjUuNSAwIDAgMS0uOTYzIDB6Ii8+PHBhdGggZD0iTTIwIDN2NCIvPjxwYXRoIGQ9Ik0yMiA1aC00Ii8+PHBhdGggZD0iTTQgMTd2MiIvPjxwYXRoIGQ9Ik01IDE4SDMiLz48L3N2Zz4K",
+      "nodes": [
+        {
+          "type": "ai.api",
+          "label": "AI",
+          "description": "Write text, call tools, make embeddings and images, and manage files with OpenAI, Anthropic, Google Gemini, or a compatible service"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/discord",
       "label": "Discord",
       "summary": "Bot messages, webhooks, and slash commands",
@@ -79,6 +96,28 @@
           "type": "feedbackjar.api",
           "label": "FeedbackJar",
           "description": "Work with feedback posts, comments, votes, boards, and tags in FeedbackJar"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/github",
+      "label": "GitHub",
+      "summary": "Issues, repos, files, and webhook triggers",
+      "description": "Work with issues, repositories, files, and releases on GitHub, and start a workflow on an event in a repository, such as a push or a new issue. Use it to automate your development work.",
+      "version": "1.1.1",
+      "sdk": "^1.1",
+      "icon": "GitBranchIcon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBkPSJNMjU2IDYuM0MxMTQuNiA2LjMgMCAxMjAuOSAwIDI2Mi4zYzAgMTEzLjMgNzMuMyAyMDkgMTc1IDI0Mi45IDEyLjggMi4yIDE3LjYtNS40IDE3LjYtMTIuMiAwLTYuMS0uMy0yNi4yLS4zLTQ3LjctNjQuMyAxMS44LTgxLTE1LjctODYuMS0zMC4xLTIuOS03LjQtMTUuNC0zMC4xLTI2LjItMzYuMi05LTQuOC0yMS44LTE2LjYtLjMtMTcgMjAuMi0uMyAzNC42IDE4LjYgMzkuNCAyNi4yIDIzIDM4LjcgNTkuOCAyNy44IDc0LjYgMjEuMSAyLjItMTYuNiA5LTI3LjggMTYuMy0zNC4yLTU3LTYuNC0xMTYuNS0yOC41LTExNi41LTEyNi40IDAtMjcuOCA5LjktNTAuOSAyNi4yLTY4LjgtMi42LTYuNC0xMS41LTMyLjYgMi42LTY3LjggMCAwIDIxLjQtNi43IDcwLjQgMjYuMiAyMC41LTUuOCA0Mi4yLTguNiA2NC04LjZzNDMuNSAyLjkgNjQgOC42YzQ5LTMzLjMgNzAuNC0yNi4yIDcwLjQtMjYuMiAxNC4xIDM1LjIgNS4xIDYxLjQgMi42IDY3LjggMTYuMyAxNy45IDI2LjIgNDAuNiAyNi4yIDY4LjggMCA5OC4yLTU5LjggMTIwLTExNi44IDEyNi40IDkuMyA4IDE3LjMgMjMuNCAxNy4zIDQ3LjQgMCAzNC4yLS4zIDYxLjgtLjMgNzAuNCAwIDYuNyA0LjggMTQuNyAxNy42IDEyLjJDNDM4LjcgNDcxLjMgNTEyIDM3NS4zIDUxMiAyNjIuM2MwLTE0MS40LTExNC42LTI1Ni0yNTYtMjU2IiBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7ZmlsbDojMWIxZjIzIi8+PC9zdmc+Cg==",
+      "nodes": [
+        {
+          "type": "trigger.github",
+          "label": "GitHub Trigger",
+          "description": "Start the workflow on an event in a GitHub repository"
+        },
+        {
+          "type": "github.api",
+          "label": "GitHub",
+          "description": "Work with issues, repositories, files, and releases on GitHub"
         }
       ]
     },
@@ -239,6 +278,23 @@
       ]
     },
     {
+      "name": "@zerodot/mysql",
+      "label": "MySQL",
+      "summary": "Queries and rows in MySQL",
+      "description": "Run SQL queries on a MySQL database, or insert, update, select, and delete rows. Use it to read and write the data of your app in MySQL.",
+      "version": "1.1.1",
+      "sdk": "^1.1",
+      "icon": "Database01Icon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iODAwIiB3aWR0aD0iMTIwMCIgdmlld0JveD0iLTU4LjQ2OTg1IC01MC4zMjYyNSA1MDYuNzM4NyAzMDEuOTU3NSI+PHBhdGggZD0iTTAgMTgzLjM1NGgxMi44NDJ2LTUwLjcxMWwxOS44OCA0NC4yMDhjMi4zNDYgNS4zNSA1LjU1NyA3LjI0NCAxMS44NTQgNy4yNDQgNi4yOTggMCA5LjM4NS0xLjg5MyAxMS43MzItNy4yNDRsMTkuODgtNDQuMjA4djUwLjcxSDg5LjAzdi01MC42MjdjMC00Ljk0LTEuOTc2LTcuMzI3LTYuMDUtOC41NjEtOS43NTUtMy4wNDYtMTYuMy0uNDEyLTE5LjI2NCA2LjE3NGwtMTkuNTEgNDMuNjMtMTguODkyLTQzLjYzYy0yLjg0LTYuNTg2LTkuNTA4LTkuMjItMTkuMjYzLTYuMTc0QzEuOTc2IDEyNS4zOTkgMCAxMjcuNzg3IDAgMTMyLjcyNXY1MC42Mjl6bTk5LjcwOC00MS4yNzZoMTIuODM4djI3LjkzOGMtLjEyIDEuNTE4LjQ4NyA1LjA4IDcuNTIyIDUuMTkgMy41ODkuMDU3IDI3LjcgMCAyNy45MjUgMHYtMzMuMjY0aDEyLjg2OGMuMDU5IDAtLjAxMyA0NS4zNjQtLjAxMiA0NS41NTcuMDcgMTEuMTg4LTEzLjg4MiAxMy42MTgtMjAuMzEzIDEzLjgwNmgtNDAuNTV2LTguNjRjLjA3MiAwIDQwLjUyLjAwOSA0MC42MjItLjAwMSA4LjI2NS0uODczIDcuMjg5LTQuOTgxIDcuMjg4LTYuMzY0di0zLjM2OEgxMjAuNmMtMTIuNy0uMTE3LTIwLjc4Ni01LjY2LTIwLjg4Ni0xMi4wMzUtLjAxLS41OTEuMjc0LTI4LjU0LS4wMDctMjguODJ6IiBmaWxsPSIjMDA2MThhIi8+PHBhdGggZD0iTTE3MC43NTggMTgzLjM1NGgzNi45MmM0LjMyMiAwIDguNTItLjkwNSAxMS44NTUtMi40NyA1LjU1Ni0yLjU1MSA4LjI3My02LjAwOCA4LjI3My0xMC41Mzd2LTkuMzg0YzAtMy43MDUtMy4wODctNy4xNjMtOS4xMzgtOS40NjctMy4yMTEtMS4yMzYtNy4xNjItMS44OTQtMTAuOTktMS44OTRoLTE1LjU2Yy01LjE4NCAwLTcuNjU0LTEuNTY0LTguMjcxLTUuMDIxLS4xMjQtLjQxMi0uMTI0LS43NDItLjEyNC0xLjE1M3YtNS44NDRjMC0uMzMgMC0uNjYuMTI0LTEuMDcxLjYxNy0yLjYzNCAxLjk3Ni0zLjM3NiA2LjU0NC0zLjc4Ny4zNyAwIC44NjQtLjA4MyAxLjIzNS0uMDgzSDIyOC4zdi04LjU2aC0zNi4wNTdjLTUuMTg2IDAtNy45MDMuMzI5LTEwLjM3MiAxLjA2OS03LjY1NiAyLjM4OC0xMC45OSA2LjE3NS0xMC45OSAxMi43NnY3LjQ5MmMwIDUuNzYzIDYuNTQ1IDEwLjcwMiAxNy41MzQgMTEuODU0IDEuMjM2LjA4MiAyLjQ3LjE2NCAzLjcwNC4xNjRoMTMuMzM2Yy40OTUgMCAuOTg5IDAgMS4zNTkuMDgzIDQuMDc1LjMzIDUuODAzIDEuMDcgNy4wMzkgMi41NTIuNzQuNzQuOTg3IDEuNDgyLjk4NyAyLjMwNXY3LjQ5YzAgLjkwNy0uNjE3IDIuMDYtMS44NTEgMy4wNDctMS4xMTIuOTg4LTIuOTY0IDEuNjQ3LTUuNDM0IDEuODEyLS40OTQgMC0uODY0LjA4Mi0xLjM1OC4wODJoLTM1LjQ0djguNTZ6bTEzNy4xNi0xNC45YzAgOC44MDggNi41NDQgMTMuNzQ4IDE5Ljc1NyAxNC43MzYgMS4yMzQuMDgyIDIuNDcuMTY0IDMuNzA0LjE2NGgzMy40NjR2LTguNTYxaC0zMy43MTFjLTcuNTMyIDAtMTAuMzcyLTEuODk0LTEwLjM3Mi02LjQyMXYtNDQuMjloLTEyLjg0MnY0NC4zNzJ6bS03MS45MTYuNDQ5VjEzOC4zOGMwLTcuNzU0IDUuNDQ1LTEyLjQ1NyAxNi4yMDktMTMuOTQyYTI0LjYzIDI0LjYzIDAgMDEzLjQ2NS0uMjQ3aDI0LjM3NmMxLjIzNyAwIDIuMzUyLjA4MyAzLjU4OS4yNDcgMTAuNzY1IDEuNDg1IDE2LjIwOSA2LjE4OCAxNi4yMDkgMTMuOTQydjMwLjUyMmMwIDYuMjktMi4zMTIgOS42NTgtNy42NDEgMTEuODUybDEyLjY1IDExLjQxOGgtMTQuOTExbC0xMC4yMzQtOS4yMzgtMTAuMzAzLjY1M2gtMTMuNzM1Yy0yLjM1MSAwLTQuODI1LS4zMzEtNy41NDgtMS4wNzMtOC4xNjYtMi4yMjctMTIuMTI2LTYuNTE3LTEyLjEyNi0xMy42MTJ6bTEzLjg2LS43NDJjMCAuNDEzLjEyNC44MjUuMjQ4IDEuMzIuNzQyIDMuNTQ3IDQuMDgzIDUuNTI3IDkuMTU2IDUuNTI3aDExLjY2N2wtMTAuNzE3LTkuNjc1aDE0LjkxbDkuMzQ4IDguNDM4YzEuNzIyLS45MTggMi44NTYtMi4zMjIgMy4yNTItNC4xMjUuMTIzLS40MTIuMTIzLS44MjUuMTIzLTEuMjM3di0yOS4yODVjMC0uMzMgMC0uNzQzLS4xMjMtMS4xNTYtLjc0My0zLjMtNC4wODQtNS4xOTYtOS4wMzMtNS4xOTZoLTE5LjQyN2MtNS42OTEgMC05LjQwMyAyLjQ3NS05LjQwMyA2LjM1MnYyOS4wMzd6IiBmaWxsPSIjZTQ4ZTAwIi8+PHBhdGggZD0iTTM3Ni4xNCAxMDkuODhjLTcuODkzLS4yMTQtMTMuOTIzLjUyLTE5LjA3OCAyLjY5NC0xLjQ2NS42MTgtMy44MDEuNjM0LTQuMDQgMi40Ny44MDUuODQ0LjkzIDIuMTA0IDEuNTcgMy4xNDIgMS4yMyAxLjk5MiAzLjMwOSA0LjY2MSA1LjE2MyA2LjA2MSAyLjAyNiAxLjUzIDQuMTE0IDMuMTY1IDYuMjg2IDQuNDkgMy44NjMgMi4zNTUgOC4xNzYgMy43IDExLjg5NiA2LjA2IDIuMTkyIDEuMzkxIDQuMzcgMy4xNDMgNi41MDkgNC43MTMgMS4wNTcuNzc2IDEuNzY4IDEuOTgzIDMuMTQyIDIuNDd2LS4yMjVjLS43MjItLjkxOS0uOTA4LTIuMTgzLTEuNTcxLTMuMTQzbC0yLjkxOC0yLjkxOGMtMi44NTMtMy43ODctNi40NzUtNy4xMTMtMTAuMzI1LTkuODc2LTMuMDctMi4yMDQtOS45NDItNS4xOC0xMS4yMjMtOC43NTRsLS4yMjUtLjIyNWMyLjE3Ny0uMjQ1IDQuNzI2LTEuMDMzIDYuNzM1LTEuNTcgMy4zNzUtLjkwNiA2LjM5LS42NzIgOS44NzYtMS41NzIgMS41Ny0uNDQ5IDMuMTQyLS44OTkgNC43MTQtMS4zNDd2LS44OThjLTEuNzYyLTEuODA4LTMuMDE4LTQuMi00Ljk0LTUuODM2LTUuMDI1LTQuMjgtMTAuNTExLTguNTU2LTE2LjE2LTEyLjEyMS0zLjEzMy0xLjk3OC03LjAwNS0zLjI2My0xMC4zMjUtNC45MzktMS4xMTctLjU2My0zLjA4LS44NTYtMy44MTctMS43OTYtMS43NDQtMi4yMjMtMi42OTQtNS4wNDItNC4wNC03LjYzMi0yLjgxNy01LjQyNS01LjU4NC0xMS4zNTEtOC4wOC0xNy4wNi0xLjcwMy0zLjg5Mi0yLjgxNS03LjczLTQuOTM4LTExLjIyMy0xMC4xOTItMTYuNzU3LTIxLjE2My0yNi44Ny0zOC4xNTgtMzYuODEyLTMuNjE2LTIuMTE0LTcuOTctMi45NS0xMi41NzEtNC4wNGwtNy40MDctLjQ1Yy0xLjUwNy0uNjMtMy4wNzUtMi40NzMtNC40OS0zLjM2Ny01LjYzLTMuNTU2LTIwLjA3LTExLjI5My0yNC4yNC0xLjEyMi0yLjYzMyA2LjQyIDMuOTM1IDEyLjY4NSA2LjI4NCAxNS45MzggMS42NDkgMi4yODIgMy43NiA0Ljg0IDQuOTM4IDcuNDA3Ljc3NSAxLjY4Ny45MDkgMy4zNzggMS41NzIgNS4xNjMgMS42MzIgNC4zOTcgMy4wNSA5LjE4IDUuMTYyIDEzLjI0MyAxLjA2NyAyLjA1NiAyLjI0MyA0LjIyMiAzLjU5MiA2LjA2LjgyNyAxLjEyOSAyLjI0NCAxLjYyNiAyLjQ2OCAzLjM2OC0xLjM4NiAxLjk0LTEuNDY1IDQuOTUtMi4yNDQgNy40MDctMy41MDggMTEuMDYyLTIuMTg1IDI0LjgxIDIuOTE4IDMyLjk5NyAxLjU2NiAyLjUxMyA1LjI1NCA3LjkwMyAxMC4zMjUgNS44MzYgNC40MzYtMS44MDcgMy40NDUtNy40MDYgNC43MTQtMTIuMzQ1LjI4Ny0xLjEyLjExLTEuOTQ0LjY3My0yLjY5NHYuMjI1bDQuMDQgOC4wOGMyLjk5IDQuODE1IDguMjk4IDkuODQ4IDEyLjc5NSAxMy4yNDQgMi4zMzIgMS43NjEgNC4xNjggNC44MDYgNy4xODMgNS44MzZ2LS4yMjVoLS4yMjVjLS41ODQtLjkxLTEuNDk4LTEuMjg4LTIuMjQ0LTIuMDItMS43NTctMS43MjItMy43MS0zLjg2My01LjE2My01LjgzNi00LjA5LTUuNTUzLTcuNzA1LTExLjYzLTEwLjk5OC0xNy45NTctMS41NzMtMy4wMi0yLjk0LTYuMzU0LTQuMjY2LTkuNDI4LS41MTEtMS4xODUtLjUwNS0yLjk3Ny0xLjU3LTMuNTkyLTEuNDUyIDIuMjUzLTMuNTkxIDQuMDc1LTQuNzE0IDYuNzM1LTEuNzk2IDQuMjUyLTIuMDI4IDkuNDM3LTIuNjkzIDE0LjgxNC0uMzk0LjE0MS0uMjIuMDQ0LS40NS4yMjQtMy4xMjYtLjc1NC00LjIyNS0zLjk3Mi01LjM4Ni02LjczMy0yLjk0LTYuOTgyLTMuNDg1LTE4LjIyNS0uOS0yNi4yNjIuNjctMi4wOCAzLjY5NC04LjYzIDIuNDctMTAuNTUtLjU4NC0xLjkxNy0yLjUxMi0zLjAyNi0zLjU5MS00LjQ5LTEuMzM1LTEuODExLTIuNjY4LTQuMTk1LTMuNTkyLTYuMjg2LTIuNDA1LTUuNDQ0LTMuNTI4LTExLjU1NS02LjA2LTE3LjA1OC0xLjIxLTIuNjMxLTMuMjU3LTUuMjkzLTQuOTM4LTcuNjMyLTEuODYxLTIuNTktMy45NDUtNC41LTUuMzg3LTcuNjMzLS41MTMtMS4xMTMtMS4yMS0yLjg5NS0uNDUtNC4wNC4yNDMtLjc3Mi41ODQtMS4wOTUgMS4zNDgtMS4zNDcgMS4zMDItMS4wMDMgNC45MjguMzM0IDYuMjg0Ljg5OCAzLjYgMS40OTUgNi42MDQgMi45MTkgOS42NTMgNC45MzggMS40NjQuOTcxIDIuOTQ0IDIuODQ4IDQuNzEzIDMuMzY4aDIuMDJjMy4xNi43MjYgNi43LjIyNSA5LjY1MiAxLjEyMiA1LjIxOCAxLjU4NiA5Ljg5NCA0LjA1MiAxNC4xNCA2LjczNCAxMi45MzkgOC4xNjkgMjMuNTE3IDE5Ljc5OCAzMC43NTMgMzMuNjcgMS4xNjQgMi4yMzMgMS42NjggNC4zNjUgMi42OTMgNi43MzQgMi4wNjkgNC43NzggNC42NzUgOS42OTQgNi43MzMgMTQuMzY2IDIuMDU0IDQuNjYgNC4wNTYgOS4zNjUgNi45NTkgMTMuMjQ0IDEuNTI3IDIuMDM5IDcuNDIyIDMuMTMzIDEwLjEgNC4yNjQgMS44NzkuNzk0IDQuOTU2IDEuNjIxIDYuNzM1IDIuNjkzIDMuMzk4IDIuMDUgNi42OSA0LjQ5IDkuODc3IDYuNzM1IDEuNTkzIDEuMTIyIDYuNDg5IDMuNTgzIDYuNzMzIDUuNjExeiIgZmlsbD0iIzAwNjE4YSIvPjxwYXRoIGQ9Ik0yNzUuODA3IDI0LjM1OWMtMS42NDYtLjAzLTIuODEuMTgtNC4wNDEuNDQ4di4yMjVoLjIyNWMuNzg1IDEuNjEzIDIuMTcgMi42NTEgMy4xNDIgNC4wNGE2ODE1LjMgNjgxNS4zIDAgMDAyLjI0NSA0LjcxNGwuMjI0LS4yMjRjMS4zOS0uOTggMi4wMjctMi41NDcgMi4wMi00LjkzOC0uNTU3LS41ODYtLjY0LTEuMzIyLTEuMTIyLTIuMDIxLS42NDItLjkzMi0xLjg4NC0xLjQ2LTIuNjkzLTIuMjQ0eiIgZmlsbD0iIzAwNjE4YSIgZmlsbC1ydWxlPSJldmVub2RkIi8+PHBhdGggZD0iTTM3MC44NyAxNzQuNTQ5YzAgNS42NTQgNC40NjggOS40NjQgOS40NjUgOS40NjRzOS40NjQtMy44MSA5LjQ2NC05LjQ2NGMwLTUuNjUzLTQuNDY3LTkuNDYzLTkuNDY0LTkuNDYzLTQuOTk3IDAtOS40NjQgMy44MS05LjQ2NCA5LjQ2M3ptMTYuODA5IDBjMCA0LjI5LTMuMjggNy40OTYtNy4zNDQgNy40OTYtNC4xMTMgMC03LjM0NC0zLjIwNi03LjM0NC03LjQ5NiAwLTQuMjkgMy4yMy03LjQ5NiA3LjM0NC03LjQ5NiA0LjA2NCAwIDcuMzQ0IDMuMjA2IDcuMzQ0IDcuNDk2em0tNC43OTQgNS40aDIuMTE5bC0zLjEwMy00Ljc0M2MxLjY2NS0uMTc3IDIuOTI2LS45ODUgMi45MjYtMi45NTMgMC0yLjE5Ni0xLjM4Ny0zLjEwNC00LjA2Mi0zLjEwNGgtNC4yMTV2MTAuOGgxLjgxN3YtNC42NjhoMS42OWwyLjgyOCA0LjY2OXptLTQuNTE4LTYuMTgydi0zLjEwNGgyLjA5NGMxLjA4NiAwIDIuMzk4LjIwMiAyLjM5OCAxLjQ2NCAwIDEuNTEzLTEuMTg2IDEuNjQtMi41NSAxLjY0aC0xLjk0MnoiIGZpbGw9IiNlNDhlMDAiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvc3ZnPg==",
+      "nodes": [
+        {
+          "type": "mysql.database",
+          "label": "MySQL",
+          "description": "Get, add and update data in MySQL"
+        }
+      ]
+    },
+    {
       "name": "@zerodot/notion",
       "label": "Notion",
       "summary": "Search, pages, databases, and blocks",
@@ -257,6 +313,72 @@
           "type": "notion.api",
           "label": "Notion",
           "description": "Search a workspace, and read and write pages, databases, and blocks in Notion"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/pdf",
+      "label": "PDF",
+      "summary": "Create, read, merge, split, and rotate PDF files",
+      "description": "Work with PDF files: create a file from text, read the text and page count, merge files, pick pages, split a file, and rotate pages. Use it to prepare or read documents in a workflow.",
+      "version": "1.1.1",
+      "sdk": "^1.1",
+      "icon": "File01Icon",
+      "iconUrl": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgd2lkdGg9IjEyOCIgaGVpZ2h0PSIxMjgiIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48dGl0bGU+UERGIGZpbGUgaWNvbjwvdGl0bGU+PGRlZnM+CjxsaW5lYXJHcmFkaWVudCBpZD0icGRmLWJvZHkiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjNDU0QjU2Ii8+PHN0b3Agb2Zmc2V0PSIuNyIgc3RvcC1jb2xvcj0iIzI0MjkzMiIvPjwvbGluZWFyR3JhZGllbnQ+CjxsaW5lYXJHcmFkaWVudCBpZD0icGRmLWNvbG9yIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iI0VENjU3OCIvPjxzdG9wIG9mZnNldD0iLjYiIHN0b3AtY29sb3I9IiNEMDMxNTAiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNBMTFDM0IiLz48L2xpbmVhckdyYWRpZW50Pgo8bGluZWFyR3JhZGllbnQgaWQ9InBkZi1mb2xkIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzhDOTQ5RiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzU4NjE2RCIvPjwvbGluZWFyR3JhZGllbnQ+CjxjbGlwUGF0aCBpZD0icGRmLWNsaXAiPjxwYXRoIGQ9Ik0xMy40NCAwSDkyLjE2TDEyOCAzNS44NFYxMTQuNTZRMTI4IDEyOCAxMTQuNTYgMTI4SDEzLjQ0UTAgMTI4IDAgMTE0LjU2VjEzLjQ0UTAgMCAxMy40NCAwWiIvPjwvY2xpcFBhdGg+PC9kZWZzPgo8ZyBjbGlwLXBhdGg9InVybCgjcGRmLWNsaXApIj48cGF0aCBmaWxsPSJ1cmwoI3BkZi1ib2R5KSIgZD0iTTEzLjQ0IDBIOTIuMTZMMTI4IDM1Ljg0VjExNC41NlExMjggMTI4IDExNC41NiAxMjhIMTMuNDRRMCAxMjggMCAxMTQuNTZWMTMuNDRRMCAwIDEzLjQ0IDBaIi8+CjxwYXRoIGZpbGw9InVybCgjcGRmLWNvbG9yKSIgZD0iTTAgNTYuNTc2TDEyOCA0OC42NFYxMjhIMFoiLz4KPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZGRkZGIiBzdHJva2Utb3BhY2l0eT0iLjE2IiBzdHJva2Utd2lkdGg9IjEuMSIgZD0iTTAgNTYuNTc2TDEyOCA0OC42NCIvPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiMwMDAwMDAiIHN0cm9rZS1vcGFjaXR5PSIuMTYiIHN0cm9rZS13aWR0aD0iMiIgZD0iTTAgMTI3SDEyOCIvPgo8cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS1vcGFjaXR5PSIuMiIgc3Ryb2tlLXdpZHRoPSIxLjIiIGQ9Ik0uNiAxMTNWMTMuNDRRLjYgLjYgMTMuNDQgLjZIOTIuMTYiLz4KPHBhdGggZmlsbD0idXJsKCNwZGYtZm9sZCkiIGQ9Ik05Mi4xNiAwTDEyOCAzNS44NEg5Ny4yOFE5Mi4xNiAzNS44NCA5Mi4xNiAzMC43MloiLz4KPHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTIyLjU1NzQzOTk5OTk5OTk5NiAxMDQuNFY2Ni41NTY4MDAwMDAwMDAwMUgzNS40NjU1OTk5OTk5OTk5OTVRMzkuNDU3MjggNjYuNTU2ODAwMDAwMDAwMDEgNDIuNDM4MDggNjguMDYwMTYwMDAwMDAwMDFRNDUuNDE4ODggNjkuNTYzNTIwMDAwMDAwMDEgNDcuMDUxODQgNzIuMjU5MlE0OC42ODQ3OTk5OTk5OTk5OTYgNzQuOTU0ODggNDguNjg0Nzk5OTk5OTk5OTk2IDc4LjU4MzY4UTQ4LjY4NDc5OTk5OTk5OTk5NiA4Mi4xNjA2NCA0Ny4wMjU5MiA4NC44ODIyNFE0NS4zNjcwNCA4Ny42MDM4NCA0Mi40MTIxNiA4OS4xMDcyUTM5LjQ1NzI4IDkwLjYxMDU2IDM1LjQ2NTU5OTk5OTk5OTk5NSA5MC42MTA1NkgzMC4zMzM0Mzk5OTk5OTk5OTZWMTA0LjRaTTMwLjMzMzQzOTk5OTk5OTk5NiA4My42MTIxNkgzNS40NjU1OTk5OTk5OTk5OTVRMzcuOTUzOTIgODMuNjEyMTYgMzkuNDMxMzYgODIuMjM4NDAwMDAwMDAwMDFRNDAuOTA4OCA4MC44NjQ2NDAwMDAwMDAwMSA0MC45MDg4IDc4LjU4MzY4UTQwLjkwODggNzYuMzAyNzIwMDAwMDAwMDEgMzkuNDMxMzYgNzQuOTI4OTZRMzcuOTUzOTIgNzMuNTU1MiAzNS40NjU1OTk5OTk5OTk5OTUgNzMuNTU1MkgzMC4zMzM0Mzk5OTk5OTk5OTZaIi8+PHBhdGggZmlsbD0iI0ZGRkZGRiIgZD0iTTUxLjcxMzkxOTk5OTk5OTk5NSAxMDQuNFY2Ni41NTY4MDAwMDAwMDAwMUg2My45OTk5OTk5OTk5OTk5OVE2Ny45Mzk4Mzk5OTk5OTk5OSA2Ni41NTY4MDAwMDAwMDAwMSA3MC44Njg4IDY4LjA2MDE2MDAwMDAwMDAxUTczLjc5Nzc2IDY5LjU2MzUyMDAwMDAwMDAxIDc1LjQzMDcyIDcyLjI4NTEyUTc3LjA2MzY3OTk5OTk5OTk5IDc1LjAwNjcyIDc3LjA2MzY3OTk5OTk5OTk5IDc4LjY4NzM2MDAwMDAwMDAxVjkyLjIxNzZRNzcuMDYzNjc5OTk5OTk5OTkgOTUuODQ2NCA3NS40MzA3MiA5OC41OTM5MlE3My43OTc3NiAxMDEuMzQxNDQgNzAuODY4OCAxMDIuODcwNzJRNjcuOTM5ODM5OTk5OTk5OTkgMTA0LjQgNjMuOTk5OTk5OTk5OTk5OTkgMTA0LjRaTTU5LjQ4OTkyIDk3LjE0MjQwMDAwMDAwMDAxSDYzLjk5OTk5OTk5OTk5OTk5UTY2LjM4NDYzOTk5OTk5OTk5IDk3LjE0MjQwMDAwMDAwMDAxIDY3LjgzNjE1OTk5OTk5OTk5IDk1Ljc5NDU2UTY5LjI4NzY4IDk0LjQ0NjcyIDY5LjI4NzY4IDkyLjIxNzZWNzguNjg3MzYwMDAwMDAwMDFRNjkuMjg3NjggNzYuNTEwMDggNjcuODM2MTU5OTk5OTk5OTkgNzUuMTYyMjRRNjYuMzg0NjM5OTk5OTk5OTkgNzMuODE0NCA2My45OTk5OTk5OTk5OTk5OSA3My44MTQ0SDU5LjQ4OTkyWiIvPjxwYXRoIGZpbGw9IiNGRkZGRkYiIGQ9Ik04MS4zODg3OTk5OTk5OTk5OSAxMDQuNFY2Ni41NTY4MDAwMDAwMDAwMUgxMDUuNzUzNTk5OTk5OTk5OTlWNzMuODE0NEg4OS4wNjExMTk5OTk5OTk5OVY4Mi4yMTI0OEgxMDQuNDA1NzU5OTk5OTk5OTlWODkuNDcwMDgwMDAwMDAwMDFIODkuMTY0Nzk5OTk5OTk5OTlWMTA0LjRaIi8+PC9nPjwvc3ZnPgo=",
+      "nodes": [
+        {
+          "type": "file.pdf",
+          "label": "PDF",
+          "description": "Create, read, merge, split, and rotate PDF files"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/postgres",
+      "label": "Postgres",
+      "summary": "Queries, rows, and change triggers for Postgres",
+      "description": "Run SQL queries on a Postgres database, or insert, update, select, and delete rows. Start a workflow when a new row appears or when Postgres sends a notification. Use it to read and write your app data.",
+      "version": "1.1.1",
+      "sdk": "^1.1",
+      "icon": "Database01Icon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIGlkPSJMYXllcl8xIiB4PSIwIiB5PSIwIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48c3R5bGU+LnN0MntmaWxsOm5vbmU7c3Ryb2tlOiNmZmY7c3Ryb2tlLXdpZHRoOjEyLjQ2NTE7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kfTwvc3R5bGU+PGcgaWQ9IkxheWVyX3gwMDIwXzMiPjxwYXRoIGQ9Ik0zNzguNSAzNzIuNWMzLjItMjYuOSAyLjMtMzAuOCAyMi4zLTI2LjVsNS4xLjRjMTUuNC43IDM1LjUtMi41IDQ3LjQtOCAyNS41LTExLjggNDAuNi0zMS41IDE1LjUtMjYuNC01Ny4zIDExLjgtNjEuMi03LjYtNjEuMi03LjYgNjAuNS04OS43IDg1LjgtMjAzLjYgNjMuOS0yMzEuNUM0MTEuOS0zIDMwOC44IDMzIDMwNy4xIDMzLjlsLS41LjFjLTExLjMtMi4zLTI0LTMuOC0zOC4yLTQtMjUuOS0uNC00NS42IDYuOC02MC41IDE4LjEgMCAwLTE4My44LTc1LjctMTc1LjIgOTUuMiAxLjggMzYuNCA1Mi4xIDI3NS4yIDExMi4xIDIwMyAyMS45LTI2LjQgNDMuMS00OC43IDQzLjEtNDguNyAxMC41IDcgMjMuMSAxMC42IDM2LjMgOS4zbDEtLjljLS4zIDMuMy0uMiA2LjUuNCAxMC4zLTE1LjUgMTcuMy0xMC45IDIwLjMtNDEuOCAyNi43LTMxLjMgNi40LTEyLjkgMTcuOS0uOSAyMC45IDE0LjUgMy42IDQ4LjIgOC44IDcwLjktMjNsLS45IDMuNmM2LjEgNC45IDUuNyAzNC45IDYuNSA1Ni4zLjkgMjEuNCAyLjMgNDEuNSA2LjcgNTMuM3M5LjUgNDIuMiA1MC4xIDMzLjVjMzQtNy4zIDU5LjktMTcuNyA2Mi4zLTExNS4xIiBzdHlsZT0ic3Ryb2tlOiMwMDA7c3Ryb2tlLXdpZHRoOjM3LjM5NTMiLz48cGF0aCBkPSJNNDY4LjcgMzEyLjFjLTU3LjMgMTEuOC02MS4yLTcuNi02MS4yLTcuNkM0NjggMjE0LjggNDkzLjMgMTAwLjkgNDcxLjQgNzMgNDExLjktMyAzMDguOCAzMyAzMDcuMSAzMy45bC0uNi4xYy0xMS4zLTIuMy0yNC0zLjctMzguMi00LTI1LjktLjQtNDUuNiA2LjgtNjAuNSAxOC4xIDAgMC0xODMuOC03NS43LTE3NS4yIDk1LjIgMS44IDM2LjQgNTIuMSAyNzUuMiAxMTIuMSAyMDMgMjEuOS0yNi40IDQzLjEtNDguNyA0My4xLTQ4LjcgMTAuNSA3IDIzLjEgMTAuNiAzNi4zIDkuM2wxLS45Yy0uMyAzLjMtLjIgNi41LjQgMTAuMy0xNS41IDE3LjMtMTAuOSAyMC4zLTQxLjggMjYuNy0zMS4zIDYuNC0xMi45IDE3LjktLjkgMjAuOSAxNC41IDMuNiA0OC4yIDguOCA3MC45LTIzbC0uOSAzLjZjNi4xIDQuOSAxMC4zIDMxLjYgOS42IDU1LjhzLTEuMiA0MC44IDMuNiA1My44IDkuNSA0Mi4yIDUwLjEgMzMuNWMzMy45LTcuMyA1MS41LTI2LjEgNTQtNTcuNiAxLjctMjIuNCA1LjctMTkgNS45LTM5bDMuMi05LjVjMy42LTMwLjMuNi00MC4xIDIxLjUtMzUuNWw1LjEuNGMxNS40LjcgMzUuNS0yLjUgNDcuNC04IDI1LjUtMTEuNyA0MC41LTMxLjQgMTUuNS0yNi4zIiBzdHlsZT0iZmlsbDojMzM2NzkxIi8+PHBhdGggZD0iTTI1Ni4zIDMyOS41Yy0xLjYgNTYuNC40IDExMy4yIDUuOSAxMjYuOSA1LjUgMTMuOCAxNy4zIDQwLjYgNTggMzEuOSAzMy45LTcuMyA0Ni4zLTIxLjQgNTEuNi01Mi40IDMuOS0yMi45IDExLjYtODYuNCAxMi41LTk5LjRNMjA3LjYgNDYuOVMyMy43LTI4LjMgMzIuMiAxNDIuN2MxLjggMzYuNCA1Mi4xIDI3NS4yIDExMi4xIDIwMyAyMS45LTI2LjQgNDEuOC00Ny4xIDQxLjgtNDcuMU0zMDYuOSAzMy4yYy02LjQgMiAxMDIuMy0zOS43IDE2NC4xIDM5LjIgMjEuOCAyNy45LTMuNSAxNDEuOC02My45IDIzMS41IiBjbGFzcz0ic3QyIi8+PHBhdGggZD0iTTQwNyAzMDMuOXMzLjkgMTkuNCA2MS4yIDcuNmMyNS4xLTUuMiAxMCAxNC41LTE1LjUgMjYuNC0yMC45IDkuNy02Ny43IDEyLjItNjguNS0xLjItMS45LTM0LjcgMjQuOC0yNC4yIDIyLjgtMzIuOC0xLjctNy44LTEzLjYtMTUuNS0yMS41LTM0LjUtNi45LTE2LjctOTQuMy0xNDQuNCAyNC4yLTEyNS41IDQuMy0uOS0zMC45LTExMi43LTE0MS44LTExNC41UzE2MC43IDE2NS44IDE2MC43IDE2NS44IiBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojZmZmO3N0cm9rZS13aWR0aDoxMi40NjUxO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpiZXZlbCIvPjxwYXRoIGQ9Ik0yMjUuMiAzMTUuN2MtMTUuNSAxNy4zLTEwLjkgMjAuMy00MS44IDI2LjctMzEuMyA2LjQtMTIuOSAxNy45LS45IDIwLjkgMTQuNSAzLjYgNDguMiA4LjggNzAuOS0yMyA2LjktOS43IDAtMjUuMS05LjUtMjkuMS00LjYtMi0xMC44LTQuNC0xOC43IDQuNSIgY2xhc3M9InN0MiIvPjxwYXRoIGQ9Ik0yMjQuMiAzMTUuNGMtMS42LTEwLjIgMy4zLTIyLjIgOC42LTM2LjQgNy45LTIxLjIgMjYuMS00Mi40IDExLjUtMTA5LjctMTAuOC01MC4xLTgzLjYtMTAuNC04My42LTMuNnMzLjMgMzQuNS0xLjIgNjYuN2MtNS45IDQyIDI2LjcgNzcuNiA2NC4zIDczLjkiIGNsYXNzPSJzdDIiLz48cGF0aCBkPSJNMjA2LjkgMTY0LjdjLS4zIDIuMyA0LjMgOC41IDEwLjIgOS4zIDYgLjggMTEuMS00IDExLjQtNi4zcy00LjItNC45LTEwLjItNS43Yy02LS45LTExLjEuMy0xMS40IDIuN3oiIHN0eWxlPSJmaWxsOiNmZmY7c3Ryb2tlOiNmZmY7c3Ryb2tlLXdpZHRoOjQuMTU1Ii8+PHBhdGggZD0iTTM4OC40IDE1OS45Yy4zIDIuMy00LjIgOC41LTEwLjIgOS4zcy0xMS4xLTQtMTEuNC02LjMgNC4zLTQuOSAxMC4yLTUuNyAxMS4xLjQgMTEuNCAyLjd6IiBzdHlsZT0iZmlsbDojZmZmO3N0cm9rZTojZmZmO3N0cm9rZS13aWR0aDoyLjA3NzUiLz48cGF0aCBkPSJNNDA5LjggMTQzLjljMSAxOC4yLTMuOSAzMC42LTQuNSA1MC0uOSAyOC4yIDEzLjQgNjAuNC04LjIgOTIuNyIgY2xhc3M9InN0MiIvPjwvZz48L3N2Zz4K",
+      "nodes": [
+        {
+          "type": "postgres.database",
+          "label": "Postgres",
+          "description": "Get, add and update data in Postgres"
+        },
+        {
+          "type": "trigger.postgres",
+          "label": "On new Postgres row",
+          "description": "Check a table on a timer and start a run for each new row"
+        },
+        {
+          "type": "trigger.postgres_listen",
+          "label": "On Postgres event",
+          "description": "Start a run at once when a row is added, changed or removed"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/redis",
+      "label": "Redis",
+      "summary": "Keys, lists, and messages in Redis",
+      "description": "Work with a Redis database: get, set, and delete keys, use lists and counters, and publish messages. Start a workflow when a message arrives on a channel. Use it for caches, counters, and simple queues.",
+      "version": "1.1.1",
+      "sdk": "^1.0",
+      "icon": "Database01Icon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaW5ZTWluIG1lZXQiIHZpZXdCb3g9IjAgMC41OCAyNTYgMjE4LjU5Ij48cGF0aCBmaWxsPSIjOTEyNjI2IiBkPSJNMjQ1Ljk3IDE2OC45NDNjLTEzLjY2MiA3LjEyMS04NC40MzQgMzYuMjItOTkuNTAxIDQ0LjA3NXMtMjMuNDM3IDcuNzgtMzUuMzQgMi4wOWMtMTEuOTAyLTUuNjktODcuMjE2LTM2LjExMi0xMDAuNzgzLTQyLjU5N0MzLjU2NiAxNjkuMjcxIDAgMTY2LjUzNSAwIDE2My45NTF2LTI1Ljg3NnM5OC4wNS0yMS4zNDUgMTEzLjg3OS0yNy4wMjRjMTUuODI4LTUuNjc5IDIxLjMyLTUuODg0IDM0Ljc5LS45NSAxMy40NzIgNC45MzYgOTQuMDE4IDE5LjQ2OCAxMDcuMzMxIDI0LjM0NGwtLjAwNiAyNS41MWMuMDAyIDIuNTU4LTMuMDcgNS4zNjQtMTAuMDI0IDguOTg4Ii8+PHBhdGggZmlsbD0iI0M2MzAyQiIgZD0iTTI0NS45NjUgMTQzLjIyYy0xMy42NjEgNy4xMTgtODQuNDMxIDM2LjIxOC05OS40OTggNDQuMDcyLTE1LjA2NiA3Ljg1Ny0yMy40MzYgNy43OC0zNS4zMzggMi4wOS0xMS45MDMtNS42ODYtODcuMjE0LTM2LjExMy0xMDAuNzgtNDIuNTk0LTEzLjU2Ni02LjQ4NS0xMy44NS0xMC45NDgtLjUyNC0xNi4xNjYgMTMuMzI2LTUuMjIgODguMjI0LTM0LjYwNSAxMDQuMDU1LTQwLjI4NCAxNS44MjgtNS42NzcgMjEuMzE5LTUuODg0IDM0Ljc4OS0uOTQ4IDEzLjQ3MSA0LjkzNCA4My44MTkgMzIuOTM1IDk3LjEzIDM3LjgxIDEzLjMxNiA0Ljg4MSAxMy44MjcgOC45LjE2NiAxNi4wMiIvPjxwYXRoIGZpbGw9IiM5MTI2MjYiIGQ9Ik0yNDUuOTcgMTI3LjA3NGMtMTMuNjYyIDcuMTIyLTg0LjQzNCAzNi4yMi05OS41MDEgNDQuMDc4LTE1LjA2NyA3Ljg1My0yMy40MzcgNy43NzctMzUuMzQgMi4wODctMTEuOTAzLTUuNjg3LTg3LjIxNi0zNi4xMTItMTAwLjc4My00Mi41OTdDMy41NjYgMTI3LjQwMiAwIDEyNC42NyAwIDEyMi4wODVWOTYuMjA2czk4LjA1LTIxLjM0NCAxMTMuODc5LTI3LjAyM2MxNS44MjgtNS42NzkgMjEuMzItNS44ODUgMzQuNzktLjk1QzE2Mi4xNDIgNzMuMTY4IDI0Mi42ODggODcuNjk3IDI1NiA5Mi41NzRsLS4wMDYgMjUuNTEzYy4wMDIgMi41NTctMy4wNyA1LjM2My0xMC4wMjQgOC45ODciLz48cGF0aCBmaWxsPSIjQzYzMDJCIiBkPSJNMjQ1Ljk2NSAxMDEuMzUxYy0xMy42NjEgNy4xMi04NC40MzEgMzYuMjE4LTk5LjQ5OCA0NC4wNzUtMTUuMDY2IDcuODU0LTIzLjQzNiA3Ljc3Ny0zNS4zMzggMi4wODctMTEuOTAzLTUuNjg2LTg3LjIxNC0zNi4xMTItMTAwLjc4LTQyLjU5NC0xMy41NjYtNi40ODMtMTMuODUtMTAuOTQ3LS41MjQtMTYuMTY3QzIzLjE1MSA4My41MzUgOTguMDUgNTQuMTQ4IDExMy44OCA0OC40N2MxNS44MjgtNS42NzggMjEuMzE5LTUuODg0IDM0Ljc4OS0uOTQ5IDEzLjQ3MSA0LjkzNCA4My44MTkgMzIuOTMzIDk3LjEzIDM3LjgxIDEzLjMxNiA0Ljg4IDEzLjgyNyA4LjkuMTY2IDE2LjAyIi8+PHBhdGggZmlsbD0iIzkxMjYyNiIgZD0iTTI0NS45NyA4My42NTNjLTEzLjY2MiA3LjEyLTg0LjQzNCAzNi4yMi05OS41MDEgNDQuMDc4LTE1LjA2NyA3Ljg1NC0yMy40MzcgNy43NzctMzUuMzQgMi4wODctMTEuOTAzLTUuNjg3LTg3LjIxNi0zNi4xMTMtMTAwLjc4My00Mi41OTVDMy41NjYgODMuOTggMCA4MS4yNDcgMCA3OC42NjV2LTI1Ljg4czk4LjA1LTIxLjM0MyAxMTMuODc5LTI3LjAyMWMxNS44MjgtNS42OCAyMS4zMi01Ljg4NCAzNC43OS0uOTVDMTYyLjE0MiAyOS43NDkgMjQyLjY4OCA0NC4yNzggMjU2IDQ5LjE1NWwtLjAwNiAyNS41MTJjLjAwMiAyLjU1NS0zLjA3IDUuMzYxLTEwLjAyNCA4Ljk4NiIvPjxwYXRoIGZpbGw9IiNDNjMwMkIiIGQ9Ik0yNDUuOTY1IDU3LjkzYy0xMy42NjEgNy4xMi04NC40MzEgMzYuMjItOTkuNDk4IDQ0LjA3NC0xNS4wNjYgNy44NTQtMjMuNDM2IDcuNzc3LTM1LjMzOCAyLjA5Qzk5LjIyNyA5OC40MDQgMjMuOTE1IDY3Ljk4IDEwLjM1IDYxLjQ5Ny0zLjIxNyA1NS4wMTUtMy41IDUwLjU1IDkuODI1IDQ1LjMzMSAyMy4xNTEgNDAuMTEzIDk4LjA1IDEwLjczIDExMy44OCA1LjA1YzE1LjgyOC01LjY3OSAyMS4zMTktNS44ODMgMzQuNzg5LS45NDhzODMuODE5IDMyLjkzNCA5Ny4xMyAzNy44MTFjMTMuMzE2IDQuODc2IDEzLjgyNyA4Ljg5Ny4xNjYgMTYuMDE3Ii8+PHBhdGggZmlsbD0iI0ZGRiIgZD0ibTE1OS4yODMgMzIuNzU3LTIyLjAxIDIuMjg1LTQuOTI3IDExLjg1Ni03Ljk1OC0xMy4yMy0yNS40MTUtMi4yODQgMTguOTY0LTYuODM5LTUuNjktMTAuNDk4IDE3Ljc1NSA2Ljk0NCAxNi43MzgtNS40OC00LjUyNCAxMC44NTV6bS0yOC4yNTEgNTcuNTE4TDg5Ljk1NSA3My4yMzhsNTguODYtOS4wMzV6bS01Ni45NS01MC45MjhjMTcuMzc1IDAgMzEuNDYgNS40NiAzMS40NiAxMi4xOTQgMCA2LjczNi0xNC4wODUgMTIuMTk1LTMxLjQ2IDEyLjE5NXMtMzEuNDYtNS40Ni0zMS40Ni0xMi4xOTVjMC02LjczNCAxNC4wODUtMTIuMTk0IDMxLjQ2LTEyLjE5NCIvPjxwYXRoIGZpbGw9IiM2MjFCMUMiIGQ9Im0xODUuMjk1IDM1Ljk5OCAzNC44MzYgMTMuNzY2LTM0LjgwNiAxMy43NTN6Ii8+PHBhdGggZmlsbD0iIzlBMjkyOCIgZD0ibTE0Ni43NTUgNTEuMjQzIDM4LjU0LTE1LjI0NS4wMyAyNy41MTktMy43NzkgMS40Nzh6Ii8+PC9zdmc+",
+      "nodes": [
+        {
+          "type": "redis.database",
+          "label": "Redis",
+          "description": "Get, set and delete keys, work on lists, and publish messages in Redis"
+        },
+        {
+          "type": "trigger.redis",
+          "label": "On Redis message",
+          "description": "Start a run when a message arrives on a Redis channel"
         }
       ]
     },
@@ -296,6 +418,93 @@
           "type": "slack.api",
           "label": "Slack",
           "description": "Send messages, manage channels, find users, and upload files with a Slack bot"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/spreadsheet",
+      "label": "Spreadsheet File",
+      "summary": "Read and write CSV and XLSX files",
+      "description": "Read and write spreadsheet files: turn a CSV or XLSX file into rows, turn rows into a CSV or XLSX file, convert between the two formats, and list the sheets of a workbook. Use it to move table data in a workflow.",
+      "version": "1.0.1",
+      "sdk": "^1.1",
+      "icon": "Xls01Icon",
+      "iconUrl": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KDTwhLS0gVXBsb2FkZWQgdG86IFNWRyBSZXBvLCB3d3cuc3ZncmVwby5jb20sIEdlbmVyYXRvcjogU1ZHIFJlcG8gTWl4ZXIgVG9vbHMgLS0+Cjxzdmcgd2lkdGg9IjgwMHB4IiBoZWlnaHQ9IjgwMHB4IiB2aWV3Qm94PSItNCAwIDY0IDY0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgoNPHBhdGggZD0iTTUuMTA2IDBjLTIuODAyIDAtNS4wNzMgMi4yNzItNS4wNzMgNS4wNzR2NTMuODQxYzAgMi44MDMgMi4yNzEgNS4wNzQgNS4wNzMgNS4wNzRoNDUuNzc0YzIuODAxIDAgNS4wNzQtMi4yNzEgNS4wNzQtNS4wNzR2LTM4LjYwNWwtMTguOTAzLTIwLjMxaC0zMS45NDV6IiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzQ1QjA1OCIvPgoNPHBhdGggZD0iTTIwLjMwNiA0My4xOTdjLjEyNi4xNDQuMTk4LjMyNC4xOTguNTIyIDAgLjM3OC0uMzA2LjcyLS43MDMuNzItLjE4IDAtLjM3OC0uMDcyLS41MDQtLjIzNC0uNzAyLS44NDYtMS44OTEtMS4zODctMy4wMDctMS4zODctMi42MjkgMC00LjYyNyAyLjAxNy00LjYyNyA0Ljg4IDAgMi44NDUgMS45OTkgNC44NzkgNC42MjcgNC44NzkgMS4xMzQgMCAyLjI1LS40ODYgMy4wMDctMS4zNjkuMTI1LS4xNDQuMzI0LS4yMzMuNTA0LS4yMzMuNDE1IDAgLjcwMy4zNTkuNzAzLjczOCAwIC4xOC0uMDcyLjM2LS4xOTguNTA0LS45MzcuOTcyLTIuMjE1IDEuNjkzLTQuMDE1IDEuNjkzLTMuNDU3IDAtNi4xNzYtMi41MjEtNi4xNzYtNi4yMTJzMi43MTktNi4yMTIgNi4xNzYtNi4yMTJjMS44LjAwMSAzLjA5Ni43MjEgNC4wMTUgMS43MTF6bTYuODAyIDEwLjcxNGMtMS43ODIgMC0zLjE4Ny0uNTk0LTQuMjEzLTEuNDk1LS4xNjItLjE0NC0uMjM0LS4zNDItLjIzNC0uNTQgMC0uMzYxLjI3LS43NTcuNzAyLS43NTcuMTQ0IDAgLjMwNi4wMzYuNDMyLjE0NC44MjguNzM5IDEuOTggMS4zMTQgMy4zNjcgMS4zMTQgMi4xNDMgMCAyLjgyNy0xLjE1MiAyLjgyNy0yLjA3MSAwLTMuMDk3LTcuMTEyLTEuMzg2LTcuMTEyLTUuNjcyIDAtMS45OCAxLjc2NC0zLjMzMSA0LjEyMy0zLjMzMSAxLjU0OCAwIDIuODgxLjQ2NyAzLjg1MyAxLjI3OC4xNjIuMTQ0LjI1Mi4zNDIuMjUyLjU0IDAgLjM2LS4zMDYuNzItLjcwMy43Mi0uMTQ0IDAtLjMwNi0uMDU0LS40MzItLjE2Mi0uODgyLS43Mi0xLjk4LTEuMDQ0LTMuMDc5LTEuMDQ0LTEuNDQgMC0yLjQ2Ny43NzQtMi40NjcgMS45MDkgMCAyLjcwMSA3LjExMiAxLjE1MiA3LjExMiA1LjYzNi4wMDEgMS43NDgtMS4xODcgMy41MzEtNC40MjggMy41MzF6bTE2Ljk5NC0xMS4yNTRsLTQuMTU5IDEwLjMzNWMtLjE5OC40ODYtLjY4NS44MS0xLjE4OC44MWgtLjAzNmMtLjUyMiAwLTEuMDA4LS4zMjQtMS4yMDctLjgxbC00LjE0Mi0xMC4zMzVjLS4wMzYtLjA5LS4wNTQtLjE4LS4wNTQtLjI4OCAwLS4zNi4zMjMtLjc5My44MS0uNzkzLjMwNiAwIC41OTQuMTguNzIuNDg2bDMuODg5IDkuOTkyIDMuODg5LTkuOTkyYy4xMDgtLjI4OC4zOTYtLjQ4Ni43Mi0uNDg2LjQ2OCAwIC44MS4zNzguODEuNzkzLjAwMS4wOS0uMDE3LjE5OC0uMDUyLjI4OHoiIGZpbGw9IiNmZmZmZmYiLz4KDTxnIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIj4KDTxwYXRoIGQ9Ik01Ni4wMDEgMjAuMzU3djFoLTEyLjhzLTYuMzEyLTEuMjYtNi4xMjgtNi43MDdjMCAwIC4yMDggNS43MDcgNi4wMDMgNS43MDdoMTIuOTI1eiIgZmlsbD0iIzM0OUM0MiIvPgoNPHBhdGggZD0iTTM3LjA5OC4wMDZ2MTQuNTYxYzAgMS42NTYgMS4xMDQgNS43OTEgNi4xMDQgNS43OTFoMTIuOGwtMTguOTA0LTIwLjM1MnoiIG9wYWNpdHk9Ii41IiBmaWxsPSIjZmZmZmZmIi8+Cg08L2c+Cg08L3N2Zz4=",
+      "nodes": [
+        {
+          "type": "file.spreadsheet",
+          "label": "Spreadsheet File",
+          "description": "Read and write CSV and XLSX files"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/ssh",
+      "label": "SSH, FTP and SFTP",
+      "summary": "Remote commands and file transfer",
+      "description": "Run commands on a server over SSH, and list, download, upload, rename, and delete files over FTP and SFTP. Use it to manage servers and to move files.",
+      "version": "1.1.1",
+      "sdk": "^1.1",
+      "icon": "ComputerTerminal01Icon",
+      "nodes": [
+        {
+          "type": "ssh.execute",
+          "label": "SSH",
+          "description": "Run a command on a server over SSH"
+        },
+        {
+          "type": "ftp.files",
+          "label": "FTP",
+          "description": "List, download, upload, rename, and delete files on an FTP server"
+        },
+        {
+          "type": "sftp.files",
+          "label": "SFTP",
+          "description": "List, download, upload, rename, and delete files on an SFTP server"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/stripe",
+      "label": "Stripe",
+      "summary": "Customers, payments, subscriptions, and events",
+      "description": "Manage customers, payments, invoices, subscriptions, refunds, and coupons with Stripe. Start a workflow when Stripe sends an event. Use it for billing and payment automation.",
+      "version": "1.0.2",
+      "sdk": "^1.2",
+      "icon": "CreditCardIcon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjNjM1QkZGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+U3RyaXBlPC90aXRsZT48cGF0aCBkPSJNMTMuOTc2IDkuMTVjLTIuMTcyLS44MDYtMy4zNTYtMS40MjYtMy4zNTYtMi40MDkgMC0uODMxLjY4My0xLjMwNSAxLjkwMS0xLjMwNSAyLjIyNyAwIDQuNTE1Ljg1OCA2LjA5IDEuNjMxbC44OS01LjQ5NEMxOC4yNTIuOTc1IDE1LjY5NyAwIDEyLjE2NSAwIDkuNjY3IDAgNy41ODkuNjU0IDYuMTA0IDEuODcyIDQuNTYgMy4xNDcgMy43NTcgNC45OTIgMy43NTcgNy4yMThjMCA0LjAzOSAyLjQ2NyA1Ljc2IDYuNDc2IDcuMjE5IDIuNTg1LjkyIDMuNDQ1IDEuNTc0IDMuNDQ1IDIuNTgzIDAgLjk4LS44NCAxLjU0NS0yLjM1NCAxLjU0NS0xLjg3NSAwLTQuOTY1LS45MjEtNi45OS0yLjEwOWwtLjkgNS41NTVDNS4xNzUgMjIuOTkgOC4zODUgMjQgMTEuNzE0IDI0YzIuNjQxIDAgNC44NDMtLjYyNCA2LjMyOC0xLjgxMyAxLjY2NC0xLjMwNSAyLjUyNS0zLjIzNiAyLjUyNS01LjczMiAwLTQuMTI4LTIuNTI0LTUuODUxLTYuNTk0LTcuMzA1aC4wMDN6Ii8+PC9zdmc+",
+      "nodes": [
+        {
+          "type": "trigger.stripe",
+          "label": "Stripe Trigger",
+          "description": "Start the workflow when Stripe sends an event, such as a payment or an invoice"
+        },
+        {
+          "type": "stripe.api",
+          "label": "Stripe",
+          "description": "Manage customers, payments, invoices, subscriptions, refunds, and products with Stripe"
+        }
+      ]
+    },
+    {
+      "name": "@zerodot/telegram",
+      "label": "Telegram",
+      "summary": "Send messages and react to bot updates",
+      "description": "Send messages and files with a Telegram bot, and start a workflow when the bot gets a message or other update. Use it to build chat bots and notifications.",
+      "version": "1.1.1",
+      "sdk": "^1.2",
+      "icon": "SentIcon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSIyNTYiIHgyPSIyNTYiIHkxPSIyIiB5Mj0iNTE0IiBncmFkaWVudFRyYW5zZm9ybT0ibWF0cml4KDEgMCAwIC0xIDAgNTE0KSIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIG9mZnNldD0iMCIgc3R5bGU9InN0b3AtY29sb3I6IzFkOTNkMiIvPjxzdG9wIG9mZnNldD0iMSIgc3R5bGU9InN0b3AtY29sb3I6IzM4YjBlMyIvPjwvbGluZWFyR3JhZGllbnQ+PGNpcmNsZSBjeD0iMjU2IiBjeT0iMjU2IiByPSIyNTYiIHN0eWxlPSJmaWxsOnVybCgjYSkiLz48cGF0aCBkPSJtMTczLjMgMjc0LjcgMzAuNCA4NC4xczMuOCA3LjkgNy45IDcuOSA2NC41LTYyLjkgNjQuNS02Mi45bDY3LjMtMTI5LjktMTY5IDc5LjF6IiBzdHlsZT0iZmlsbDojYzhkYWVhIi8+PHBhdGggZD0ibTIxMy42IDI5Ni4zLTUuOCA2MnMtMi40IDE5IDE2LjUgMGMxOS0xOSAzNy4yLTMzLjYgMzcuMi0zMy42IiBzdHlsZT0iZmlsbDojYTljNmQ4Ii8+PHBhdGggZD0ibTE3My44IDI3Ny43LTYyLjUtMjAuNHMtNy41LTMtNS4xLTkuOWMuNS0xLjQgMS41LTIuNiA0LjUtNC43QzEyNC42IDIzMy4xIDM2NyAxNDYgMzY3IDE0NnM2LjgtMi4zIDEwLjktLjhjMiAuNiAzLjYgMi4zIDQgNC40LjQgMS44LjYgMy43LjUgNS41IDAgMS42LS4yIDMuMS0uNCA1LjQtMS41IDIzLjgtNDUuNyAyMDEuNi00NS43IDIwMS42cy0yLjYgMTAuNC0xMi4xIDEwLjhjLTQuNy4yLTkuMy0xLjYtMTIuNi00LjktMTguNi0xNi04Mi44LTU5LjItOTctNjguNi0uNi0uNC0xLjEtMS4xLTEuMi0xLjktLjItMSAuOS0yLjIuOS0yLjJzMTExLjgtOTkuNCAxMTQuOC0xMDkuOGMuMi0uOC0uNi0xLjItMS44LS45LTcuNCAyLjctMTM2LjIgODQuMS0xNTAuNCA5My0uOS4yLTIgLjMtMy4xLjEiIHN0eWxlPSJmaWxsOiNmZmYiLz48L3N2Zz4K",
+      "nodes": [
+        {
+          "type": "trigger.telegram",
+          "label": "Telegram Trigger",
+          "description": "Start the workflow on a Telegram bot update"
+        },
+        {
+          "type": "telegram.bot",
+          "label": "Telegram",
+          "description": "Send messages and manage chats with a Telegram bot"
         }
       ]
     },
