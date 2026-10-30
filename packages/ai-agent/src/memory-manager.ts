@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { defineNode, type FieldSpec } from "@zerodot/node-sdk";
 import { z } from "zod";
-import { MEMORY_ICON } from "./icon";
+import { MEMORY_MANAGER_ICON } from "./icon";
 import { isMemory, KIND, type Memory, type Message } from "./types";
 
 const OPERATIONS = ["get", "insert", "delete"] as const;
@@ -75,8 +75,8 @@ export default defineNode({
   label: "Chat Memory Manager",
   description: "Read, add, or delete the messages in the memory of an AI Agent",
   category: "integration",
-  icon: "DatabaseIcon",
-  iconUrl: MEMORY_ICON,
+  icon: "BubbleChatIcon",
+  iconUrl: MEMORY_MANAGER_ICON,
   config: z.object({
     operation: z
       .enum(OPERATIONS)

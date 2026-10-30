@@ -24,7 +24,8 @@
     "workflow.svg",
     "mcp.svg",
     "code.svg",
-    "http.svg"
+    "http.svg",
+    "memory-manager.svg"
   ],
   "zerodot": {
     "sdk": "^1.4",
