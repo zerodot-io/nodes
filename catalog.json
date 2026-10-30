@@ -1,4 +1,26 @@
 {
   "version": 1,
-  "packages": []
+  "packages": [
+    {
+      "name": "@zerodot/email",
+      "label": "Email",
+      "summary": "Send email and react to new mail",
+      "description": "Send email through an SMTP server, and start a workflow when a new email arrives in an IMAP mailbox. Use it for notifications and reports, or to react to incoming mail.",
+      "version": "1.1.1",
+      "sdk": "^1.1",
+      "icon": "Mail01Icon",
+      "nodes": [
+        {
+          "type": "email.send",
+          "label": "Send Email",
+          "description": "Sends an email using SMTP protocol"
+        },
+        {
+          "type": "trigger.email_imap",
+          "label": "On new email (IMAP)",
+          "description": "Start a run when a new unread mail arrives in a mailbox"
+        }
+      ]
+    }
+  ]
 }
