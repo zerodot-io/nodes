@@ -654,7 +654,7 @@ describe("agent.run", () => {
     });
     const toolset = await supplyOf(
       "agent.tool.mcp",
-      { url: "https://mcp.test/mcp", prefix: "docs", only: "shout" },
+      { url: "https://mcp.test/mcp", prefix: "docs", include: "except", toolNames: "hidden" },
       { credential: { type: "http.bearer", data: { token: "tok" } } },
     );
     let closed = 0;

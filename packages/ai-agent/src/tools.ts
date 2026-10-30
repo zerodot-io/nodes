@@ -93,8 +93,9 @@ export type McpOptions = {
   credential: ResolvedCredential | null;
   /** Put in front of each tool name, as `<prefix>__<tool>`. Empty means no prefix. */
   prefix: string;
-  /** Tool names. Empty means all tools. */
-  only: string[];
+  /** Which tools of the server the agent gets. `toolNames` is for "selected" and "except". */
+  include: "all" | "selected" | "except";
+  toolNames: string[];
   timeoutMs: number;
 };
 
@@ -116,10 +117,12 @@ export function mcpToolset(options: McpOptions): Toolset {
       });
       const request = { signal, timeout: options.timeoutMs };
       await opened.connect(transport, request);
-      const only = new Set(options.only);
+      const names = new Set(options.toolNames);
+      const wanted = (name: string) =>
+        options.include === "all" || (options.include === "selected") === names.has(name);
       const listed = await opened.listTools(undefined, request);
       return listed.tools
-        .filter((tool) => only.size === 0 || only.has(tool.name))
+        .filter((tool) => wanted(tool.name))
         .map((tool) => ({
           spec: {
             name: (options.prefix ? `${options.prefix}__${tool.name}` : tool.name)

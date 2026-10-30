@@ -64,7 +64,7 @@ Runs another workflow of the project and waits for it. The input from the model 
 
 ### MCP Client Tool (`agent.tool.mcp`)
 
-Gives the tools of a Streamable HTTP MCP server to the agent. The credential is optional: `http.bearer`, `http.header`, or `http.basic`. Use **Tool Name Prefix** when two servers have a tool with the same name.
+Gives the tools of a Streamable HTTP MCP server to the agent. The credential is optional: `http.bearer`, `http.header`, or `http.basic`. **Tools to Include** is All, Selected, or All Except. Use **Tool Name Prefix** when two servers have a tool with the same name.
 
 ### Code Tool (`agent.tool.code`)
 

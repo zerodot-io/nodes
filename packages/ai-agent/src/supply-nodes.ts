@@ -115,16 +115,32 @@ const mcpToolNode = defineSupplyNode({
         description:
           "Optional. The tools are <prefix>__<tool>. Use it when two servers share a name",
       }),
-    only: z.string().default("").meta({
-      title: "Only These Tools",
-      description: "Optional. Tool names with commas between them. Empty means all tools",
-    }),
+    include: z
+      .enum(["all", "selected", "except"])
+      .default("all")
+      .meta({
+        title: "Tools to Include",
+        labels: { all: "All", selected: "Selected", except: "All Except" },
+        hints: {
+          all: "Every tool of the server",
+          selected: "Only the tools that you name",
+          except: "Every tool except the ones that you name",
+        },
+      }),
+    toolNames: z
+      .string()
+      .default("")
+      .meta({
+        showWhen: { include: ["selected", "except"] },
+        title: "Tool Names",
+        description: "The tool names of the server, with commas between them",
+      }),
     timeoutMs: z.number().int().min(1000).max(300_000).default(30_000).meta({
       title: "Timeout (ms)",
       description: "The time limit of the connection and of each tool call",
     }),
   }),
-  defaultConfig: { url: "https://", prefix: "", only: "", timeoutMs: 30_000 },
+  defaultConfig: { url: "https://", prefix: "", include: "all", toolNames: "", timeoutMs: 30_000 },
   // Optional. The credential gives the header of each request.
   credentialTypes: MCP_CREDENTIAL_TYPES,
   subtitle: (config) => (typeof config.url === "string" ? config.url : undefined),
@@ -133,7 +149,8 @@ const mcpToolNode = defineSupplyNode({
       url: config.url,
       credential,
       prefix: config.prefix,
-      only: config.only
+      include: config.include,
+      toolNames: config.toolNames
         .split(/[\s,]+/)
         .map((name) => name.trim())
         .filter(Boolean),
