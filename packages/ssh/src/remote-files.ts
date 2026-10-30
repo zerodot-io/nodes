@@ -143,6 +143,8 @@ export function remoteFilesNode(options: {
     label: options.label,
     description: options.description,
     category: "integration",
+    // Not a tool: the files are binary, and a model must not delete files on a server.
+    usableAsTool: false,
     app: options.app,
     actions: [
       { label: "List files in a folder", config: { operation: "list" } },
