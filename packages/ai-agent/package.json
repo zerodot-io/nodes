@@ -1,0 +1,53 @@
+{
+  "name": "@zerodot/ai-agent",
+  "version": "0.1.0",
+  "description": "An AI agent that calls tools until it has an answer. It uses OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, runs other workflows and MCP tools as its tools, and keeps chat memory in a data table.",
+  "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zerodot-io/nodes.git",
+    "directory": "packages/ai-agent"
+  },
+  "keywords": [
+    "zerodot-node-package"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "exports": {
+    ".": "./dist/index.cjs"
+  },
+  "files": [
+    "dist",
+    "ai-agent.svg",
+    "ai.svg"
+  ],
+  "zerodot": {
+    "sdk": "^1.2",
+    "label": "AI Agent",
+    "summary": "An AI agent that calls workflows and MCP tools"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -p tsconfig.json",
+    "test": "tsx --test src/*.test.ts",
+    "prepublishOnly": "pnpm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1"
+  },
+  "peerDependencies": {
+    "@zerodot/node-sdk": "^1.2.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@zerodot/node-sdk": "^1.2.1",
+    "tsdown": "0.23.2",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  }
+}
