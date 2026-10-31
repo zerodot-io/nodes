@@ -210,8 +210,8 @@ importers:
         specifier: 26.6.5
         version: 26.6.5
       '@zerodot/node-sdk':
-        specifier: ^1.4.0
-        version: 1.4.0(zod@4.6.7)
+        specifier: ^1.5.0
+        version: 1.5.0(zod@4.6.7)
       tsdown:
         specifier: 0.23.2
         version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
@@ -617,8 +617,8 @@ importers:
         specifier: 26.6.5
         version: 26.6.5
       '@zerodot/node-sdk':
-        specifier: ^1.4.0
-        version: 1.4.0(zod@4.6.7)
+        specifier: ^1.5.0
+        version: 1.5.0(zod@4.6.7)
       tsdown:
         specifier: 0.23.2
         version: 0.23.2(tsx@4.23.15)(typescript@7.0.2)
@@ -1583,6 +1583,11 @@ packages:
 
   '@zerodot/node-sdk@1.4.0':
     resolution: {integrity: sha512-6NI7YD6MkE4T/BIFru/sFfhWZoku6JzM6Et/dPxS5xSsTiR8taONqm2TsDGhi/Abn5+jA4d3m21HsItm31/pvg==}
+    peerDependencies:
+      zod: ^4.0.0
+
+  '@zerodot/node-sdk@1.5.0':
+    resolution: {integrity: sha512-kLYsHcTT1n2mJFyBl4GFh8ZFVzMTNHXnem9SHVg9YAh0DINKdQrbdSQVbAfFJQdk8CMBL7P1vrzvCeaJE9JmSw==}
     peerDependencies:
       zod: ^4.0.0
 
@@ -2986,6 +2991,10 @@ snapshots:
       zod: 4.6.7
 
   '@zerodot/node-sdk@1.4.0(zod@4.6.7)':
+    dependencies:
+      zod: 4.6.7
+
+  '@zerodot/node-sdk@1.5.0(zod@4.6.7)':
     dependencies:
       zod: 4.6.7
 

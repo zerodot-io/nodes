@@ -53,12 +53,12 @@
     "unpdf": "1.8.1"
   },
   "peerDependencies": {
-    "@zerodot/node-sdk": "^1.4.0",
+    "@zerodot/node-sdk": "^1.5.0",
     "zod": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "26.6.5",
-    "@zerodot/node-sdk": "^1.4.0",
+    "@zerodot/node-sdk": "^1.5.0",
     "tsdown": "0.23.2",
     "tsx": "4.23.15",
     "typescript": "7.0.2",
