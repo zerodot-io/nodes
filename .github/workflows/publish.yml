@@ -7,6 +7,8 @@ on:
 permissions:
   contents: read
   actions: write
+  # npm trusted publishing. NPM_TOKEN stays as a fallback.
+  id-token: write
 
 jobs:
   publish:
