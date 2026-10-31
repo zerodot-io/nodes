@@ -5,8 +5,8 @@
       "name": "@zerodot/ai",
       "label": "AI",
       "summary": "Text, images, audio, and embeddings from many AI providers",
-      "description": "Generate text, embeddings, images, and audio with OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, in one node. Use it to add AI steps to a workflow.",
-      "version": "1.0.1",
+      "description": "Generate text, embeddings, images, and audio with OpenAI, Anthropic, Google Gemini, Mistral, Groq, xAI, DeepSeek, OpenRouter, Ollama, Azure OpenAI, Amazon Bedrock, Google Vertex AI, or any OpenAI-compatible endpoint, in one node. Use it to add AI steps to a workflow.",
+      "version": "1.1.0",
       "sdk": "^1.2",
       "icon": "SparklesIcon",
       "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik05LjkzNyAxNS41QTIgMiAwIDAgMCA4LjUgMTQuMDYzbC02LjEzNS0xLjU4MmEuNS41IDAgMCAxIDAtLjk2Mkw4LjUgOS45MzZBMiAyIDAgMCAwIDkuOTM3IDguNWwxLjU4Mi02LjEzNWEuNS41IDAgMCAxIC45NjMgMEwxNC4wNjMgOC41QTIgMiAwIDAgMCAxNS41IDkuOTM3bDYuMTM1IDEuNTgxYS41LjUgMCAwIDEgMCAuOTY0TDE1LjUgMTQuMDYzYTIgMiAwIDAgMC0xLjQzNyAxLjQzN2wtMS41ODIgNi4xMzVhLjUuNSAwIDAgMS0uOTYzIDB6Ii8+PHBhdGggZD0iTTIwIDN2NCIvPjxwYXRoIGQ9Ik0yMiA1aC00Ii8+PHBhdGggZD0iTTQgMTd2MiIvPjxwYXRoIGQ9Ik01IDE4SDMiLz48L3N2Zz4K",
@@ -21,15 +21,24 @@
         "ai.openai",
         "ai.anthropic",
         "ai.gemini",
-        "ai.compatible"
+        "ai.compatible",
+        "ai.mistral",
+        "ai.groq",
+        "ai.xai",
+        "ai.deepseek",
+        "ai.openrouter",
+        "ai.ollama",
+        "ai.azure",
+        "ai.bedrock",
+        "ai.vertex"
       ]
     },
     {
       "name": "@zerodot/ai-agent",
       "label": "AI Agent",
       "summary": "An AI agent with ports for a chat model, memory, and tools",
-      "description": "An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, memory in a data table, and other workflows, MCP servers, and vector stores as tools. Embedding models, text splitters, a data loader, and a Cohere reranker for vector stores.",
-      "version": "0.2.0",
+      "description": "An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, Mistral, Groq, xAI, DeepSeek, OpenRouter, Ollama, Azure OpenAI, Amazon Bedrock, Google Vertex AI, or any OpenAI-compatible endpoint, memory in a data table, and other workflows, MCP servers, and vector stores as tools. Embedding models, text splitters, a data loader, and a Cohere reranker for vector stores.",
+      "version": "0.3.0",
       "sdk": "^1.5",
       "icon": "BotIcon",
       "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiA4VjRIOCIvPjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxMiIgeD0iNCIgeT0iOCIgcng9IjIiLz48cGF0aCBkPSJNMiAxNGgyIi8+PHBhdGggZD0iTTIwIDE0aDIiLz48cGF0aCBkPSJNMTUgMTN2MiIvPjxwYXRoIGQ9Ik05IDEzdjIiLz48L3N2Zz4K",
@@ -60,9 +69,54 @@
           "description": "A Google Gemini model for the AI Agent"
         },
         {
+          "type": "agent.model.mistral",
+          "label": "Mistral Chat Model",
+          "description": "A Mistral AI model for the AI Agent"
+        },
+        {
+          "type": "agent.model.groq",
+          "label": "Groq Chat Model",
+          "description": "An open model on Groq for the AI Agent"
+        },
+        {
+          "type": "agent.model.xai",
+          "label": "xAI Grok Chat Model",
+          "description": "A Grok model for the AI Agent"
+        },
+        {
+          "type": "agent.model.deepseek",
+          "label": "DeepSeek Chat Model",
+          "description": "A DeepSeek model for the AI Agent"
+        },
+        {
+          "type": "agent.model.bedrock",
+          "label": "AWS Bedrock Chat Model",
+          "description": "A model on Amazon Bedrock, such as Claude or Nova, for the AI Agent"
+        },
+        {
+          "type": "agent.model.vertex",
+          "label": "Google Vertex Chat Model",
+          "description": "A Gemini model on Google Cloud Vertex AI for the AI Agent"
+        },
+        {
           "type": "agent.model.compatible",
           "label": "OpenAI-compatible Chat Model",
-          "description": "A model of a service with an OpenAI-style API, such as Ollama or a gateway"
+          "description": "A model of a service with an OpenAI-style API, such as a gateway"
+        },
+        {
+          "type": "agent.model.openrouter",
+          "label": "OpenRouter Chat Model",
+          "description": "A model of any provider on OpenRouter, for the AI Agent"
+        },
+        {
+          "type": "agent.model.ollama",
+          "label": "Ollama Chat Model",
+          "description": "A local model on Ollama for the AI Agent"
+        },
+        {
+          "type": "agent.model.azure",
+          "label": "Azure OpenAI Chat Model",
+          "description": "An OpenAI model on Azure for the AI Agent"
         },
         {
           "type": "agent.embedding.openai",
@@ -75,9 +129,34 @@
           "description": "A Google Gemini embedding model for a vector store"
         },
         {
+          "type": "agent.embedding.mistral",
+          "label": "Mistral Embeddings",
+          "description": "A Mistral AI embedding model for a vector store"
+        },
+        {
+          "type": "agent.embedding.bedrock",
+          "label": "AWS Bedrock Embeddings",
+          "description": "An embedding model on Amazon Bedrock for a vector store"
+        },
+        {
+          "type": "agent.embedding.vertex",
+          "label": "Google Vertex Embeddings",
+          "description": "An embedding model on Google Cloud Vertex AI for a vector store"
+        },
+        {
           "type": "agent.embedding.compatible",
           "label": "OpenAI-compatible Embeddings",
-          "description": "An embedding model of a service with an OpenAI-style API, such as Ollama"
+          "description": "An embedding model of a service with an OpenAI-style API"
+        },
+        {
+          "type": "agent.embedding.ollama",
+          "label": "Ollama Embeddings",
+          "description": "A local embedding model on Ollama for a vector store"
+        },
+        {
+          "type": "agent.embedding.azure",
+          "label": "Azure OpenAI Embeddings",
+          "description": "An OpenAI embedding model on Azure for a vector store"
         },
         {
           "type": "agent.splitter.recursive",
@@ -135,6 +214,15 @@
         "ai.anthropic",
         "ai.gemini",
         "ai.compatible",
+        "ai.mistral",
+        "ai.groq",
+        "ai.xai",
+        "ai.deepseek",
+        "ai.openrouter",
+        "ai.ollama",
+        "ai.azure",
+        "ai.bedrock",
+        "ai.vertex",
         "cohere"
       ]
     },
