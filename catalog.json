@@ -28,9 +28,9 @@
       "name": "@zerodot/ai-agent",
       "label": "AI Agent",
       "summary": "An AI agent with ports for a chat model, memory, and tools",
-      "description": "An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, memory in a data table, and other workflows and MCP servers as tools.",
-      "version": "0.1.1",
-      "sdk": "^1.4",
+      "description": "An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, memory in a data table, and other workflows, MCP servers, and vector stores as tools. Embedding models, text splitters, a data loader, and a Cohere reranker for vector stores.",
+      "version": "0.2.0",
+      "sdk": "^1.5",
       "icon": "BotIcon",
       "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0xMiA4VjRIOCIvPjxyZWN0IHdpZHRoPSIxNiIgaGVpZ2h0PSIxMiIgeD0iNCIgeT0iOCIgcng9IjIiLz48cGF0aCBkPSJNMiAxNGgyIi8+PHBhdGggZD0iTTIwIDE0aDIiLz48cGF0aCBkPSJNMTUgMTN2MiIvPjxwYXRoIGQ9Ik05IDEzdjIiLz48L3N2Zz4K",
       "nodes": [
@@ -65,6 +65,46 @@
           "description": "A model of a service with an OpenAI-style API, such as Ollama or a gateway"
         },
         {
+          "type": "agent.embedding.openai",
+          "label": "OpenAI Embeddings",
+          "description": "An OpenAI embedding model for a vector store"
+        },
+        {
+          "type": "agent.embedding.gemini",
+          "label": "Gemini Embeddings",
+          "description": "A Google Gemini embedding model for a vector store"
+        },
+        {
+          "type": "agent.embedding.compatible",
+          "label": "OpenAI-compatible Embeddings",
+          "description": "An embedding model of a service with an OpenAI-style API, such as Ollama"
+        },
+        {
+          "type": "agent.splitter.recursive",
+          "label": "Recursive Character Text Splitter",
+          "description": "Splits text into chunks, and keeps paragraphs, sentences, and words together"
+        },
+        {
+          "type": "agent.splitter.character",
+          "label": "Character Text Splitter",
+          "description": "Splits text at a separator into chunks of a size"
+        },
+        {
+          "type": "agent.splitter.token",
+          "label": "Token Text Splitter",
+          "description": "Splits text into chunks of a number of tokens"
+        },
+        {
+          "type": "agent.document.default",
+          "label": "Default Data Loader",
+          "description": "Makes chunks with metadata from items or files, for a vector store"
+        },
+        {
+          "type": "agent.reranker.cohere",
+          "label": "Reranker Cohere",
+          "description": "Orders the chunks of a vector store search by relevance to the query"
+        },
+        {
           "type": "agent.memory.table",
           "label": "Data Table Memory",
           "description": "Keeps the conversation of the AI Agent in a data table of the project"
@@ -83,13 +123,19 @@
           "type": "agent.tool.code",
           "label": "Code Tool",
           "description": "A tool for the AI Agent that runs your JavaScript"
+        },
+        {
+          "type": "agent.tool.vectorStore",
+          "label": "Vector Store Tool",
+          "description": "Lets the AI Agent search a vector store. A chat model on this tool is optional: it answers from the chunks, so the agent gets only the answer"
         }
       ],
       "credentialTypes": [
         "ai.openai",
         "ai.anthropic",
         "ai.gemini",
-        "ai.compatible"
+        "ai.compatible",
+        "cohere"
       ]
     },
     {
@@ -461,9 +507,9 @@
       "name": "@zerodot/postgres",
       "label": "Postgres",
       "summary": "Queries, rows, and change triggers for Postgres",
-      "description": "Run SQL queries on a Postgres database, or insert, update, select, and delete rows. Start a workflow when a new row appears or when Postgres sends a notification. Use it to read and write your app data.",
-      "version": "1.2.0",
-      "sdk": "^1.4",
+      "description": "Run SQL queries on a Postgres database, or insert, update, select, and delete rows. Start a workflow when a new row appears or when Postgres sends a notification. Keep AI Agent memory, and store and search vectors with pgvector.",
+      "version": "1.3.0",
+      "sdk": "^1.5",
       "icon": "Database01Icon",
       "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbDpzcGFjZT0icHJlc2VydmUiIGlkPSJMYXllcl8xIiB4PSIwIiB5PSIwIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48c3R5bGU+LnN0MntmaWxsOm5vbmU7c3Ryb2tlOiNmZmY7c3Ryb2tlLXdpZHRoOjEyLjQ2NTE7c3Ryb2tlLWxpbmVjYXA6cm91bmQ7c3Ryb2tlLWxpbmVqb2luOnJvdW5kfTwvc3R5bGU+PGcgaWQ9IkxheWVyX3gwMDIwXzMiPjxwYXRoIGQ9Ik0zNzguNSAzNzIuNWMzLjItMjYuOSAyLjMtMzAuOCAyMi4zLTI2LjVsNS4xLjRjMTUuNC43IDM1LjUtMi41IDQ3LjQtOCAyNS41LTExLjggNDAuNi0zMS41IDE1LjUtMjYuNC01Ny4zIDExLjgtNjEuMi03LjYtNjEuMi03LjYgNjAuNS04OS43IDg1LjgtMjAzLjYgNjMuOS0yMzEuNUM0MTEuOS0zIDMwOC44IDMzIDMwNy4xIDMzLjlsLS41LjFjLTExLjMtMi4zLTI0LTMuOC0zOC4yLTQtMjUuOS0uNC00NS42IDYuOC02MC41IDE4LjEgMCAwLTE4My44LTc1LjctMTc1LjIgOTUuMiAxLjggMzYuNCA1Mi4xIDI3NS4yIDExMi4xIDIwMyAyMS45LTI2LjQgNDMuMS00OC43IDQzLjEtNDguNyAxMC41IDcgMjMuMSAxMC42IDM2LjMgOS4zbDEtLjljLS4zIDMuMy0uMiA2LjUuNCAxMC4zLTE1LjUgMTcuMy0xMC45IDIwLjMtNDEuOCAyNi43LTMxLjMgNi40LTEyLjkgMTcuOS0uOSAyMC45IDE0LjUgMy42IDQ4LjIgOC44IDcwLjktMjNsLS45IDMuNmM2LjEgNC45IDUuNyAzNC45IDYuNSA1Ni4zLjkgMjEuNCAyLjMgNDEuNSA2LjcgNTMuM3M5LjUgNDIuMiA1MC4xIDMzLjVjMzQtNy4zIDU5LjktMTcuNyA2Mi4zLTExNS4xIiBzdHlsZT0ic3Ryb2tlOiMwMDA7c3Ryb2tlLXdpZHRoOjM3LjM5NTMiLz48cGF0aCBkPSJNNDY4LjcgMzEyLjFjLTU3LjMgMTEuOC02MS4yLTcuNi02MS4yLTcuNkM0NjggMjE0LjggNDkzLjMgMTAwLjkgNDcxLjQgNzMgNDExLjktMyAzMDguOCAzMyAzMDcuMSAzMy45bC0uNi4xYy0xMS4zLTIuMy0yNC0zLjctMzguMi00LTI1LjktLjQtNDUuNiA2LjgtNjAuNSAxOC4xIDAgMC0xODMuOC03NS43LTE3NS4yIDk1LjIgMS44IDM2LjQgNTIuMSAyNzUuMiAxMTIuMSAyMDMgMjEuOS0yNi40IDQzLjEtNDguNyA0My4xLTQ4LjcgMTAuNSA3IDIzLjEgMTAuNiAzNi4zIDkuM2wxLS45Yy0uMyAzLjMtLjIgNi41LjQgMTAuMy0xNS41IDE3LjMtMTAuOSAyMC4zLTQxLjggMjYuNy0zMS4zIDYuNC0xMi45IDE3LjktLjkgMjAuOSAxNC41IDMuNiA0OC4yIDguOCA3MC45LTIzbC0uOSAzLjZjNi4xIDQuOSAxMC4zIDMxLjYgOS42IDU1LjhzLTEuMiA0MC44IDMuNiA1My44IDkuNSA0Mi4yIDUwLjEgMzMuNWMzMy45LTcuMyA1MS41LTI2LjEgNTQtNTcuNiAxLjctMjIuNCA1LjctMTkgNS45LTM5bDMuMi05LjVjMy42LTMwLjMuNi00MC4xIDIxLjUtMzUuNWw1LjEuNGMxNS40LjcgMzUuNS0yLjUgNDcuNC04IDI1LjUtMTEuNyA0MC41LTMxLjQgMTUuNS0yNi4zIiBzdHlsZT0iZmlsbDojMzM2NzkxIi8+PHBhdGggZD0iTTI1Ni4zIDMyOS41Yy0xLjYgNTYuNC40IDExMy4yIDUuOSAxMjYuOSA1LjUgMTMuOCAxNy4zIDQwLjYgNTggMzEuOSAzMy45LTcuMyA0Ni4zLTIxLjQgNTEuNi01Mi40IDMuOS0yMi45IDExLjYtODYuNCAxMi41LTk5LjRNMjA3LjYgNDYuOVMyMy43LTI4LjMgMzIuMiAxNDIuN2MxLjggMzYuNCA1Mi4xIDI3NS4yIDExMi4xIDIwMyAyMS45LTI2LjQgNDEuOC00Ny4xIDQxLjgtNDcuMU0zMDYuOSAzMy4yYy02LjQgMiAxMDIuMy0zOS43IDE2NC4xIDM5LjIgMjEuOCAyNy45LTMuNSAxNDEuOC02My45IDIzMS41IiBjbGFzcz0ic3QyIi8+PHBhdGggZD0iTTQwNyAzMDMuOXMzLjkgMTkuNCA2MS4yIDcuNmMyNS4xLTUuMiAxMCAxNC41LTE1LjUgMjYuNC0yMC45IDkuNy02Ny43IDEyLjItNjguNS0xLjItMS45LTM0LjcgMjQuOC0yNC4yIDIyLjgtMzIuOC0xLjctNy44LTEzLjYtMTUuNS0yMS41LTM0LjUtNi45LTE2LjctOTQuMy0xNDQuNCAyNC4yLTEyNS41IDQuMy0uOS0zMC45LTExMi43LTE0MS44LTExNC41UzE2MC43IDE2NS44IDE2MC43IDE2NS44IiBzdHlsZT0iZmlsbDpub25lO3N0cm9rZTojZmZmO3N0cm9rZS13aWR0aDoxMi40NjUxO3N0cm9rZS1saW5lY2FwOnJvdW5kO3N0cm9rZS1saW5lam9pbjpiZXZlbCIvPjxwYXRoIGQ9Ik0yMjUuMiAzMTUuN2MtMTUuNSAxNy4zLTEwLjkgMjAuMy00MS44IDI2LjctMzEuMyA2LjQtMTIuOSAxNy45LS45IDIwLjkgMTQuNSAzLjYgNDguMiA4LjggNzAuOS0yMyA2LjktOS43IDAtMjUuMS05LjUtMjkuMS00LjYtMi0xMC44LTQuNC0xOC43IDQuNSIgY2xhc3M9InN0MiIvPjxwYXRoIGQ9Ik0yMjQuMiAzMTUuNGMtMS42LTEwLjIgMy4zLTIyLjIgOC42LTM2LjQgNy45LTIxLjIgMjYuMS00Mi40IDExLjUtMTA5LjctMTAuOC01MC4xLTgzLjYtMTAuNC04My42LTMuNnMzLjMgMzQuNS0xLjIgNjYuN2MtNS45IDQyIDI2LjcgNzcuNiA2NC4zIDczLjkiIGNsYXNzPSJzdDIiLz48cGF0aCBkPSJNMjA2LjkgMTY0LjdjLS4zIDIuMyA0LjMgOC41IDEwLjIgOS4zIDYgLjggMTEuMS00IDExLjQtNi4zcy00LjItNC45LTEwLjItNS43Yy02LS45LTExLjEuMy0xMS40IDIuN3oiIHN0eWxlPSJmaWxsOiNmZmY7c3Ryb2tlOiNmZmY7c3Ryb2tlLXdpZHRoOjQuMTU1Ii8+PHBhdGggZD0iTTM4OC40IDE1OS45Yy4zIDIuMy00LjIgOC41LTEwLjIgOS4zcy0xMS4xLTQtMTEuNC02LjMgNC4zLTQuOSAxMC4yLTUuNyAxMS4xLjQgMTEuNCAyLjd6IiBzdHlsZT0iZmlsbDojZmZmO3N0cm9rZTojZmZmO3N0cm9rZS13aWR0aDoyLjA3NzUiLz48cGF0aCBkPSJNNDA5LjggMTQzLjljMSAxOC4yLTMuOSAzMC42LTQuNSA1MC0uOSAyOC4yIDEzLjQgNjAuNC04LjIgOTIuNyIgY2xhc3M9InN0MiIvPjwvZz48L3N2Zz4K",
       "nodes": [
@@ -486,6 +532,11 @@
           "type": "postgres.memory",
           "label": "Postgres Chat Memory",
           "description": "Keeps the conversation of the AI Agent in a Postgres table"
+        },
+        {
+          "type": "postgres.vectorStore",
+          "label": "Postgres Vector Store",
+          "description": "Keep chunks of text as vectors in Postgres with pgvector, and search them"
         }
       ],
       "credentialTypes": [
