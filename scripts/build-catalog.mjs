@@ -8,6 +8,17 @@ import { pathToFileURL } from "node:url";
 const root = resolve(import.meta.dirname, "..");
 const packages = [];
 
+// The catalog that is on disk now. A package keeps its entry from here while npm
+// does not show its new version yet.
+const catalogPath = join(root, "catalog.json");
+const oldEntries = new Map();
+try {
+  for (const entry of JSON.parse(readFileSync(catalogPath, "utf8")).packages ?? [])
+    oldEntries.set(entry.name, entry);
+} catch {
+  // No catalog yet, or a bad file: start from an empty list.
+}
+
 // A package that is not on npm yet cannot be installed, so it stays out of the catalog.
 async function isPublished(name, version) {
   const response = await fetch(`https://registry.npmjs.org/${name.replace("/", "%2f")}/${version}`);
@@ -22,7 +33,13 @@ for (const folder of readdirSync(join(root, "packages")).sort()) {
   const json = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
   if (json.private || !json.zerodot?.sdk) continue;
   if (!(await isPublished(json.name, json.version))) {
-    console.log(`skip ${json.name}@${json.version}: not on npm`);
+    const old = oldEntries.get(json.name);
+    if (old) {
+      console.log(`keep ${json.name}@${old.version}: ${json.version} is not on npm`);
+      packages.push(old);
+    } else {
+      console.log(`skip ${json.name}@${json.version}: not on npm`);
+    }
     continue;
   }
   const entry = typeof json.exports === "string" ? json.exports : json.exports?.["."];
@@ -47,5 +64,5 @@ for (const folder of readdirSync(join(root, "packages")).sort()) {
   });
 }
 
-writeFileSync(join(root, "catalog.json"), `${JSON.stringify({ version: 1, packages }, null, 2)}\n`);
+writeFileSync(catalogPath, `${JSON.stringify({ version: 1, packages }, null, 2)}\n`);
 console.log(`catalog.json: ${packages.length} package(s)`);

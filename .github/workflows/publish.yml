@@ -41,7 +41,10 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       # Adds the new version to catalog.json now, and not at the next hourly run.
+      # npm can need some minutes before it shows a new version, so wait 10 minutes first.
       - name: Update the catalog
-        run: gh workflow run catalog.yml --ref main
+        run: |
+          sleep 600
+          gh workflow run catalog.yml --ref main
         env:
           GH_TOKEN: ${{ github.token }}
