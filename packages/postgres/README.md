@@ -27,6 +27,10 @@ Checks a table on a timer (15 seconds to 1 day) and starts a run for each new ro
 
 Starts a run at once when a row is added, changed, or removed. It uses `LISTEN` and `NOTIFY`.
 
+### Postgres Chat Memory (`postgres.memory`)
+
+Keeps the conversation of an AI Agent (`@zerodot/ai-agent`) in a table. Connect it to the **Memory** port of the agent. Each run of the agent adds one row, and the agent reads the last turns of the session. The node makes the table (default `public.zerodot_chat_memory`) when it is not there. It can delete the turns that are older than the turns to remember. The Chat Memory Manager can read, add, and delete its messages.
+
 ## Credential
 
 **Postgres** (`postgres`): `host`, `port`, `database`, `user`, `password`, `ssl` (`allow`, `disable`, or `require`), `allowUnauthorizedCerts`. The password is secret.
