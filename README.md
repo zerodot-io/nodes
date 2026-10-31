@@ -15,7 +15,7 @@ ZERODOT_NODE_PACKAGES=@zerodot/redis
 ## Nodes
 
 - [`ai`](packages/ai): text, images, audio, and embeddings from OpenAI, Anthropic, Gemini, and compatible APIs
-- [`ai-agent`](packages/ai-agent): an AI agent with ports for a chat model, memory, and tools
+- [`ai-agent`](packages/ai-agent): an AI agent with ports for a chat model, memory, and tools, and the embeddings, text splitters, loader, reranker, and tool for vector stores
 - [`discord`](packages/discord): bot messages, webhooks, and slash commands
 - [`edit-image`](packages/edit-image): resize, crop, rotate, and convert images
 - [`email`](packages/email): send email and react to new mail
@@ -32,7 +32,7 @@ ZERODOT_NODE_PACKAGES=@zerodot/redis
 - [`mysql`](packages/mysql): queries and rows in MySQL
 - [`notion`](packages/notion): pages, databases, blocks, and search
 - [`pdf`](packages/pdf): create, read, merge, split, and rotate PDF files
-- [`postgres`](packages/postgres): queries, rows, change triggers, and AI Agent memory for Postgres
+- [`postgres`](packages/postgres): queries, rows, change triggers, AI Agent memory, and a pgvector vector store for Postgres
 - [`redis`](packages/redis): keys, lists, messages, and AI Agent memory in Redis
 - [`s3`](packages/s3): files and buckets in S3 and compatible storage
 - [`slack`](packages/slack): messages, channels, files, and Slack events

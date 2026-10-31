@@ -75,6 +75,22 @@ export const GEMINI_TEXT_MODELS = [
   },
 ] as const satisfies readonly ModelEntry[];
 
+// The embedding models of @zerodot/ai, from the same lists.
+
+export const OPENAI_EMBEDDING_MODELS = [
+  { id: "text-embedding-3-small", label: "Embedding 3 Small", hint: "Low cost. 1536 dimensions" },
+  {
+    id: "text-embedding-3-large",
+    label: "Embedding 3 Large",
+    hint: "Best quality. 3072 dimensions",
+  },
+] as const satisfies readonly ModelEntry[];
+
+export const GEMINI_EMBEDDING_MODELS = [
+  { id: "gemini-embedding-2", label: "Gemini Embedding 2", hint: "The newest embedding model" },
+  { id: "gemini-embedding-001", label: "Gemini Embedding", hint: "The first embedding model" },
+] as const satisfies readonly ModelEntry[];
+
 /** The ids of a list, and the Custom value, as a tuple for `z.enum`. */
 export const idsOf = (models: readonly ModelEntry[]): [string, ...string[]] => {
   const [first, ...rest] = models.map((model) => model.id);

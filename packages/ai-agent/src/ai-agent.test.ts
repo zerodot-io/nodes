@@ -11,6 +11,7 @@ import { credentialTypes, nodes } from "./index";
 import { readMessages, tableMemory } from "./memory";
 import { chatModelOf } from "./model";
 import * as models from "./models";
+import type { Embeddings } from "./rag";
 import type { ChatModel, Message, ModelTurn, Tool } from "./types";
 
 const signal = new AbortController().signal;
@@ -80,13 +81,18 @@ describe("credentials and models", () => {
         iconUrl: type.iconUrl,
         fields: z.toJSONSchema(type.fields),
       }));
-    assert.deepEqual(shape(credentialTypes), shape(aiCredentialTypes));
+    assert.deepEqual(
+      shape(credentialTypes.filter((type) => type.type !== "cohere")),
+      shape(aiCredentialTypes),
+    );
   });
 
   it("has the chat models of @zerodot/ai", () => {
     assert.deepEqual(models.OPENAI_TEXT_MODELS, aiModels.OPENAI_TEXT_MODELS);
     assert.deepEqual(models.ANTHROPIC_MODELS, aiModels.ANTHROPIC_MODELS);
     assert.deepEqual(models.GEMINI_TEXT_MODELS, aiModels.GEMINI_TEXT_MODELS);
+    assert.deepEqual(models.OPENAI_EMBEDDING_MODELS, aiModels.OPENAI_EMBEDDING_MODELS);
+    assert.deepEqual(models.GEMINI_EMBEDDING_MODELS, aiModels.GEMINI_EMBEDDING_MODELS);
   });
 });
 
@@ -492,10 +498,19 @@ describe("supply nodes", () => {
       "agent.model.anthropic": "ai.model",
       "agent.model.gemini": "ai.model",
       "agent.model.compatible": "ai.model",
+      "agent.embedding.openai": "ai.embedding",
+      "agent.embedding.gemini": "ai.embedding",
+      "agent.embedding.compatible": "ai.embedding",
+      "agent.splitter.recursive": "ai.textSplitter",
+      "agent.splitter.character": "ai.textSplitter",
+      "agent.splitter.token": "ai.textSplitter",
+      "agent.document.default": "ai.document",
+      "agent.reranker.cohere": "ai.reranker",
       "agent.memory.table": "ai.memory",
       "agent.tool.workflow": "ai.tool",
       "agent.tool.mcp": "ai.tool",
       "agent.tool.code": "ai.tool",
+      "agent.tool.vectorStore": "ai.tool",
     });
     assert.deepEqual(
       def.supplyPorts?.map((port) => [port.name, port.kind, port.required ?? false]),
@@ -531,6 +546,76 @@ describe("supply nodes", () => {
       supplyOf("agent.tool.workflow", { name: "find", description: "d", workflowId: "w" }),
       /cannot run workflows/,
     );
+  });
+});
+
+describe("embeddings", () => {
+  const vector = (seed: number) => [seed, seed + 0.5];
+
+  it("OpenAI: sends texts in batches, and keeps the order of the answer index", async () => {
+    const texts = Array.from({ length: 300 }, (_, index) => `t${index}`);
+    const answerOf = (from: number, count: number) => ({
+      data: Array.from({ length: count }, (_, index) => ({
+        index: count - 1 - index,
+        embedding: vector(from + count - 1 - index),
+      })),
+    });
+    const calls = mockFetch([answerOf(0, 256), answerOf(256, 44)]);
+    const embeddings = (await supplyOf(
+      "agent.embedding.openai",
+      { model: "text-embedding-3-large" },
+      { credential: { type: "ai.openai", data: { apiKey: KEY } } },
+    )) as Embeddings;
+    const vectors = await embeddings.embed(texts, "document", signal);
+    assert.equal(calls.length, 2);
+    assert.equal(calls[0]?.url, "https://api.openai.com/v1/embeddings");
+    assert.equal(calls[0]?.body.model, "text-embedding-3-large");
+    assert.equal((calls[0]?.body.input as string[] | undefined)?.length, 256);
+    assert.equal(calls[0]?.body.dimensions, undefined);
+    assert.equal(vectors.length, 300);
+    assert.deepEqual(vectors[0], vector(0));
+    assert.deepEqual(vectors[299], vector(299));
+  });
+
+  it("Gemini: sends the task type and the dimensions, and checks the length", async () => {
+    const calls = mockFetch([
+      { embeddings: [{ values: [1, 2] }] },
+      { embeddings: [{ values: [1, 2, 3] }] },
+    ]);
+    const embeddings = (await supplyOf(
+      "agent.embedding.gemini",
+      { dimensions: 2 },
+      { credential: { type: "ai.gemini", data: { apiKey: KEY } } },
+    )) as Embeddings;
+    assert.equal(embeddings.dimensions, 2);
+    assert.deepEqual(await embeddings.embed(["q"], "query", signal), [[1, 2]]);
+    assert.equal(
+      calls[0]?.url,
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2:batchEmbedContents",
+    );
+    assert.deepEqual(calls[0]?.body, {
+      requests: [
+        {
+          model: "models/gemini-embedding-2",
+          content: { parts: [{ text: "q" }] },
+          embedContentConfig: { taskType: "RETRIEVAL_QUERY", outputDimensionality: 2 },
+        },
+      ],
+    });
+    await assert.rejects(embeddings.embed(["d"], "document", signal), /3 dimensions, not 2/);
+  });
+
+  it("a compatible service needs a model, and an answer needs a vector for each text", async () => {
+    const credential = { type: "ai.compatible", data: { baseUrl: "http://localhost:11434/v1" } };
+    await assert.rejects(supplyOf("agent.embedding.compatible", {}, { credential }), /"model"/);
+    const calls = mockFetch([{ data: [{ index: 0, embedding: [1] }] }]);
+    const embeddings = (await supplyOf(
+      "agent.embedding.compatible",
+      { model: "nomic-embed-text" },
+      { credential },
+    )) as Embeddings;
+    await assert.rejects(embeddings.embed(["a", "b"], "document", signal), /vector for text 2/);
+    assert.equal(calls[0]?.url, "http://localhost:11434/v1/embeddings");
   });
 });
 

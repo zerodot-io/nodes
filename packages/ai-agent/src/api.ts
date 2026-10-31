@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import type { ResolvedCredential } from "@zerodot/node-sdk";
+import { StatusError } from "./retry";
 
 // The access code of @zerodot/ai, with only the JSON calls that the agent needs.
 
@@ -128,7 +129,7 @@ export function errorOf(
   if (hint) parts.push(hint);
   if (code) parts.push(`Error code ${code}`);
   if (requestId) parts.push(`Request ID ${requestId}`);
-  return new Error(parts.join(". "));
+  return new StatusError(parts.join(". "), status);
 }
 
 export type Call = {
