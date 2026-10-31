@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: read
-  actions: write
   # npm trusted publishing. NPM_TOKEN stays as a fallback.
   id-token: write
 
@@ -40,11 +39,4 @@ jobs:
         run: pnpm publish --access public --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      # Adds the new version to catalog.json now, and not at the next hourly run.
-      # npm can need some minutes before it shows a new version, so wait 10 minutes first.
-      - name: Update the catalog
-        run: |
-          sleep 600
-          gh workflow run catalog.yml --ref main
-        env:
-          GH_TOKEN: ${{ github.token }}
+      # The hourly catalog workflow adds the new version to catalog.json.
