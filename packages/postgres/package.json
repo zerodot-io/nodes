@@ -1,7 +1,7 @@
 {
   "name": "@zerodot/postgres",
-  "version": "1.2.0",
-  "description": "Run SQL queries on a Postgres database, or insert, update, select, and delete rows. Start a workflow when a new row appears or when Postgres sends a notification. Use it to read and write your app data.",
+  "version": "1.3.0",
+  "description": "Run SQL queries on a Postgres database, or insert, update, select, and delete rows. Start a workflow when a new row appears or when Postgres sends a notification. Keep AI Agent memory, and store and search vectors with pgvector.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "postgresql.svg"
   ],
   "zerodot": {
-    "sdk": "^1.4",
+    "sdk": "^1.5",
     "label": "Postgres",
     "summary": "Queries, rows, and change triggers for Postgres"
   },
@@ -38,12 +38,12 @@
     "postgres": "3.4.9"
   },
   "peerDependencies": {
-    "@zerodot/node-sdk": "^1.4.0",
+    "@zerodot/node-sdk": "^1.5.0",
     "zod": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "26.6.5",
-    "@zerodot/node-sdk": "^1.4.0",
+    "@zerodot/node-sdk": "^1.5.0",
     "tsdown": "0.23.2",
     "tsx": "4.23.15",
     "typescript": "7.0.2",

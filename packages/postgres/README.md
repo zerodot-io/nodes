@@ -31,6 +31,19 @@ Starts a run at once when a row is added, changed, or removed. It uses `LISTEN` 
 
 Keeps the conversation of an AI Agent (`@zerodot/ai-agent`) in a table. Connect it to the **Memory** port of the agent. Each run of the agent adds one row, and the agent reads the last turns of the session. The node makes the table (default `public.zerodot_chat_memory`) when it is not there. It can delete the turns that are older than the turns to remember. The Chat Memory Manager can read, add, and delete its messages.
 
+### Postgres Vector Store (`postgres.vectorStore`)
+
+Keeps chunks of text as vectors with pgvector. Supabase and Neon work too. **Operation Mode**:
+
+- **Get Many**: finds the chunks that are closest to the **Prompt**, with a score. **Include Metadata** adds the metadata. **Metadata Filter** is a JSON object. **Rerank Results** uses the reranker on **Reranker**.
+- **Insert Documents**: makes chunks of the items, embeds them, and inserts one row for each chunk. Connect a Default Data Loader to **Document**, or the node uses all data of each item with simple splitting.
+- **Retrieve Documents (As Vector Store for Chain/Tool)**: the node is a supply (kind `ai.vectorStore`) and not a step. Connect it to the **Vector Store** port of the Vector Store Tool of the AI Agent.
+- **Retrieve Documents (As Tool for AI Agent)**: the node is a tool (kind `ai.tool`). Connect it to the **Tools** port of the AI Agent. The tool name is the node name. Settings: **Description**, **Limit**, **Include Metadata**, **Metadata Filter**, and **Rerank Results**.
+- **Update Documents**: replaces the text, the metadata, and the vector of one chunk for each item, by ID.
+- **Delete Documents**: deletes chunks by their ID.
+
+Connect an embedding model of `@zerodot/ai-agent` to **Embedding**. Insert makes the `vector` extension, the table (default `public.zerodot_vectors`), and an HNSW index (up to 2000 dimensions) when they are not there. **Collection** keeps sets of chunks apart in one table. The column names can be changed, to use a table that you have. **Distance** is Cosine, Euclidean, or Inner Product. The retrieve modes need zerodot with node SDK 1.5, and keep one connection for the run.
+
 ## Credential
 
 **Postgres** (`postgres`): `host`, `port`, `database`, `user`, `password`, `ssl` (`allow`, `disable`, or `require`), `allowUnauthorizedCerts`. The password is secret.

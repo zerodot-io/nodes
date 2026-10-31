@@ -160,7 +160,7 @@ const mcpToolNode = defineSupplyNode({
 });
 
 /** The Tool Name and Description fields of a tool node. */
-const toolFields = {
+export const toolFields = {
   name: z.string().default("").meta({
     title: "Tool Name",
     placeholder: "get_weather",
@@ -174,7 +174,7 @@ const toolFields = {
 };
 
 /** The checked name and description of a tool node. */
-function nameAndDescription(config: { name: string; description: string }) {
+export function nameAndDescription(config: { name: string; description: string }) {
   const name = config.name.trim();
   if (!TOOL_NAME.test(name)) throw new Error('"name" must have 1 to 64 letters, digits, _ or -');
   const description = config.description.trim();

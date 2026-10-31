@@ -7,10 +7,28 @@ import {
   geminiCredential,
   openaiCredential,
 } from "./credential";
+import documentLoader from "./document-loader";
+import { embeddingNodes } from "./embedding-models";
 import memoryManager from "./memory-manager";
 import agent from "./node";
+import { cohereCredential, cohereRerankerNode } from "./reranker";
 import { supplyNodes } from "./supply-nodes";
+import { splitterNodes } from "./text-splitters";
+import vectorStoreTool from "./vector-store-tool";
 
+export type {
+  Document,
+  DocumentLoader,
+  Embeddings,
+  EmbeddingUse,
+  Match,
+  Ranked,
+  Reranker,
+  SearchRequest,
+  TextSplitter,
+  VectorStore,
+} from "./rag";
+export { RAG_KIND } from "./rag";
 export type {
   ChatModel,
   ChatRequest,
@@ -26,10 +44,21 @@ export type {
 } from "./types";
 export { KIND } from "./types";
 
-export const nodes: NodeDefinition[] = [agent, memoryManager, ...chatModelNodes, ...supplyNodes];
+export const nodes: NodeDefinition[] = [
+  agent,
+  memoryManager,
+  ...chatModelNodes,
+  ...embeddingNodes,
+  ...splitterNodes,
+  documentLoader,
+  cohereRerankerNode,
+  ...supplyNodes,
+  vectorStoreTool,
+];
 export const credentialTypes: CredentialTypeDefinition[] = [
   openaiCredential,
   anthropicCredential,
   geminiCredential,
   compatibleCredential,
+  cohereCredential,
 ];

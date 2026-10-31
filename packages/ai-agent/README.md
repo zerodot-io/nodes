@@ -1,6 +1,6 @@
 # @zerodot/ai-agent
 
-An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint. Memory in a data table. Other workflows, MCP servers, and JavaScript as tools. Needs zerodot with node SDK 1.4.
+An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint. Memory in a data table. Other workflows, MCP servers, JavaScript, and vector stores as tools. Embedding models, text splitters, a data loader, and a reranker for vector stores. Needs zerodot with node SDK 1.5.
 
 ## Install
 
@@ -54,6 +54,30 @@ The output is `{ messages }`: the messages of the session after the operation. *
 
 `agent.model.openai`, `agent.model.anthropic`, `agent.model.gemini`, and `agent.model.compatible`. Each one has the credential of its provider, the model, Max Tokens, Temperature (not for Anthropic), and a timeout for each call. The model must support tool calls.
 
+### Embeddings
+
+`agent.embedding.openai`, `agent.embedding.gemini`, and `agent.embedding.compatible` give an embedding model (kind `ai.embedding`) to a vector store. Settings: the model, **Dimensions** (optional, it must be the same as the vector store), and a timeout. Big inputs go to the provider in batches.
+
+### Text splitters
+
+They cut text into chunks (kind `ai.textSplitter`). Connect one to the **Text Splitter** port of the Default Data Loader.
+
+- **Recursive Character Text Splitter** (`agent.splitter.recursive`): keeps paragraphs, then sentences, then words together. **Text Format** is Plain Text, Markdown, HTML, or Code. Default: 1000 characters, 200 overlap.
+- **Character Text Splitter** (`agent.splitter.character`): splits at a separator. Write `\n` for a new line.
+- **Token Text Splitter** (`agent.splitter.token`): counts tokens (`o200k_base` or `cl100k_base`).
+
+### Default Data Loader (`agent.document.default`)
+
+Makes the chunks for a vector store (kind `ai.document`). **Type of Data** is JSON or Binary. JSON: **Load All Input Data** (one line for each value of the item) or **Load Specific Data** (a text with expressions, such as `{{ $json.body }}`). Binary: PDF, Text, Markdown, HTML, or JSON, or found from the MIME type. **Metadata Fields** and **Extra Metadata** go with each chunk. With no text splitter, it uses the recursive splitter with 1000 characters and 200 overlap.
+
+### Reranker Cohere (`agent.reranker.cohere`)
+
+Orders the chunks of a search by relevance to the query (kind `ai.reranker`). Needs a Cohere API key.
+
+### Vector Store Tool (`agent.tool.vectorStore`)
+
+Lets the agent search a vector store. Connect a store in a retrieve mode, such as **Postgres Vector Store** of `@zerodot/postgres` with **Retrieve Documents (As Vector Store for Chain/Tool)**, to **Vector Store**. To give the store to the agent with no Answer Model, use the store mode **Retrieve Documents (As Tool for AI Agent)**. Settings: Tool Name, Description, Limit, Include Metadata, and Metadata Filter. A reranker is optional. **Answer Model** is optional, and is not the model of the agent. With a chat model there, the tool answers the question from the chunks, and the agent gets only the answer.
+
 ### Data Table Memory (`agent.memory.table`)
 
 The table needs the text columns `sessionId` and `messages`. Each run adds one row. The agent reads the last **Turns to Remember** rows of the session. A table holds a limited number of rows, so turn on **Delete Older Turns** for a busy session.
@@ -74,7 +98,9 @@ Supply nodes and supply ports work only in official `@zerodot/*` packages, so th
 
 ## Credential
 
-The chat models use the same credential types as `@zerodot/ai`: `ai.openai`, `ai.anthropic`, `ai.gemini`, and `ai.compatible`. A key saved for one package works in the other.
+The chat models and the embedding models use the same credential types as `@zerodot/ai`: `ai.openai`, `ai.anthropic`, `ai.gemini`, and `ai.compatible`. A key saved for one package works in the other.
+
+**Cohere API key** (`cohere`): `apiKey`, and an optional `baseUrl`. The key is secret.
 
 ## License
 

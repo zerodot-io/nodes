@@ -1,12 +1,18 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { isRecord } from "@zerodot/node-sdk";
+import { RAG_KIND } from "./rag";
 
 // The values that supply nodes give to the AI Agent. zerodot passes them as unknown, so the
 // agent checks the shape when it runs. Another package can import these types to make its own
 // supply nodes.
 
 /** The supply kinds of the agent ports. */
-export const KIND = { model: "ai.model", memory: "ai.memory", tool: "ai.tool" } as const;
+export const KIND = {
+  model: "ai.model",
+  memory: "ai.memory",
+  tool: "ai.tool",
+  embedding: RAG_KIND.embedding,
+} as const;
 
 type JsonObject = Record<string, unknown>;
 

@@ -33,8 +33,7 @@ export function createStatements(schema: string, table: string): string[] {
 /**
  * Memory in a Postgres table. Each turn is one row: `session_id`, and `messages` (the messages of
  * the turn as JSONB). A turn keeps a tool call and its result together, so a window of turns
- * never splits them. The memory makes the table when it is not there. Each call opens its own
- * connection, because a supply has no close.
+ * never splits them. The memory makes the table when it is not there.
  */
 export function postgresMemory(connect: Connect, options: Options): Memory {
   const { sessionId, turns, trim } = options;
@@ -146,24 +145,36 @@ export default defineSupplyNode({
     if (!table) throw new Error('The node needs "table"');
     // A missing credential or host stops the run before the agent calls the model.
     const settings = postgresOptions(credential);
-    const connect: Connect = async (work) => {
+    // One connection for all calls. It closes after one second without queries, and opens
+    // again when needed. The node SDK 1.5 calls `close` when the run is done.
+    let opened: ReturnType<typeof open> | undefined;
+    async function open() {
       const postgres = await loadPostgres();
       const sql = postgres(settings);
       const abort = () => void sql.end({ timeout: 0 });
       signal.addEventListener("abort", abort, { once: true });
-      try {
-        return await work(async (query, values) => [...(await sql.unsafe(query, values))]);
-      } finally {
-        signal.removeEventListener("abort", abort);
-        await sql.end({ timeout: 5 });
-      }
+      return { sql, abort };
+    }
+    const connect: Connect = async (work) => {
+      opened ??= open();
+      const { sql } = await opened;
+      return work(async (query, values) => [...(await sql.unsafe(query, values))]);
     };
-    return postgresMemory(connect, {
+    const close = async () => {
+      const connection = opened;
+      opened = undefined;
+      if (!connection) return;
+      const { sql, abort } = await connection;
+      signal.removeEventListener("abort", abort);
+      await sql.end({ timeout: 5 });
+    };
+    const memory = postgresMemory(connect, {
       schema,
       table,
       sessionId: sessionOf(config),
       turns: config.turns,
       trim: config.trim,
     });
+    return { ...memory, close };
   },
 });

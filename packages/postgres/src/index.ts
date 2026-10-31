@@ -5,6 +5,13 @@ import postgres from "./postgres";
 import postgresListen from "./postgres-listen";
 import postgresMemory from "./postgres-memory";
 import postgresTrigger from "./postgres-trigger";
+import postgresVector from "./postgres-vector";
 
-export const nodes: NodeDefinition[] = [postgres, postgresTrigger, postgresListen, postgresMemory];
+export const nodes: NodeDefinition[] = [
+  postgres,
+  postgresTrigger,
+  postgresListen,
+  postgresMemory,
+  postgresVector,
+];
 export const credentialTypes: CredentialTypeDefinition[] = [postgresCredential];

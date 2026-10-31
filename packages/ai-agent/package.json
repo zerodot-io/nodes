@@ -1,7 +1,7 @@
 {
   "name": "@zerodot/ai-agent",
-  "version": "0.1.1",
-  "description": "An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, memory in a data table, and other workflows and MCP servers as tools.",
+  "version": "0.2.0",
+  "description": "An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, memory in a data table, and other workflows, MCP servers, and vector stores as tools. Embedding models, text splitters, a data loader, and a Cohere reranker for vector stores.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
@@ -27,10 +27,14 @@
     "memory-manager.svg",
     "openai.svg",
     "anthropic.svg",
-    "gemini.svg"
+    "gemini.svg",
+    "splitter.svg",
+    "document.svg",
+    "reranker.svg",
+    "vector-store.svg"
   ],
   "zerodot": {
-    "sdk": "^1.4",
+    "sdk": "^1.5",
     "label": "AI Agent",
     "summary": "An AI agent with ports for a chat model, memory, and tools"
   },
@@ -44,15 +48,17 @@
     "access": "public"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "1.32.1"
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "js-tiktoken": "1.0.21",
+    "unpdf": "1.8.1"
   },
   "peerDependencies": {
-    "@zerodot/node-sdk": "^1.4.0",
+    "@zerodot/node-sdk": "^1.5.0",
     "zod": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "26.6.5",
-    "@zerodot/node-sdk": "^1.4.0",
+    "@zerodot/node-sdk": "^1.5.0",
     "tsdown": "0.23.2",
     "tsx": "4.23.15",
     "typescript": "7.0.2",

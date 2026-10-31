@@ -12,6 +12,10 @@ export const MEMORY_ICON = fileIcon(import.meta.url, "../memory.svg");
 export const WORKFLOW_ICON = fileIcon(import.meta.url, "../workflow.svg");
 export const MCP_ICON = fileIcon(import.meta.url, "../mcp.svg");
 export const CODE_ICON = fileIcon(import.meta.url, "../code.svg");
+export const SPLITTER_ICON = fileIcon(import.meta.url, "../splitter.svg");
+export const DOCUMENT_ICON = fileIcon(import.meta.url, "../document.svg");
+export const RERANKER_ICON = fileIcon(import.meta.url, "../reranker.svg");
+export const VECTOR_STORE_ICON = fileIcon(import.meta.url, "../vector-store.svg");
 export const MEMORY_MANAGER_ICON = fileIcon(import.meta.url, "../memory-manager.svg");
 
 // The logos of the model providers.
