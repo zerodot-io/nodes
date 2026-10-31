@@ -1,16 +1,29 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import type { NodeDefinition } from "@zerodot/node-sdk";
-import { z } from "zod";
-import { accessOf, CREDENTIAL_OF } from "./api";
-import { embeddingsOf } from "./embedding";
-import { AI_ICON, GEMINI_ICON, OPENAI_ICON } from "./icon";
 import {
+  accessOf,
+  BEDROCK_EMBEDDING_MODELS,
+  CREDENTIAL_OF,
   CUSTOM_MODEL,
   GEMINI_EMBEDDING_MODELS,
   idsOf,
+  MISTRAL_EMBEDDING_MODELS,
   type ModelEntry,
   OPENAI_EMBEDDING_MODELS,
-} from "./models";
+  VERTEX_EMBEDDING_MODELS,
+} from "@zerodot/ai-core";
+import type { NodeDefinition } from "@zerodot/node-sdk";
+import { z } from "zod";
+import { embeddingsOf } from "./embedding";
+import {
+  AI_ICON,
+  AZURE_ICON,
+  BEDROCK_ICON,
+  GEMINI_ICON,
+  MISTRAL_ICON,
+  OLLAMA_ICON,
+  OPENAI_ICON,
+  VERTEX_ICON,
+} from "./icon";
 import { defineSupplyNode } from "./supply";
 import { KIND } from "./types";
 
@@ -27,7 +40,7 @@ const settings = {
 };
 
 type Spec = {
-  provider: "openai" | "gemini";
+  provider: "openai" | "gemini" | "mistral" | "bedrock" | "vertex";
   label: string;
   description: string;
   models: readonly ModelEntry[];
@@ -51,6 +64,30 @@ const SPECS: Spec[] = [
     models: GEMINI_EMBEDDING_MODELS,
     first: "gemini-embedding-2",
     iconUrl: GEMINI_ICON,
+  },
+  {
+    provider: "mistral",
+    label: "Mistral Embeddings",
+    description: "A Mistral AI embedding model for a vector store",
+    models: MISTRAL_EMBEDDING_MODELS,
+    first: "mistral-embed",
+    iconUrl: MISTRAL_ICON,
+  },
+  {
+    provider: "bedrock",
+    label: "AWS Bedrock Embeddings",
+    description: "An embedding model on Amazon Bedrock for a vector store",
+    models: BEDROCK_EMBEDDING_MODELS,
+    first: "amazon.titan-embed-text-v2:0",
+    iconUrl: BEDROCK_ICON,
+  },
+  {
+    provider: "vertex",
+    label: "Google Vertex Embeddings",
+    description: "An embedding model on Google Cloud Vertex AI for a vector store",
+    models: VERTEX_EMBEDDING_MODELS,
+    first: "gemini-embedding-2",
+    iconUrl: VERTEX_ICON,
   },
 ];
 
@@ -103,34 +140,70 @@ const listed = SPECS.map((spec) =>
   }),
 );
 
-const compatible = defineSupplyNode({
-  type: "agent.embedding.compatible",
-  label: "OpenAI-compatible Embeddings",
-  description: "An embedding model of a service with an OpenAI-style API, such as Ollama",
-  category: "integration",
-  icon: "SparklesIcon",
-  iconUrl: AI_ICON,
-  supplies: KIND.embedding,
-  config: z.object({
-    model: z.string().default("").meta({
-      title: "Model ID",
-      description: "The embedding model id of the service, such as nomic-embed-text",
-    }),
-    ...settings,
-  }),
-  defaultConfig: { model: "", timeoutMs: 60_000 },
-  credentialTypes: [CREDENTIAL_OF.compatible],
-  subtitle: (config) =>
-    typeof config.model === "string" && config.model !== "" ? config.model : undefined,
-  supply: ({ config, credential }) => {
-    const model = config.model.trim();
-    if (!model) throw new Error('The node needs "model"');
-    return embeddingsOf(accessOf("compatible", credential), {
-      model,
-      dimensions: config.dimensions,
-      timeoutMs: config.timeoutMs,
-    });
-  },
-});
+type TypedSpec = {
+  provider: "compatible" | "ollama" | "azure";
+  label: string;
+  description: string;
+  modelTitle: string;
+  modelHint: string;
+  iconUrl: string;
+};
 
-export const embeddingNodes: NodeDefinition[] = [...listed, compatible];
+/** These providers have no model list. The user types the model id. */
+const TYPED: TypedSpec[] = [
+  {
+    provider: "compatible",
+    label: "OpenAI-compatible Embeddings",
+    description: "An embedding model of a service with an OpenAI-style API",
+    modelTitle: "Model ID",
+    modelHint: "The embedding model id of the service",
+    iconUrl: AI_ICON,
+  },
+  {
+    provider: "ollama",
+    label: "Ollama Embeddings",
+    description: "A local embedding model on Ollama for a vector store",
+    modelTitle: "Model",
+    modelHint: "The name of an embedding model that Ollama has, such as nomic-embed-text",
+    iconUrl: OLLAMA_ICON,
+  },
+  {
+    provider: "azure",
+    label: "Azure OpenAI Embeddings",
+    description: "An OpenAI embedding model on Azure for a vector store",
+    modelTitle: "Deployment Name",
+    modelHint: "The name of the embedding model deployment in the Azure resource",
+    iconUrl: AZURE_ICON,
+  },
+];
+
+const typed = TYPED.map((spec) =>
+  defineSupplyNode({
+    type: `agent.embedding.${spec.provider}`,
+    label: spec.label,
+    description: spec.description,
+    category: "integration",
+    icon: "SparklesIcon",
+    iconUrl: spec.iconUrl,
+    supplies: KIND.embedding,
+    config: z.object({
+      model: z.string().default("").meta({ title: spec.modelTitle, description: spec.modelHint }),
+      ...settings,
+    }),
+    defaultConfig: { model: "", timeoutMs: 60_000 },
+    credentialTypes: [CREDENTIAL_OF[spec.provider]],
+    subtitle: (config) =>
+      typeof config.model === "string" && config.model !== "" ? config.model : undefined,
+    supply: ({ config, credential }) => {
+      const model = config.model.trim();
+      if (!model) throw new Error('The node needs "model"');
+      return embeddingsOf(accessOf(spec.provider, credential), {
+        model,
+        dimensions: config.dimensions,
+        timeoutMs: config.timeoutMs,
+      });
+    },
+  }),
+);
+
+export const embeddingNodes: NodeDefinition[] = [...listed, ...typed];

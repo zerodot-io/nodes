@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { accessOf, CREDENTIAL_OF, callApi, callList, MAX_ITEMS } from "@zerodot/ai-core";
 import { defineNode } from "@zerodot/node-sdk";
-import { accessOf, CREDENTIAL_OF, callApi, callList, MAX_ITEMS } from "./api";
 import { aiConfig } from "./config";
+import { embedding, generate } from "./generate";
 import { AI_ICON } from "./icon";
 import { buildRequest, resultOf } from "./request";
 
@@ -80,6 +81,13 @@ export default defineNode({
   async run({ config, input, credential, signal }) {
     const access = accessOf(config.provider, credential);
     const options = { signal, timeoutMs: config.timeoutMs };
+    const op = `${config.resource}.${config.operation}`;
+    if (op === "text.generate") {
+      return { port: "out", data: await generate(config, input, access, options) };
+    }
+    if (op === "embedding.create") {
+      return { port: "out", data: await embedding(config, access, options) };
+    }
     const request = buildRequest(config, input);
 
     if (request.list) {

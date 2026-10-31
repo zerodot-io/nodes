@@ -1,19 +1,21 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import assert from "node:assert/strict";
 import { afterEach, describe, it, mock } from "node:test";
-import { type NodeDefinition, toBinary } from "@zerodot/node-sdk";
 import {
   type Access,
   AIError,
+  ANTHROPIC_MODELS,
   ANTHROPIC_VERSION,
   accessOf,
   CREDENTIAL_OF,
   callApi,
   callList,
-} from "./api";
+  GEMINI_TEXT_MODELS,
+  OPENAI_TEXT_MODELS,
+} from "@zerodot/ai-core";
+import { type NodeDefinition, toBinary } from "@zerodot/node-sdk";
 import { aiConfig, PROVIDER_OPTIONS } from "./config";
 import { credentialTypes, nodes } from "./index";
-import { ANTHROPIC_MODELS, GEMINI_TEXT_MODELS, OPENAI_TEXT_MODELS } from "./models";
 import { base64Of, buildRequest, resultOf } from "./request";
 
 const signal = new AbortController().signal;
@@ -198,130 +200,6 @@ describe("ai config", () => {
 });
 
 describe("openai request", () => {
-  it("builds a chat call with a system prompt and options", () => {
-    const { call } = build({
-      prompt: "Hi",
-      systemPrompt: " Be brief ",
-      temperature: 0.2,
-      maxTokens: 100,
-    });
-    assert.equal(call.method, "POST");
-    assert.equal(call.path, "/chat/completions");
-    assert.deepEqual(call.json, {
-      model: "gpt-6.1-terra",
-      messages: [
-        { role: "system", content: "Be brief" },
-        { role: "user", content: "Hi" },
-      ],
-      temperature: 0.2,
-      max_completion_tokens: 100,
-      response_format: undefined,
-      tools: undefined,
-      tool_choice: undefined,
-      parallel_tool_calls: undefined,
-    });
-  });
-
-  it("needs a prompt", () => {
-    assert.throws(() => build({}), /prompt/);
-  });
-
-  it("uses a custom model id", () => {
-    const { call } = build({
-      prompt: "Hi",
-      openaiTextModel: "custom",
-      customModel: " my-model ",
-    });
-    assert.equal(call.json?.model, "my-model");
-    assert.throws(() => build({ prompt: "Hi", openaiTextModel: "custom" }), /customModel/);
-  });
-
-  it("sends images from URLs, data URLs, and a binary field", () => {
-    const input = binaryInput("a.png", "image/png");
-    const { call } = build(
-      {
-        prompt: "What is it?",
-        imageUrls: "https://a.test/1.png?x=1,2\nhttps://a.test/2.png",
-        imageProperty: "data",
-      },
-      input,
-    );
-    const messages = call.json?.messages as { content: { type: string }[] }[];
-    const parts = messages[0]?.content ?? [];
-    assert.deepEqual(
-      parts.map((part) => part.type),
-      ["text", "image_url", "image_url", "image_url"],
-    );
-    assert.match(JSON.stringify(parts[1]), /1\.png\?x=1,2/);
-    assert.match(JSON.stringify(parts[3]), /data:image\/png;base64,AQI=/);
-  });
-
-  it("sets JSON mode and a JSON schema", () => {
-    assert.deepEqual(
-      build({ prompt: "Hi", responseFormat: "json_object" }).call.json?.response_format,
-      {
-        type: "json_object",
-      },
-    );
-    const { call } = build({
-      prompt: "Hi",
-      responseFormat: "json_schema",
-      jsonSchema: '{"type":"object"}',
-    });
-    assert.deepEqual(call.json?.response_format, {
-      type: "json_schema",
-      json_schema: { name: "output", strict: true, schema: { type: "object" } },
-    });
-    assert.throws(
-      () => build({ prompt: "Hi", responseFormat: "json_schema", jsonSchema: "[1]" }),
-      /JSON object/,
-    );
-    assert.throws(
-      () => build({ prompt: "Hi", responseFormat: "json_schema", jsonSchema: "{" }),
-      /must be JSON/,
-    );
-  });
-
-  it("builds tools and a tool choice", () => {
-    const tools = '[{"name":"get_weather","description":"d","input_schema":{"type":"object"}}]';
-    const { call } = build({
-      prompt: "Hi",
-      tools,
-      toolChoice: "any",
-      disableParallelToolUse: true,
-    });
-    assert.deepEqual(call.json?.tools, [
-      {
-        type: "function",
-        function: { name: "get_weather", description: "d", parameters: { type: "object" } },
-      },
-    ]);
-    assert.equal(call.json?.tool_choice, "required");
-    assert.equal(call.json?.parallel_tool_calls, false);
-    assert.deepEqual(
-      build({ prompt: "Hi", tools, toolChoice: "tool", toolChoiceName: "get_weather" }).call.json
-        ?.tool_choice,
-      { type: "function", function: { name: "get_weather" } },
-    );
-    assert.equal(build({ prompt: "Hi", tools, toolChoice: "none" }).call.json?.tool_choice, "none");
-  });
-
-  it("builds an embedding call", () => {
-    const { call } = build({
-      resource: "embedding",
-      operation: "create",
-      input: "Hello",
-      dimensions: 256,
-    });
-    assert.equal(call.path, "/embeddings");
-    assert.deepEqual(call.json, {
-      model: "text-embedding-3-small",
-      input: "Hello",
-      dimensions: 256,
-    });
-    assert.throws(() => build({ resource: "embedding", operation: "create" }), /input/);
-  });
-
   it("builds an image call and leaves out the auto values", () => {
     const { call } = build({
       resource: "image",
@@ -534,124 +412,8 @@ describe("openai request", () => {
   });
 });
 
-describe("compatible request", () => {
-  it("needs the model id and uses the older token name", () => {
-    assert.throws(() => build({ provider: "compatible", prompt: "Hi" }), /customModel/);
-    const { call } = build({
-      provider: "compatible",
-      prompt: "Hi",
-      customModel: "llama3",
-      maxTokens: 50,
-    });
-    assert.equal(call.path, "/chat/completions");
-    assert.equal(call.json?.model, "llama3");
-    assert.equal(call.json?.max_tokens, 50);
-    assert.equal("max_completion_tokens" in (call.json ?? {}), false);
-    assert.equal(
-      build({
-        provider: "compatible",
-        resource: "embedding",
-        operation: "create",
-        input: "x",
-        customModel: "e",
-      }).call.path,
-      "/embeddings",
-    );
-  });
-});
-
 describe("anthropic request", () => {
   const a = { provider: "anthropic" };
-
-  it("builds a message with a system prompt and no temperature", () => {
-    const { call } = build({ ...a, systemPrompt: "Be brief", prompt: "Hi" });
-    assert.equal(call.method, "POST");
-    assert.equal(call.path, "/v1/messages");
-    assert.deepEqual(call.json, {
-      model: "claude-sonnet-5-5",
-      max_tokens: 1024,
-      system: "Be brief",
-      messages: [{ role: "user", content: "Hi" }],
-      tools: undefined,
-      tool_choice: undefined,
-      output_config: undefined,
-    });
-  });
-
-  it("uses a custom model", () => {
-    const { call } = build({
-      ...a,
-      anthropicModel: "custom",
-      customModel: " claude-opus-4-8 ",
-      prompt: "Hi",
-    });
-    assert.equal(call.json?.model, "claude-opus-4-8");
-    assert.throws(() => build({ ...a, anthropicModel: "custom", prompt: "Hi" }), /customModel/);
-  });
-
-  it("puts images before the text", () => {
-    const input = binaryInput("a.webp", "image/webp");
-    const { call } = build(
-      {
-        ...a,
-        prompt: "What is this?",
-        imageUrls: "https://a.test/1.png\nhttps://a.test/2.png",
-        imageProperty: "data",
-      },
-      input,
-    );
-    const messages = call.json?.messages as { content: unknown }[];
-    assert.deepEqual(messages[0]?.content, [
-      { type: "image", source: { type: "url", url: "https://a.test/1.png" } },
-      { type: "image", source: { type: "url", url: "https://a.test/2.png" } },
-      { type: "image", source: { type: "base64", media_type: "image/webp", data: "AQI=" } },
-      { type: "text", text: "What is this?" },
-    ]);
-  });
-
-  it("adds files and PDF documents", () => {
-    const { call } = build(
-      {
-        ...a,
-        prompt: "Summarize",
-        imageFileIds: "file_img1",
-        documentUrls: "https://a.test/a.pdf",
-        documentFileIds: "file_doc1\nfile_doc2",
-        documentProperty: "data",
-      },
-      binaryInput("a.pdf", "application/pdf"),
-    );
-    const messages = call.json?.messages as { content: unknown }[];
-    assert.deepEqual(messages[0]?.content, [
-      { type: "image", source: { type: "file", file_id: "file_img1" } },
-      { type: "document", source: { type: "url", url: "https://a.test/a.pdf" } },
-      { type: "document", source: { type: "file", file_id: "file_doc1" } },
-      { type: "document", source: { type: "file", file_id: "file_doc2" } },
-      { type: "document", source: { type: "base64", media_type: "application/pdf", data: "AQI=" } },
-      { type: "text", text: "Summarize" },
-    ]);
-  });
-
-  it("sets the effort only when it is not the default", () => {
-    assert.equal(build({ ...a, prompt: "Hi" }).call.json?.output_config, undefined);
-    assert.deepEqual(build({ ...a, prompt: "Hi", effort: "low" }).call.json?.output_config, {
-      effort: "low",
-    });
-    assert.deepEqual(
-      build({
-        ...a,
-        prompt: "Hi",
-        effort: "high",
-        responseFormat: "json_schema",
-        jsonSchema: '{"type":"object"}',
-      }).call.json?.output_config,
-      { effort: "high", format: { type: "json_schema", schema: { type: "object" } } },
-    );
-    assert.throws(
-      () => build({ ...a, prompt: "Hi", responseFormat: "json_object" }),
-      /no JSON mode/,
-    );
-  });
 
   it("builds the file calls", () => {
     const input = binaryInput("a.txt", "text/plain", [65, 66, 67]);
@@ -677,129 +439,6 @@ describe("anthropic request", () => {
     assert.equal(build({ ...a, resource: "file", operation: "list" }).list?.limit, 20);
   });
 
-  it("needs a prompt or an image", () => {
-    assert.throws(() => build(a), /needs "prompt"/);
-    assert.doesNotThrow(() => build({ ...a, imageUrls: "https://a.test/1.png" }));
-  });
-
-  it("builds tools and a tool choice", () => {
-    const tool = {
-      name: "get_weather",
-      description: "Get the weather",
-      input_schema: { type: "object", properties: { city: { type: "string" } } },
-    };
-    const tools = JSON.stringify([tool]);
-    const plain = build({ ...a, prompt: "Hi", tools }).call.json;
-    assert.deepEqual(plain?.tools, [tool]);
-    assert.equal(plain?.tool_choice, undefined);
-    assert.deepEqual(
-      build({ ...a, prompt: "Hi", tools, toolChoice: "tool", toolChoiceName: "get_weather" }).call
-        .json?.tool_choice,
-      { type: "tool", name: "get_weather" },
-    );
-    assert.deepEqual(
-      build({ ...a, prompt: "Hi", tools, toolChoice: "any", disableParallelToolUse: true }).call
-        .json?.tool_choice,
-      { type: "any", disable_parallel_tool_use: true },
-    );
-    assert.deepEqual(
-      build({ ...a, prompt: "Hi", tools, toolChoice: "none" }).call.json?.tool_choice,
-      { type: "none" },
-    );
-    assert.throws(() => build({ ...a, prompt: "Hi", tools, toolChoice: "tool" }), /toolChoiceName/);
-    assert.deepEqual(
-      build({ ...a, operation: "countTokens", prompt: "Hi", tools }).call.json?.tools,
-      [tool],
-    );
-  });
-
-  it("does not drop a tool choice that has no tools", () => {
-    for (const provider of ["openai", "anthropic", "gemini"]) {
-      assert.throws(
-        () => build({ provider, prompt: "Hi", toolChoice: "any" }),
-        /no "tools"/,
-        provider,
-      );
-    }
-    assert.doesNotThrow(() => build({ ...a, prompt: "Hi", toolChoice: "auto" }));
-  });
-
-  it("checks the tools", () => {
-    assert.throws(() => build({ ...a, prompt: "Hi", tools: "nope" }), /must be JSON/);
-    assert.throws(() => build({ ...a, prompt: "Hi", tools: "{}" }), /array of objects/);
-    assert.throws(() => build({ ...a, prompt: "Hi", tools: "[]" }), /no tool/);
-    assert.throws(
-      () =>
-        build({ ...a, prompt: "Hi", tools: '[{"name":"a b","input_schema":{"type":"object"}}]' }),
-      /"name"/,
-    );
-    assert.throws(
-      () =>
-        build({
-          ...a,
-          prompt: "Hi",
-          tools: `[{"name":"${"a".repeat(129)}","input_schema":{"type":"object"}}]`,
-        }),
-      /"name"/,
-    );
-    assert.doesNotThrow(() =>
-      build({
-        ...a,
-        prompt: "Hi",
-        tools: `[{"name":"${"a".repeat(128)}","input_schema":{"type":"object"}}]`,
-      }),
-    );
-    assert.throws(() => build({ ...a, prompt: "Hi", tools: '[{"name":"a"}]' }), /input_schema/);
-    assert.throws(
-      () => build({ ...a, prompt: "Hi", tools: '[{"name":"a","input_schema":{"type":"array"}}]' }),
-      /type "object"/,
-    );
-  });
-
-  it("continues after a tool call", () => {
-    const assistant = [
-      { type: "text", text: "I check." },
-      { type: "tool_use", id: "toolu_1", name: "get_weather", input: { city: "Oslo" } },
-    ];
-    const tools = '[{"name":"get_weather","input_schema":{"type":"object"}}]';
-    const { call } = build({
-      ...a,
-      prompt: "Weather in Oslo?",
-      tools,
-      assistantContent: JSON.stringify(assistant),
-      toolResults: JSON.stringify([
-        { tool_use_id: "toolu_1", content: { temp: 3 } },
-        { tool_use_id: "toolu_2", content: "failed", is_error: true },
-      ]),
-    });
-    assert.deepEqual(call.json?.messages, [
-      { role: "user", content: "Weather in Oslo?" },
-      { role: "assistant", content: assistant },
-      {
-        role: "user",
-        content: [
-          { type: "tool_result", tool_use_id: "toolu_1", content: '{"temp":3}' },
-          { type: "tool_result", tool_use_id: "toolu_2", content: "failed", is_error: true },
-        ],
-      },
-    ]);
-    assert.throws(
-      () => build({ ...a, prompt: "Hi", tools, toolResults: '[{"tool_use_id":"t"}]' }),
-      /assistantContent/,
-    );
-    assert.throws(
-      () =>
-        build({
-          ...a,
-          prompt: "Hi",
-          tools,
-          assistantContent: "[]",
-          toolResults: '[{"content":"x"}]',
-        }),
-      /tool_use_id/,
-    );
-  });
-
   it("builds a token count without max_tokens", () => {
     const { call } = build({ ...a, operation: "countTokens", prompt: "Hi" });
     assert.equal(call.path, "/v1/messages/count_tokens");
@@ -816,112 +455,21 @@ describe("anthropic request", () => {
 describe("gemini request", () => {
   const g = { provider: "gemini" };
 
-  it("builds a generateContent call", () => {
-    const { call } = build({
-      ...g,
-      systemPrompt: "Be brief",
-      prompt: "Hi",
-      maxTokens: 50,
-      temperature: 0.5,
-    });
-    assert.equal(call.path, "/models/gemini-3.8-flash:generateContent");
-    assert.deepEqual(call.json, {
-      systemInstruction: { parts: [{ text: "Be brief" }] },
-      contents: [{ role: "user", parts: [{ text: "Hi" }] }],
-      tools: undefined,
-      toolConfig: undefined,
-      generationConfig: { maxOutputTokens: 50, temperature: 0.5 },
-    });
-    assert.equal(build({ ...g, prompt: "Hi" }).call.json?.generationConfig, undefined);
-    assert.throws(() => build(g), /prompt/);
-  });
-
-  it("checks the custom model id", () => {
-    const custom = { ...g, prompt: "Hi", geminiTextModel: "custom" };
-    assert.equal(
-      build({ ...custom, customModel: "models/gemini-x" }).call.path,
-      "/models/gemini-x:generateContent",
-    );
-    assert.throws(() => build({ ...custom, customModel: "../x" }), /not a model id/);
-    assert.throws(() => build(custom), /customModel/);
-  });
-
-  it("sends images, data URLs, and file URIs before the text", () => {
-    const { call } = build(
-      {
-        ...g,
-        prompt: "Look",
-        imageUrls: "data:image/png;base64,QUJD\nhttps://files.test/f",
-        fileUris: "https://generativelanguage.googleapis.com/v1beta/files/abc",
-        imageProperty: "data",
-      },
-      binaryInput("a.png", "image/jpeg"),
-    );
-    const contents = call.json?.contents as { parts: unknown[] }[];
-    assert.deepEqual(contents[0]?.parts, [
-      { inlineData: { mimeType: "image/png", data: "QUJD" } },
-      { fileData: { fileUri: "https://files.test/f" } },
-      { inlineData: { mimeType: "image/jpeg", data: "AQI=" } },
-      { fileData: { fileUri: "https://generativelanguage.googleapis.com/v1beta/files/abc" } },
-      { text: "Look" },
-    ]);
-  });
-
   it("checks Base64", () => {
     assert.equal(base64Of(" QU\nJD ", "x"), "QUJD");
     assert.throws(() => base64Of("data:image/png;base64,QUJD", "x"), /data: prefix/);
     assert.throws(() => base64Of("QUJ", "x"), /not valid Base64/);
     assert.throws(() => base64Of("QU!D", "x"), /not valid Base64/);
     assert.throws(
-      () => build({ ...g, prompt: "x", imageUrls: "data:image/png;base64,QU" }),
+      () =>
+        build({
+          ...g,
+          operation: "countTokens",
+          prompt: "x",
+          imageUrls: "data:image/png;base64,QU",
+        }),
       /Base64/,
     );
-  });
-
-  it("sets JSON output and a JSON schema", () => {
-    assert.deepEqual(
-      build({ ...g, prompt: "Hi", responseFormat: "json_object" }).call.json?.generationConfig,
-      { responseMimeType: "application/json" },
-    );
-    assert.deepEqual(
-      build({ ...g, prompt: "Hi", responseFormat: "json_schema", jsonSchema: '{"type":"object"}' })
-        .call.json?.generationConfig,
-      { responseMimeType: "application/json", responseJsonSchema: { type: "object" } },
-    );
-  });
-
-  it("builds tools and a tool config", () => {
-    const tools = '[{"name":"get_weather","description":"d","input_schema":{"type":"object"}}]';
-    const { call } = build({
-      ...g,
-      prompt: "Hi",
-      tools,
-      toolChoice: "tool",
-      toolChoiceName: "get_weather",
-    });
-    assert.deepEqual(call.json?.tools, [
-      {
-        functionDeclarations: [
-          { name: "get_weather", description: "d", parametersJsonSchema: { type: "object" } },
-        ],
-      },
-    ]);
-    assert.deepEqual(call.json?.toolConfig, {
-      functionCallingConfig: { mode: "ANY", allowedFunctionNames: ["get_weather"] },
-    });
-    assert.deepEqual(
-      build({ ...g, prompt: "Hi", tools, toolChoice: "any" }).call.json?.toolConfig,
-      {
-        functionCallingConfig: { mode: "ANY" },
-      },
-    );
-    assert.deepEqual(
-      build({ ...g, prompt: "Hi", tools, toolChoice: "none" }).call.json?.toolConfig,
-      {
-        functionCallingConfig: { mode: "NONE" },
-      },
-    );
-    assert.equal(build({ ...g, prompt: "Hi", tools }).call.json?.toolConfig, undefined);
   });
 
   it("builds a token count", () => {
@@ -935,26 +483,6 @@ describe("gemini request", () => {
         tools: undefined,
       },
     });
-  });
-
-  it("builds an embedding call", () => {
-    const { call } = build({
-      ...g,
-      resource: "embedding",
-      operation: "create",
-      input: "Hello",
-      dimensions: 256,
-    });
-    assert.equal(call.path, "/models/gemini-embedding-2:embedContent");
-    assert.deepEqual(call.json, {
-      content: { parts: [{ text: "Hello" }] },
-      embedContentConfig: { outputDimensionality: 256 },
-    });
-    assert.equal(
-      build({ ...g, resource: "embedding", operation: "create", input: "x" }).call.json
-        ?.embedContentConfig,
-      undefined,
-    );
   });
 
   it("builds image generation and image editing calls", () => {
@@ -1023,148 +551,7 @@ describe("gemini request", () => {
 });
 
 describe("ai result", () => {
-  it("reads an OpenAI chat answer", () => {
-    const answer = {
-      id: "c1",
-      model: "gpt-6.1-terra",
-      choices: [{ message: { content: '{"a":1}' }, finish_reason: "stop" }],
-      usage: { prompt_tokens: 2, completion_tokens: 3, total_tokens: 5 },
-    };
-    const out = result({ prompt: "Hi", responseFormat: "json_object" }, answer) as Record<
-      string,
-      unknown
-    >;
-    assert.equal(out.text, '{"a":1}');
-    assert.deepEqual(out.json, { a: 1 });
-    assert.equal(out.finishReason, "stop");
-    assert.equal(out.stopReason, "stop");
-    assert.deepEqual(out.usage, { inputTokens: 2, outputTokens: 3, totalTokens: 5 });
-    assert.equal(out.raw, undefined);
-    assert.deepEqual(out.toolCalls, []);
-    const plain = result({ prompt: "Hi", includeRaw: true }, answer) as Record<string, unknown>;
-    assert.equal("json" in plain, false);
-    assert.equal(plain.raw, answer);
-  });
-
-  it("reads OpenAI tool calls", () => {
-    const out = result(
-      { prompt: "Hi" },
-      {
-        choices: [
-          {
-            message: {
-              content: null,
-              tool_calls: [
-                { id: "call_1", function: { name: "get_weather", arguments: '{"city":"Oslo"}' } },
-              ],
-            },
-            finish_reason: "tool_calls",
-          },
-        ],
-      },
-    ) as { toolCalls: unknown; finishReason: string; text: string };
-    assert.equal(out.text, "");
-    assert.equal(out.finishReason, "tool_calls");
-    assert.deepEqual(out.toolCalls, [
-      { id: "call_1", name: "get_weather", input: { city: "Oslo" } },
-    ]);
-  });
-
-  it("reads an Anthropic answer and keeps the content to continue", () => {
-    const use = { type: "tool_use", id: "toolu_1", name: "get_weather", input: { city: "Oslo" } };
-    const content = [{ type: "text", text: "Wait" }, use];
-    const out = result(
-      { provider: "anthropic", prompt: "Hi" },
-      {
-        id: "msg_1",
-        model: "claude-sonnet-5-5",
-        content,
-        stop_reason: "tool_use",
-        usage: { input_tokens: 3, output_tokens: 1 },
-      },
-    ) as Record<string, unknown>;
-    assert.equal(out.text, "Wait");
-    assert.equal(out.finishReason, "tool_calls");
-    assert.equal(out.stopReason, "tool_use");
-    assert.deepEqual(out.toolCalls, [
-      { id: "toolu_1", name: "get_weather", input: { city: "Oslo" } },
-    ]);
-    assert.deepEqual(out.assistantContent, content);
-    assert.deepEqual(out.usage, { inputTokens: 3, outputTokens: 1, totalTokens: 4 });
-  });
-
-  it("does not parse JSON when the answer is a tool call", () => {
-    const config = {
-      provider: "anthropic",
-      prompt: "Hi",
-      responseFormat: "json_schema",
-      jsonSchema: '{"type":"object"}',
-    };
-    const out = result(config, {
-      content: [{ type: "tool_use", id: "t", name: "a", input: {} }],
-      stop_reason: "tool_use",
-    }) as Record<string, unknown>;
-    assert.equal(out.finishReason, "tool_calls");
-    assert.equal("json" in out, false);
-    assert.throws(
-      () => result(config, { content: [{ type: "text", text: "nope" }], stop_reason: "end_turn" }),
-      /not valid JSON/,
-    );
-    const cut = result(config, {
-      content: [{ type: "text", text: '{"a"' }],
-      stop_reason: "max_tokens",
-    }) as Record<string, unknown>;
-    assert.equal(cut.finishReason, "length");
-    assert.equal("json" in cut, false);
-  });
-
-  it("reads a Gemini answer", () => {
-    const out = result(
-      { provider: "gemini", prompt: "Hi" },
-      {
-        candidates: [
-          {
-            content: {
-              parts: [
-                { text: "thinking", thought: true },
-                { text: "Hello" },
-                { functionCall: { name: "get_weather", args: { city: "Oslo" } } },
-              ],
-            },
-            finishReason: "STOP",
-          },
-        ],
-        usageMetadata: {
-          promptTokenCount: 4,
-          candidatesTokenCount: 2,
-          thoughtsTokenCount: 1,
-          totalTokenCount: 7,
-        },
-        modelVersion: "gemini-3.8-flash",
-        responseId: "r1",
-      },
-    ) as Record<string, unknown>;
-    assert.equal(out.text, "Hello");
-    assert.equal(out.finishReason, "tool_calls");
-    assert.equal(out.stopReason, "STOP");
-    assert.deepEqual(out.toolCalls, [
-      { id: "call_1", name: "get_weather", input: { city: "Oslo" } },
-    ]);
-    assert.deepEqual(out.usage, { inputTokens: 4, outputTokens: 3, totalTokens: 7 });
-    assert.equal(out.model, "gemini-3.8-flash");
-    const filtered = result(
-      { provider: "gemini", prompt: "Hi" },
-      { candidates: [{ finishReason: "SAFETY" }] },
-    ) as Record<string, unknown>;
-    assert.equal(filtered.finishReason, "content_filter");
-    const cut = result(
-      { provider: "gemini", prompt: "Hi" },
-      { candidates: [{ content: { parts: [{ text: "x" }] }, finishReason: "MAX_TOKENS" }] },
-    ) as Record<string, unknown>;
-    assert.equal(cut.finishReason, "length");
-  });
-
-  it("reads token counts and embeddings", () => {
+  it("reads token counts", () => {
     assert.deepEqual(
       result(
         { provider: "anthropic", operation: "countTokens", prompt: "x" },
@@ -1176,19 +563,6 @@ describe("ai result", () => {
       result({ provider: "gemini", operation: "countTokens", prompt: "x" }, { totalTokens: 9 }),
       { inputTokens: 9 },
     );
-    const open = result(
-      { resource: "embedding", operation: "create", input: "x" },
-      { data: [{ embedding: [0.1, 0.2] }], model: "m" },
-    ) as Record<string, unknown>;
-    assert.deepEqual(open.embedding, [0.1, 0.2]);
-    assert.equal(open.dimensions, 2);
-    const google = result(
-      { provider: "gemini", resource: "embedding", operation: "create", input: "x" },
-      { embedding: { values: [1, 2, 3] }, usageMetadata: { promptTokenCount: 1 } },
-    ) as Record<string, unknown>;
-    assert.deepEqual(google.embedding, [1, 2, 3]);
-    assert.equal(google.dimensions, 3);
-    assert.equal(google.model, "gemini-embedding-2");
   });
 
   it("puts images in binary fields", () => {
@@ -1285,6 +659,835 @@ describe("ai result", () => {
       deleted: true,
       name: "files/a1b2",
     });
+  });
+});
+
+// text.generate and embedding.create go through the AI SDK, so the tests run the node and read
+// the request that it sends.
+
+const BASE_OF: Record<string, string> = {
+  openai: "https://api.openai.com/v1",
+  anthropic: "https://api.anthropic.com",
+  gemini: "https://generativelanguage.googleapis.com/v1beta",
+  compatible: "https://llm.test/v1",
+};
+
+const openaiChat = (message: Record<string, unknown>, finish = "stop") => ({
+  id: "chatcmpl_1",
+  object: "chat.completion",
+  model: "gpt-6.1-terra",
+  choices: [{ index: 0, finish_reason: finish, message: { role: "assistant", ...message } }],
+  usage: { prompt_tokens: 2, completion_tokens: 3, total_tokens: 5 },
+});
+
+const anthropicMessage = (content: unknown[], stop = "end_turn") => ({
+  id: "msg_1",
+  type: "message",
+  role: "assistant",
+  model: "claude-sonnet-5-5",
+  content,
+  stop_reason: stop,
+  usage: { input_tokens: 3, output_tokens: 1 },
+});
+
+const geminiAnswer = (parts: unknown[], finish = "STOP") => ({
+  candidates: [{ content: { role: "model", parts }, finishReason: finish }],
+  usageMetadata: { promptTokenCount: 4, candidatesTokenCount: 2, totalTokenCount: 6 },
+  modelVersion: "gemini-3.8-flash",
+  responseId: "r1",
+});
+
+const ANSWER_OF: Record<string, unknown> = {
+  openai: openaiChat({ content: "Hello" }),
+  anthropic: anthropicMessage([{ type: "text", text: "Hello" }]),
+  gemini: geminiAnswer([{ text: "Hello" }]),
+  compatible: openaiChat({ content: "Hello" }),
+};
+
+/**
+ * Runs the node and gives the last request: its path after the base URL and its JSON body.
+ * `before` answers the calls that come first, such as the read of a Gemini file.
+ */
+async function send(
+  config: Record<string, unknown>,
+  input: unknown = null,
+  answer?: unknown,
+  before: Answer[] = [],
+) {
+  const provider = String(config.provider ?? "openai");
+  const calls = mockFetch([...before, { body: answer ?? ANSWER_OF[provider] }]);
+  const out = await run(config, input);
+  const last = calls.at(-1);
+  return {
+    path: (last?.url ?? "").slice(BASE_OF[provider]?.length),
+    json: bodyOf(last),
+    headers: (last?.init.headers ?? {}) as Record<string, string>,
+    data: out.data as Record<string, unknown>,
+    calls,
+  };
+}
+
+const TOOL = { name: "get_weather", description: "d", input_schema: { type: "object" } };
+const TOOLS = JSON.stringify([TOOL]);
+
+describe("text.generate with OpenAI", () => {
+  it("sends the system prompt, the prompt, and the settings, and reads the answer", async () => {
+    const sent = await send(
+      { prompt: "Hi", systemPrompt: " Be brief ", maxTokens: 100 },
+      null,
+      openaiChat({ content: "Hello" }),
+    );
+    assert.equal(sent.path, "/chat/completions");
+    assert.deepEqual(sent.json, {
+      model: "gpt-6.1-terra",
+      max_completion_tokens: 100,
+      // The AI SDK sends the system prompt with the newer role of OpenAI.
+      messages: [
+        { role: "developer", content: "Be brief" },
+        { role: "user", content: "Hi" },
+      ],
+    });
+    assert.deepEqual(sent.data, {
+      text: "Hello",
+      toolCalls: [],
+      finishReason: "stop",
+      stopReason: "stop",
+      usage: { inputTokens: 2, outputTokens: 3, totalTokens: 5 },
+      model: "gpt-6.1-terra",
+      id: "chatcmpl_1",
+    });
+  });
+
+  it("needs a prompt, and uses a custom model id", async () => {
+    await assert.rejects(run({}), /prompt/);
+    const sent = await send({ prompt: "Hi", openaiTextModel: "custom", customModel: " my-model " });
+    assert.equal(sent.json.model, "my-model");
+    await assert.rejects(run({ prompt: "Hi", openaiTextModel: "custom" }), /customModel/);
+  });
+
+  it("sends images from URLs, data URLs, and a binary field after the text", async () => {
+    const sent = await send(
+      {
+        prompt: "What is it?",
+        imageUrls: "https://a.test/1.png?x=1,2\ndata:image/png;base64,QUJD",
+        imageProperty: "data",
+      },
+      binaryInput("a.png", "image/png"),
+    );
+    const messages = sent.json.messages as { content: unknown }[];
+    assert.deepEqual(messages[0]?.content, [
+      { type: "text", text: "What is it?" },
+      { type: "image_url", image_url: { url: "https://a.test/1.png?x=1,2" } },
+      { type: "image_url", image_url: { url: "data:image/png;base64,QUJD" } },
+      { type: "image_url", image_url: { url: "data:image/png;base64,AQI=" } },
+    ]);
+  });
+
+  it("sets JSON mode and a JSON schema, and reads the JSON", async () => {
+    const answer = openaiChat({ content: '{"a":1}' });
+    const json = await send({ prompt: "Hi", responseFormat: "json_object" }, null, answer);
+    assert.deepEqual(json.json.response_format, { type: "json_object" });
+    assert.deepEqual(json.data.json, { a: 1 });
+    const schema = await send(
+      { prompt: "Hi", responseFormat: "json_schema", jsonSchema: '{"type":"object"}' },
+      null,
+      answer,
+    );
+    assert.deepEqual(schema.json.response_format, {
+      type: "json_schema",
+      json_schema: { schema: { type: "object" }, strict: true, name: "output" },
+    });
+    await assert.rejects(
+      run({ prompt: "Hi", responseFormat: "json_schema", jsonSchema: "[1]" }),
+      /JSON object/,
+    );
+    await assert.rejects(
+      run({ prompt: "Hi", responseFormat: "json_schema", jsonSchema: "{" }),
+      /must be JSON/,
+    );
+  });
+
+  it("sends tools and a tool choice, and reads the tool calls", async () => {
+    const call = {
+      id: "call_1",
+      type: "function",
+      function: { name: "get_weather", arguments: '{"city":"Oslo"}' },
+    };
+    const answer = openaiChat({ content: null, tool_calls: [call] }, "tool_calls");
+    const sent = await send(
+      { prompt: "Hi", tools: TOOLS, toolChoice: "any", disableParallelToolUse: true },
+      null,
+      answer,
+    );
+    assert.deepEqual(sent.json.tools, [
+      {
+        type: "function",
+        function: { name: "get_weather", description: "d", parameters: { type: "object" } },
+      },
+    ]);
+    assert.equal(sent.json.tool_choice, "required");
+    assert.equal(sent.json.parallel_tool_calls, false);
+    assert.equal(sent.data.text, "");
+    assert.equal(sent.data.finishReason, "tool_calls");
+    assert.deepEqual(sent.data.toolCalls, [
+      { id: "call_1", name: "get_weather", input: { city: "Oslo" } },
+    ]);
+    const one = await send(
+      { prompt: "Hi", tools: TOOLS, toolChoice: "tool", toolChoiceName: "get_weather" },
+      null,
+      answer,
+    );
+    assert.deepEqual(one.json.tool_choice, { type: "function", function: { name: "get_weather" } });
+    const none = await send({ prompt: "Hi", tools: TOOLS, toolChoice: "none" });
+    assert.equal(none.json.tool_choice, "none");
+  });
+
+  it("gives the raw answer and the refusal", async () => {
+    const answer = openaiChat({ content: null, refusal: "I cannot help" });
+    const sent = await send({ prompt: "Hi", includeRaw: true }, null, answer);
+    assert.equal(sent.data.refusal, "I cannot help");
+    assert.deepEqual(sent.data.raw, answer);
+  });
+});
+
+describe("text.generate with a compatible service", () => {
+  it("needs the model id and uses the older token name", async () => {
+    await assert.rejects(run({ provider: "compatible", prompt: "Hi" }), /customModel/);
+    const sent = await send({
+      provider: "compatible",
+      prompt: "Hi",
+      customModel: "llama3",
+      maxTokens: 50,
+      tools: TOOLS,
+      disableParallelToolUse: true,
+    });
+    assert.equal(sent.path, "/chat/completions");
+    assert.equal(sent.json.model, "llama3");
+    assert.equal(sent.json.max_tokens, 50);
+    assert.equal("max_completion_tokens" in sent.json, false);
+    assert.equal(sent.json.parallel_tool_calls, false);
+    assert.equal(sent.data.text, "Hello");
+  });
+});
+
+describe("text.generate with Anthropic", () => {
+  const a = { provider: "anthropic" };
+
+  it("sends a message with a system prompt and no temperature", async () => {
+    const sent = await send({ ...a, systemPrompt: "Be brief", prompt: "Hi", temperature: 0.5 });
+    assert.equal(sent.path, "/v1/messages");
+    assert.deepEqual(sent.json, {
+      model: "claude-sonnet-5-5",
+      max_tokens: 1024,
+      system: [{ type: "text", text: "Be brief" }],
+      messages: [{ role: "user", content: [{ type: "text", text: "Hi" }] }],
+    });
+    assert.equal(sent.headers["x-api-key"], KEY);
+    assert.deepEqual(sent.data.assistantContent, [{ type: "text", text: "Hello" }]);
+    assert.deepEqual(sent.data.usage, { inputTokens: 3, outputTokens: 1, totalTokens: 4 });
+    assert.equal(sent.data.stopReason, "end_turn");
+  });
+
+  it("uses a custom model, and needs a prompt or an image", async () => {
+    const sent = await send({
+      ...a,
+      anthropicModel: "custom",
+      customModel: " claude-opus-4-8 ",
+      prompt: "Hi",
+    });
+    assert.equal(sent.json.model, "claude-opus-4-8");
+    await assert.rejects(run({ ...a, anthropicModel: "custom", prompt: "Hi" }), /customModel/);
+    await assert.rejects(run(a), /needs "prompt"/);
+    await send({ ...a, imageUrls: "https://a.test/1.png" });
+  });
+
+  it("puts images, files, and PDF documents before the text", async () => {
+    const sent = await send(
+      {
+        ...a,
+        prompt: "Summarize",
+        imageUrls: "https://a.test/1.png",
+        imageFileIds: "file_img1",
+        documentUrls: "https://a.test/a.pdf",
+        documentFileIds: "file_doc1\nfile_doc2",
+        documentProperty: "data",
+      },
+      binaryInput("a.pdf", "application/pdf"),
+    );
+    const messages = sent.json.messages as { content: unknown }[];
+    assert.deepEqual(messages[0]?.content, [
+      { type: "image", source: { type: "url", url: "https://a.test/1.png" } },
+      { type: "image", source: { type: "file", file_id: "file_img1" } },
+      { type: "document", source: { type: "url", url: "https://a.test/a.pdf" } },
+      { type: "document", source: { type: "file", file_id: "file_doc1" } },
+      { type: "document", source: { type: "file", file_id: "file_doc2" } },
+      { type: "document", source: { type: "base64", media_type: "application/pdf", data: "AQI=" } },
+      { type: "text", text: "Summarize" },
+    ]);
+  });
+
+  it("sets the effort only when it is not the default", async () => {
+    assert.equal((await send({ ...a, prompt: "Hi" })).json.output_config, undefined);
+    const low = await send({ ...a, prompt: "Hi", effort: "low" });
+    assert.deepEqual(low.json.output_config, { effort: "low" });
+    const schema = await send(
+      {
+        ...a,
+        prompt: "Hi",
+        effort: "high",
+        responseFormat: "json_schema",
+        jsonSchema: '{"type":"object"}',
+      },
+      null,
+      anthropicMessage([{ type: "text", text: '{"a":1}' }]),
+    );
+    assert.deepEqual(schema.json.output_config, {
+      effort: "high",
+      format: { type: "json_schema", schema: { type: "object", additionalProperties: false } },
+    });
+    assert.deepEqual(schema.data.json, { a: 1 });
+    await assert.rejects(
+      run({ ...a, prompt: "Hi", responseFormat: "json_object" }),
+      /no JSON mode/,
+    );
+  });
+
+  it("sends tools and a tool choice", async () => {
+    const use = { type: "tool_use", id: "toolu_1", name: "get_weather", input: { city: "Oslo" } };
+    const answer = anthropicMessage([{ type: "text", text: "Wait" }, use], "tool_use");
+    const plain = await send({ ...a, prompt: "Hi", tools: TOOLS }, null, answer);
+    assert.deepEqual(plain.json.tools, [TOOL]);
+    assert.deepEqual(plain.json.tool_choice, { type: "auto" });
+    assert.equal(plain.data.text, "Wait");
+    assert.equal(plain.data.finishReason, "tool_calls");
+    assert.equal(plain.data.stopReason, "tool_use");
+    assert.deepEqual(plain.data.toolCalls, [
+      { id: "toolu_1", name: "get_weather", input: { city: "Oslo" } },
+    ]);
+    assert.deepEqual(plain.data.assistantContent, [{ type: "text", text: "Wait" }, use]);
+    // Haiku 5.5 takes a forced tool choice. The AI SDK knows the models that do not.
+    const haiku = { ...a, anthropicModel: "claude-haiku-5-5", prompt: "Hi", tools: TOOLS };
+    const one = await send(
+      { ...haiku, toolChoice: "tool", toolChoiceName: "get_weather" },
+      null,
+      answer,
+    );
+    assert.deepEqual(one.json.tool_choice, { type: "tool", name: "get_weather" });
+    const any = await send(
+      { ...haiku, toolChoice: "any", disableParallelToolUse: true },
+      null,
+      answer,
+    );
+    assert.deepEqual(any.json.tool_choice, { type: "any", disable_parallel_tool_use: true });
+    // Sonnet 5.5 always thinks, so it gets Auto and only the chosen tool.
+    const sonnet = await send(
+      { ...a, prompt: "Hi", tools: TOOLS, toolChoice: "tool", toolChoiceName: "get_weather" },
+      null,
+      answer,
+    );
+    assert.deepEqual(sonnet.json.tool_choice, { type: "auto" });
+    assert.deepEqual(sonnet.json.tools, [TOOL]);
+    await assert.rejects(
+      run({ ...a, prompt: "Hi", tools: TOOLS, toolChoice: "tool" }),
+      /toolChoiceName/,
+    );
+    assert.deepEqual(
+      build({ ...a, operation: "countTokens", prompt: "Hi", tools: TOOLS }).call.json?.tools,
+      [TOOL],
+    );
+  });
+
+  it("does not drop a tool choice that has no tools", async () => {
+    for (const provider of ["openai", "anthropic", "gemini"]) {
+      await assert.rejects(run({ provider, prompt: "Hi", toolChoice: "any" }), /no "tools"/);
+    }
+    await send({ ...a, prompt: "Hi", toolChoice: "auto" });
+  });
+
+  it("checks the tools", async () => {
+    const check = (tools: string) => run({ ...a, prompt: "Hi", tools });
+    await assert.rejects(check("nope"), /must be JSON/);
+    await assert.rejects(check("{}"), /array of objects/);
+    await assert.rejects(check("[]"), /no tool/);
+    await assert.rejects(check('[{"name":"a b","input_schema":{"type":"object"}}]'), /"name"/);
+    await assert.rejects(
+      check(`[{"name":"${"a".repeat(129)}","input_schema":{"type":"object"}}]`),
+      /"name"/,
+    );
+    await send({
+      ...a,
+      prompt: "Hi",
+      tools: `[{"name":"${"a".repeat(128)}","input_schema":{"type":"object"}}]`,
+    });
+    await assert.rejects(check('[{"name":"a"}]'), /input_schema/);
+    await assert.rejects(check('[{"name":"a","input_schema":{"type":"array"}}]'), /type "object"/);
+  });
+
+  it("continues after a tool call", async () => {
+    const assistant = [
+      { type: "text", text: "I check." },
+      { type: "tool_use", id: "toolu_1", name: "get_weather", input: { city: "Oslo" } },
+    ];
+    const sent = await send({
+      ...a,
+      prompt: "Weather in Oslo?",
+      tools: TOOLS,
+      assistantContent: JSON.stringify(assistant),
+      toolResults: JSON.stringify([
+        { tool_use_id: "toolu_1", content: { temp: 3 } },
+        { tool_use_id: "toolu_2", content: "failed", is_error: true },
+      ]),
+    });
+    assert.deepEqual(sent.json.messages, [
+      { role: "user", content: [{ type: "text", text: "Weather in Oslo?" }] },
+      { role: "assistant", content: assistant },
+      {
+        role: "user",
+        content: [
+          { type: "tool_result", tool_use_id: "toolu_1", content: '{"temp":3}' },
+          { type: "tool_result", tool_use_id: "toolu_2", content: "failed", is_error: true },
+        ],
+      },
+    ]);
+    await assert.rejects(
+      run({ ...a, prompt: "Hi", tools: TOOLS, toolResults: '[{"tool_use_id":"t"}]' }),
+      /assistantContent/,
+    );
+    await assert.rejects(
+      run({
+        ...a,
+        prompt: "Hi",
+        tools: TOOLS,
+        assistantContent: "[]",
+        toolResults: '[{"content":"x"}]',
+      }),
+      /tool_use_id/,
+    );
+  });
+
+  it("checks the JSON, but not when the answer is a tool call or cut", async () => {
+    const config = {
+      ...a,
+      prompt: "Hi",
+      responseFormat: "json_schema",
+      jsonSchema: '{"type":"object"}',
+    };
+    const use = anthropicMessage([{ type: "tool_use", id: "t", name: "a", input: {} }], "tool_use");
+    const tool = await send(
+      { ...config, tools: '[{"name":"a","input_schema":{"type":"object"}}]' },
+      null,
+      use,
+    );
+    assert.equal(tool.data.finishReason, "tool_calls");
+    assert.equal("json" in tool.data, false);
+    mockFetch([{ body: anthropicMessage([{ type: "text", text: "nope" }]) }]);
+    await assert.rejects(run(config), /not valid JSON/);
+    const cut = await send(
+      config,
+      null,
+      anthropicMessage([{ type: "text", text: '{"a"' }], "max_tokens"),
+    );
+    assert.equal(cut.data.finishReason, "length");
+    assert.equal("json" in cut.data, false);
+  });
+
+  it("gives the error of Anthropic with the hint", async () => {
+    mockFetch([
+      {
+        status: 404,
+        body: { type: "error", error: { type: "not_found_error", message: "model: x" } },
+        headers: { "request-id": "req_1" },
+      },
+    ]);
+    await assert.rejects(run({ ...a, prompt: "Hi" }), (error: unknown) => {
+      assert.ok(error instanceof AIError);
+      assert.equal(error.status, 404);
+      assert.equal(error.code, "not_found_error");
+      assert.match(error.message, /^Anthropic text.generate failed \(404\)\. model: x\./);
+      assert.match(error.message, /Request ID req_1/);
+      return true;
+    });
+  });
+});
+
+describe("text.generate with Gemini", () => {
+  const g = { provider: "gemini" };
+
+  it("sends the system prompt and the settings, and reads the answer", async () => {
+    const sent = await send({
+      ...g,
+      systemPrompt: "Be brief",
+      prompt: "Hi",
+      maxTokens: 50,
+      temperature: 0.5,
+    });
+    assert.equal(sent.path, "/models/gemini-3.8-flash:generateContent");
+    assert.equal(sent.headers["x-goog-api-key"], KEY);
+    assert.deepEqual(sent.json, {
+      generationConfig: { maxOutputTokens: 50, temperature: 0.5 },
+      contents: [{ role: "user", parts: [{ text: "Hi" }] }],
+      systemInstruction: { parts: [{ text: "Be brief" }] },
+    });
+    assert.deepEqual(sent.data, {
+      text: "Hello",
+      toolCalls: [],
+      finishReason: "stop",
+      stopReason: "STOP",
+      usage: { inputTokens: 4, outputTokens: 2, totalTokens: 6 },
+      model: "gemini-3.8-flash",
+      id: "r1",
+    });
+    await assert.rejects(run(g), /prompt/);
+  });
+
+  it("checks the custom model id", async () => {
+    const custom = { ...g, prompt: "Hi", geminiTextModel: "custom" };
+    const sent = await send({ ...custom, customModel: "models/gemini-x" });
+    assert.equal(sent.path, "/models/gemini-x:generateContent");
+    await assert.rejects(run({ ...custom, customModel: "../x" }), /not a model id/);
+    await assert.rejects(run(custom), /customModel/);
+  });
+
+  it("sends images, data URLs, and file URIs before the text", async () => {
+    const uri = "https://generativelanguage.googleapis.com/v1beta/files/abc";
+    const sent = await send(
+      {
+        ...g,
+        prompt: "Look",
+        imageUrls: "data:image/png;base64,QUJD\nhttps://files.test/f.webp",
+        fileUris: uri,
+        imageProperty: "data",
+      },
+      binaryInput("a.png", "image/jpeg"),
+      undefined,
+      [{ body: { name: "files/abc", mimeType: "video/mp4" } }],
+    );
+    // The type of a file URI comes from the file.
+    assert.equal(sent.calls[0]?.url, uri);
+    const contents = sent.json.contents as { parts: unknown[] }[];
+    assert.deepEqual(contents[0]?.parts, [
+      { inlineData: { mimeType: "image/png", data: "QUJD" } },
+      { fileData: { mimeType: "image/webp", fileUri: "https://files.test/f.webp" } },
+      { inlineData: { mimeType: "image/jpeg", data: "AQI=" } },
+      { fileData: { mimeType: "video/mp4", fileUri: uri } },
+      { text: "Look" },
+    ]);
+    await assert.rejects(
+      run({ ...g, prompt: "x", fileUris: "https://a.test/video.mp4" }),
+      /not a Gemini file URI/,
+    );
+  });
+
+  it("sets JSON output and a JSON schema", async () => {
+    const answer = geminiAnswer([{ text: '{"a":1}' }]);
+    const json = await send({ ...g, prompt: "Hi", responseFormat: "json_object" }, null, answer);
+    assert.deepEqual(json.json.generationConfig, { responseMimeType: "application/json" });
+    const schema = await send(
+      { ...g, prompt: "Hi", responseFormat: "json_schema", jsonSchema: '{"type":"object"}' },
+      null,
+      answer,
+    );
+    assert.deepEqual(schema.json.generationConfig, {
+      responseMimeType: "application/json",
+      responseJsonSchema: { type: "object" },
+    });
+    assert.deepEqual(schema.data.json, { a: 1 });
+  });
+
+  it("sends tools and a tool config, and reads function calls without thoughts", async () => {
+    const answer = geminiAnswer([
+      { text: "thinking", thought: true },
+      { text: "Hello" },
+      { functionCall: { name: "get_weather", args: { city: "Oslo" } } },
+    ]);
+    const sent = await send(
+      { ...g, prompt: "Hi", tools: TOOLS, toolChoice: "tool", toolChoiceName: "get_weather" },
+      null,
+      answer,
+    );
+    assert.deepEqual(sent.json.tools, [
+      {
+        functionDeclarations: [
+          { name: "get_weather", description: "d", parametersJsonSchema: { type: "object" } },
+        ],
+      },
+    ]);
+    assert.deepEqual(sent.json.toolConfig, {
+      functionCallingConfig: { mode: "ANY", allowedFunctionNames: ["get_weather"] },
+    });
+    assert.equal(sent.data.text, "Hello");
+    assert.equal(sent.data.finishReason, "tool_calls");
+    assert.equal(sent.data.stopReason, "STOP");
+    const [call] = sent.data.toolCalls as { id: string; name: string; input: unknown }[];
+    // Gemini gives no call id, so the AI SDK makes one.
+    assert.match(call?.id ?? "", /^\w+$/);
+    assert.deepEqual({ ...call, id: "" }, { id: "", name: "get_weather", input: { city: "Oslo" } });
+    const any = await send({ ...g, prompt: "Hi", tools: TOOLS, toolChoice: "any" }, null, answer);
+    assert.deepEqual(any.json.toolConfig, { functionCallingConfig: { mode: "ANY" } });
+    const none = await send({ ...g, prompt: "Hi", tools: TOOLS, toolChoice: "none" });
+    assert.deepEqual(none.json.toolConfig, { functionCallingConfig: { mode: "NONE" } });
+    const auto = await send({ ...g, prompt: "Hi", tools: TOOLS });
+    assert.deepEqual(auto.json.toolConfig, { functionCallingConfig: { mode: "AUTO" } });
+  });
+
+  it("reads a filtered answer and a cut answer", async () => {
+    const filtered = await send({ ...g, prompt: "Hi" }, null, {
+      candidates: [{ finishReason: "SAFETY" }],
+    });
+    assert.equal(filtered.data.finishReason, "content_filter");
+    assert.equal(filtered.data.stopReason, "SAFETY");
+    const cut = await send(
+      { ...g, prompt: "Hi" },
+      null,
+      geminiAnswer([{ text: "x" }], "MAX_TOKENS"),
+    );
+    assert.equal(cut.data.finishReason, "length");
+  });
+});
+
+describe("text.generate with the other providers", () => {
+  const xaiAnswer = {
+    id: "resp_1",
+    object: "response",
+    created_at: 1,
+    model: "grok-4.7",
+    status: "completed",
+    output: [
+      {
+        type: "message",
+        id: "msg_1",
+        role: "assistant",
+        status: "completed",
+        content: [{ type: "output_text", text: "Hello", annotations: [] }],
+      },
+    ],
+    usage: { input_tokens: 2, output_tokens: 3, total_tokens: 5 },
+  };
+  const bedrockAnswer = {
+    output: { message: { role: "assistant", content: [{ text: "Hello" }] } },
+    stopReason: "end_turn",
+    usage: { inputTokens: 2, outputTokens: 3, totalTokens: 5 },
+  };
+  const cases: [string, Record<string, unknown>, unknown, string, (headers: Headers) => void][] = [
+    [
+      "mistral",
+      { apiKey: KEY },
+      openaiChat({ content: "Hello" }),
+      "https://api.mistral.ai/v1/chat/completions",
+      (headers) => assert.equal(headers.get("authorization"), `Bearer ${KEY}`),
+    ],
+    [
+      "groq",
+      { apiKey: KEY },
+      openaiChat({ content: "Hello" }),
+      "https://api.groq.com/openai/v1/chat/completions",
+      (headers) => assert.equal(headers.get("authorization"), `Bearer ${KEY}`),
+    ],
+    [
+      "xai",
+      { apiKey: KEY },
+      xaiAnswer,
+      "https://api.x.ai/v1/responses",
+      (headers) => assert.equal(headers.get("authorization"), `Bearer ${KEY}`),
+    ],
+    [
+      "deepseek",
+      { apiKey: KEY },
+      openaiChat({ content: "Hello" }),
+      "https://api.deepseek.com/chat/completions",
+      (headers) => assert.equal(headers.get("authorization"), `Bearer ${KEY}`),
+    ],
+    [
+      "openrouter",
+      { apiKey: KEY },
+      openaiChat({ content: "Hello" }),
+      "https://openrouter.ai/api/v1/chat/completions",
+      (headers) => assert.equal(headers.get("authorization"), `Bearer ${KEY}`),
+    ],
+    [
+      "ollama",
+      {},
+      openaiChat({ content: "Hello" }),
+      "http://localhost:11434/v1/chat/completions",
+      (headers) => assert.equal(headers.get("authorization"), null),
+    ],
+    [
+      "azure",
+      { apiKey: KEY, resourceName: "my-res" },
+      openaiChat({ content: "Hello" }),
+      "https://my-res.openai.azure.com/openai/v1/chat/completions?api-version=v1",
+      (headers) => assert.equal(headers.get("api-key"), KEY),
+    ],
+    [
+      "bedrock",
+      { region: "us-east-1", accessKeyId: "AKIAEXAMPLE", secretAccessKey: KEY },
+      bedrockAnswer,
+      "https://bedrock-runtime.us-east-1.amazonaws.com/model/us.anthropic.claude-sonnet-5-5/converse",
+      // The AI SDK signs the request with the access key (AWS Signature Version 4).
+      (headers) =>
+        assert.match(
+          headers.get("authorization") ?? "",
+          /^AWS4-HMAC-SHA256 Credential=AKIAEXAMPLE\//,
+        ),
+    ],
+    [
+      "vertex",
+      { project: "my-project", apiKey: KEY },
+      geminiAnswer([{ text: "Hello" }]),
+      "https://aiplatform.googleapis.com/v1/publishers/google/models/gemini-3.8-flash:generateContent",
+      (headers) => assert.equal(headers.get("x-goog-api-key"), KEY),
+    ],
+  ];
+
+  for (const [provider, data, answer, url, check] of cases) {
+    it(`${provider}: sends the prompt and reads the answer`, async () => {
+      const calls = mockFetch([{ body: answer }]);
+      const credential = { type: `ai.${provider}`, data };
+      const out = await run(
+        {
+          provider,
+          prompt: "Hi",
+          // These providers have no model list.
+          ...(["openrouter", "ollama", "azure"].includes(provider) ? { customModel: "m1" } : {}),
+        },
+        null,
+        credential,
+      );
+      assert.equal((out.data as { text: string }).text, "Hello");
+      assert.equal(calls[0]?.url, url);
+      check(new Headers(calls[0]?.init.headers));
+    });
+  }
+
+  it("checks the cloud credentials", async () => {
+    await assert.rejects(
+      run({ provider: "bedrock", prompt: "Hi" }, null, {
+        type: "ai.bedrock",
+        data: { region: "us-east-1" },
+      }),
+      /"apiKey", or "accessKeyId" and "secretAccessKey"/,
+    );
+    await assert.rejects(
+      run({ provider: "azure", prompt: "Hi", customModel: "d" }, null, {
+        type: "ai.azure",
+        data: { apiKey: KEY },
+      }),
+      /"resourceName"/,
+    );
+    await assert.rejects(
+      run({ provider: "vertex", prompt: "Hi" }, null, {
+        type: "ai.vertex",
+        data: { project: "p", serviceAccountJson: "{}" },
+      }),
+      /"client_email" and "private_key"/,
+    );
+    await assert.rejects(
+      run({ provider: "ollama", prompt: "Hi", customModel: "m" }, null, {
+        type: "ai.ollama",
+        data: { baseUrl: "http://ollama.lan:11434/v1" },
+      }),
+      /must start with https/,
+    );
+  });
+
+  it("lists the models of an OpenAI-style provider", async () => {
+    const calls = mockFetch([{ body: { data: [{ id: "mistral-large-latest" }] } }]);
+    const out = await run({ provider: "mistral", resource: "model", operation: "list" }, null, {
+      type: "ai.mistral",
+      data: { apiKey: KEY },
+    });
+    assert.deepEqual(out.data, [{ id: "mistral-large-latest" }]);
+    assert.equal(calls[0]?.url, "https://api.mistral.ai/v1/models");
+  });
+});
+
+describe("embedding.create", () => {
+  const embed = { resource: "embedding", operation: "create" };
+
+  it("OpenAI: sends the input and the dimensions", async () => {
+    const answer = {
+      object: "list",
+      data: [{ object: "embedding", index: 0, embedding: [0.1, 0.2] }],
+      model: "text-embedding-3-small",
+      usage: { prompt_tokens: 1, total_tokens: 1 },
+    };
+    const sent = await send({ ...embed, input: "Hello", dimensions: 256 }, null, answer);
+    assert.equal(sent.path, "/embeddings");
+    assert.deepEqual(sent.json, {
+      model: "text-embedding-3-small",
+      input: ["Hello"],
+      encoding_format: "float",
+      dimensions: 256,
+    });
+    assert.deepEqual(sent.data, {
+      embedding: [0.1, 0.2],
+      dimensions: 2,
+      model: "text-embedding-3-small",
+      usage: { prompt_tokens: 1, total_tokens: 1 },
+    });
+    await assert.rejects(run(embed), /input/);
+  });
+
+  it("Gemini: sends the dimensions only when they are set", async () => {
+    const answer = { embedding: { values: [1, 2, 3] } };
+    const sent = await send(
+      { provider: "gemini", ...embed, input: "Hello", dimensions: 256 },
+      null,
+      answer,
+    );
+    assert.equal(sent.path, "/models/gemini-embedding-2:embedContent");
+    assert.deepEqual(sent.json, {
+      model: "models/gemini-embedding-2",
+      content: { parts: [{ text: "Hello" }] },
+      outputDimensionality: 256,
+    });
+    assert.deepEqual(sent.data.embedding, [1, 2, 3]);
+    assert.equal(sent.data.dimensions, 3);
+    assert.equal(sent.data.model, "gemini-embedding-2");
+    const plain = await send({ provider: "gemini", ...embed, input: "x" }, null, answer);
+    assert.equal("outputDimensionality" in plain.json, false);
+  });
+
+  it("Mistral and Ollama send the input to their embedding models", async () => {
+    const answer = {
+      id: "e1",
+      object: "list",
+      data: [{ object: "embedding", index: 0, embedding: [1, 2] }],
+      model: "mistral-embed",
+      usage: { prompt_tokens: 1, total_tokens: 1 },
+    };
+    const calls = mockFetch([{ body: answer }, { body: answer }]);
+    const mistral = await run({ provider: "mistral", ...embed, input: "x" }, null, {
+      type: "ai.mistral",
+      data: { apiKey: KEY },
+    });
+    assert.deepEqual((mistral.data as { embedding: number[] }).embedding, [1, 2]);
+    assert.equal(calls[0]?.url, "https://api.mistral.ai/v1/embeddings");
+    assert.equal(bodyOf(calls[0]).model, "mistral-embed");
+    await run({ provider: "ollama", ...embed, input: "x", customModel: "nomic-embed-text" }, null, {
+      type: "ai.ollama",
+      data: {},
+    });
+    assert.equal(calls[1]?.url, "http://localhost:11434/v1/embeddings");
+    assert.equal(bodyOf(calls[1]).model, "nomic-embed-text");
+    await assert.rejects(
+      run({ provider: "groq", ...embed, input: "x" }, null, {
+        type: "ai.groq",
+        data: { apiKey: KEY },
+      }),
+      /Groq has no \\"embedding.create\\" operation/,
+    );
+  });
+
+  it("a compatible service uses its own model", async () => {
+    const answer = { data: [{ index: 0, embedding: [1] }] };
+    const sent = await send(
+      { provider: "compatible", ...embed, input: "x", customModel: "e" },
+      null,
+      answer,
+    );
+    assert.equal(sent.path, "/embeddings");
+    assert.equal(sent.json.model, "e");
   });
 });
 
@@ -1533,54 +1736,18 @@ describe("ai api", () => {
 });
 
 describe("ai node", () => {
-  it("has one node and four credential types", () => {
+  it("has one node and a credential type for each provider", () => {
     assert.deepEqual(
       nodes.map((node) => node.type),
       ["ai.api"],
     );
     assert.deepEqual(
       credentialTypes.map((type) => type.type),
-      ["ai.openai", "ai.anthropic", "ai.gemini", "ai.compatible"],
+      Object.values(CREDENTIAL_OF),
     );
     const node = def("ai.api");
     assert.deepEqual(node.credentialTypes, Object.values(CREDENTIAL_OF));
     assert.deepEqual(node.credentialRules?.["ai.gemini"], { showWhen: { provider: ["gemini"] } });
-  });
-
-  it("generates text with OpenAI", async () => {
-    const calls = mockFetch([
-      { body: { model: "m", choices: [{ message: { content: "Hello" }, finish_reason: "stop" }] } },
-    ]);
-    const out = await run({ prompt: "Hi" });
-    assert.equal(out.port, "out");
-    assert.equal((out.data as { text: string }).text, "Hello");
-    assert.equal(calls[0]?.url, "https://api.openai.com/v1/chat/completions");
-  });
-
-  it("generates text with Anthropic", async () => {
-    const calls = mockFetch([
-      { body: { id: "msg_1", content: [{ type: "text", text: "Hi" }], stop_reason: "end_turn" } },
-    ]);
-    const out = await run({ provider: "anthropic", prompt: "Hello" });
-    assert.equal((out.data as { text: string }).text, "Hi");
-    assert.equal(calls[0]?.url, "https://api.anthropic.com/v1/messages");
-    assert.equal(bodyOf(calls[0]).max_tokens, 1024);
-  });
-
-  it("generates text with Gemini and with a compatible service", async () => {
-    const calls = mockFetch([
-      { body: { candidates: [{ content: { parts: [{ text: "Yo" }] }, finishReason: "STOP" }] } },
-      { body: { choices: [{ message: { content: "Hey" }, finish_reason: "stop" }] } },
-    ]);
-    const google = await run({ provider: "gemini", prompt: "Hi" });
-    assert.equal((google.data as { text: string }).text, "Yo");
-    assert.equal(
-      calls[0]?.url,
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
-    );
-    const other = await run({ provider: "compatible", prompt: "Hi", customModel: "llama3" });
-    assert.equal((other.data as { text: string }).text, "Hey");
-    assert.equal(calls[1]?.url, "https://llm.test/v1/chat/completions");
   });
 
   it("counts tokens and lists models and files", async () => {

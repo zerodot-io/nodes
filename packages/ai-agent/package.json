@@ -1,7 +1,7 @@
 {
   "name": "@zerodot/ai-agent",
-  "version": "0.2.0",
-  "description": "An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint, memory in a data table, and other workflows, MCP servers, and vector stores as tools. Embedding models, text splitters, a data loader, and a Cohere reranker for vector stores.",
+  "version": "0.3.0",
+  "description": "An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, Mistral, Groq, xAI, DeepSeek, OpenRouter, Ollama, Azure OpenAI, Amazon Bedrock, Google Vertex AI, or any OpenAI-compatible endpoint, memory in a data table, and other workflows, MCP servers, and vector stores as tools. Embedding models, text splitters, a data loader, and a Cohere reranker for vector stores.",
   "license": "AGPL-3.0-only",
   "repository": {
     "type": "git",
@@ -31,7 +31,16 @@
     "splitter.svg",
     "document.svg",
     "reranker.svg",
-    "vector-store.svg"
+    "vector-store.svg",
+    "mistral.svg",
+    "groq.svg",
+    "xai.svg",
+    "deepseek.svg",
+    "openrouter.svg",
+    "ollama.svg",
+    "azure.svg",
+    "bedrock.svg",
+    "vertex.svg"
   ],
   "zerodot": {
     "sdk": "^1.5",
@@ -48,7 +57,20 @@
     "access": "public"
   },
   "dependencies": {
+    "@ai-sdk/amazon-bedrock": "5.0.118",
+    "@ai-sdk/anthropic": "4.0.82",
+    "@ai-sdk/azure": "4.0.104",
+    "@ai-sdk/deepseek": "3.0.67",
+    "@ai-sdk/google": "4.0.99",
+    "@ai-sdk/google-vertex": "5.0.115",
+    "@ai-sdk/groq": "4.0.63",
+    "@ai-sdk/mistral": "4.0.66",
+    "@ai-sdk/openai": "4.0.96",
+    "@ai-sdk/openai-compatible": "3.0.71",
+    "@ai-sdk/xai": "5.0.24",
     "@modelcontextprotocol/sdk": "1.32.1",
+    "@openrouter/ai-sdk-provider": "3.1.0",
+    "ai": "7.0.143",
     "js-tiktoken": "1.0.21",
     "unpdf": "1.8.1"
   },
@@ -58,6 +80,7 @@
   },
   "devDependencies": {
     "@types/node": "26.6.5",
+    "@zerodot/ai-core": "workspace:*",
     "@zerodot/node-sdk": "^1.5.0",
     "tsdown": "0.23.2",
     "tsx": "4.23.15",

@@ -1,14 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { aiCredentialTypes } from "@zerodot/ai-core";
 import type { CredentialTypeDefinition, NodeDefinition } from "@zerodot/node-sdk";
 import { chatModelNodes } from "./chat-models";
-import {
-  anthropicCredential,
-  compatibleCredential,
-  geminiCredential,
-  openaiCredential,
-} from "./credential";
 import documentLoader from "./document-loader";
 import { embeddingNodes } from "./embedding-models";
+import { AI_ICON } from "./icon";
 import memoryManager from "./memory-manager";
 import agent from "./node";
 import { cohereCredential, cohereRerankerNode } from "./reranker";
@@ -56,9 +52,6 @@ export const nodes: NodeDefinition[] = [
   vectorStoreTool,
 ];
 export const credentialTypes: CredentialTypeDefinition[] = [
-  openaiCredential,
-  anthropicCredential,
-  geminiCredential,
-  compatibleCredential,
+  ...aiCredentialTypes(AI_ICON),
   cohereCredential,
 ];

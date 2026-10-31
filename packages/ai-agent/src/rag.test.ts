@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import assert from "node:assert/strict";
 import { afterEach, describe, it, mock } from "node:test";
+import { StatusError, withRetry } from "@zerodot/ai-core";
 import { formatOf, htmlText } from "./document-loader";
 import { nodes } from "./index";
 import {
@@ -17,7 +18,6 @@ import {
   textOf,
   type VectorStore,
 } from "./rag";
-import { StatusError, withRetry } from "./retry";
 import { splitCharacters, splitTokens } from "./text-splitters";
 import type { ChatModel, ChatRequest, Tool } from "./types";
 
