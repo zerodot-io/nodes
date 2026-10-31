@@ -1,6 +1,6 @@
 # @zerodot/ai-agent
 
-An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, or any OpenAI-compatible endpoint. Memory in a data table. Other workflows, MCP servers, JavaScript, and vector stores as tools. Embedding models, text splitters, a data loader, and a reranker for vector stores. Needs zerodot with node SDK 1.5.
+An AI agent with ports for a chat model, memory, and tools. Chat models of OpenAI, Anthropic, Google Gemini, Mistral, Groq, xAI, DeepSeek, OpenRouter, Ollama, Azure OpenAI, Amazon Bedrock, Google Vertex AI, or any OpenAI-compatible endpoint. Memory in a data table. Other workflows, MCP servers, JavaScript, and vector stores as tools. Embedding models, text splitters, a data loader, and a reranker for vector stores. Needs zerodot with node SDK 1.5.
 
 ## Install
 
@@ -52,11 +52,11 @@ The output is `{ messages }`: the messages of the session after the operation. *
 
 ### Chat models
 
-`agent.model.openai`, `agent.model.anthropic`, `agent.model.gemini`, and `agent.model.compatible`. Each one has the credential of its provider, the model, Max Tokens, Temperature (not for Anthropic), and a timeout for each call. The model must support tool calls.
+`agent.model.openai`, `agent.model.anthropic`, `agent.model.gemini`, `agent.model.mistral`, `agent.model.groq`, `agent.model.xai`, `agent.model.deepseek`, `agent.model.bedrock`, `agent.model.vertex`, `agent.model.openrouter`, `agent.model.ollama`, `agent.model.azure`, and `agent.model.compatible`. Each one has the credential of its provider, the model, Max Tokens, Temperature (not for Anthropic), and a timeout for each call. OpenRouter, Ollama, Azure (the deployment name), and the compatible service take a typed model ID. The others have a list and **Custom**. The model must support tool calls. The credential types are the same as the ones of `@zerodot/ai`.
 
 ### Embeddings
 
-`agent.embedding.openai`, `agent.embedding.gemini`, and `agent.embedding.compatible` give an embedding model (kind `ai.embedding`) to a vector store. Settings: the model, **Dimensions** (optional, it must be the same as the vector store), and a timeout. Big inputs go to the provider in batches.
+`agent.embedding.openai`, `agent.embedding.gemini`, `agent.embedding.mistral`, `agent.embedding.bedrock`, `agent.embedding.vertex`, `agent.embedding.ollama`, `agent.embedding.azure`, and `agent.embedding.compatible` give an embedding model (kind `ai.embedding`) to a vector store. Settings: the model, **Dimensions** (optional, it must be the same as the vector store), and a timeout. Big inputs go to the provider in batches.
 
 ### Text splitters
 

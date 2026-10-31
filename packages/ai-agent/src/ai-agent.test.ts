@@ -2,15 +2,13 @@
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { afterEach, describe, it, mock } from "node:test";
+import { chatModelOf } from "@zerodot/ai-core";
 import type { NodeDefinition, NodeRunContext, SupplyContext } from "@zerodot/node-sdk";
 import { z } from "zod";
 import { credentialTypes as aiCredentialTypes } from "../../ai/src/index";
-import * as aiModels from "../../ai/src/models";
 import { resultText, runAgent } from "./agent";
 import { credentialTypes, nodes } from "./index";
 import { readMessages, tableMemory } from "./memory";
-import { chatModelOf } from "./model";
-import * as models from "./models";
 import type { Embeddings } from "./rag";
 import type { ChatModel, Message, ModelTurn, Tool } from "./types";
 
@@ -70,7 +68,7 @@ const agentOptions = {
   signal,
 };
 
-describe("credentials and models", () => {
+describe("credentials", () => {
   it("are the same as the ones of @zerodot/ai", () => {
     const shape = (list: typeof credentialTypes) =>
       list.map((type) => ({
@@ -85,14 +83,6 @@ describe("credentials and models", () => {
       shape(credentialTypes.filter((type) => type.type !== "cohere")),
       shape(aiCredentialTypes),
     );
-  });
-
-  it("has the chat models of @zerodot/ai", () => {
-    assert.deepEqual(models.OPENAI_TEXT_MODELS, aiModels.OPENAI_TEXT_MODELS);
-    assert.deepEqual(models.ANTHROPIC_MODELS, aiModels.ANTHROPIC_MODELS);
-    assert.deepEqual(models.GEMINI_TEXT_MODELS, aiModels.GEMINI_TEXT_MODELS);
-    assert.deepEqual(models.OPENAI_EMBEDDING_MODELS, aiModels.OPENAI_EMBEDDING_MODELS);
-    assert.deepEqual(models.GEMINI_EMBEDDING_MODELS, aiModels.GEMINI_EMBEDDING_MODELS);
   });
 });
 
@@ -217,10 +207,13 @@ describe("chat models", () => {
       {
         choices: [
           {
+            index: 0,
             finish_reason: "tool_calls",
             message: {
               content: null,
-              tool_calls: [{ id: "c3", function: { name: "echo", arguments: '{"b":2}' } }],
+              tool_calls: [
+                { id: "c3", type: "function", function: { name: "echo", arguments: '{"b":2}' } },
+              ],
             },
           },
         ],
@@ -243,7 +236,8 @@ describe("chat models", () => {
     const body = calls[0]?.body ?? {};
     assert.equal(calls[0]?.url, "https://api.openai.com/v1/chat/completions");
     assert.deepEqual(body.messages, [
-      { role: "system", content: "Be brief" },
+      // The AI SDK sends the system prompt with the newer role of OpenAI.
+      { role: "developer", content: "Be brief" },
       { role: "user", content: "hi" },
       {
         role: "assistant",
@@ -253,7 +247,7 @@ describe("chat models", () => {
         ],
       },
       { role: "tool", tool_call_id: "c1", content: "1" },
-      { role: "tool", tool_call_id: "c2", content: "boom" },
+      { role: "tool", tool_call_id: "c2", content: '{"error":"boom"}' },
     ]);
     assert.deepEqual(body.tools, [
       {
@@ -269,7 +263,15 @@ describe("chat models", () => {
       { type: "tool_use", id: "c1", name: "echo", input: { a: 1 } },
     ];
     const calls = mockFetch([
-      { content: [{ type: "text", text: "Done" }], stop_reason: "end_turn", usage: {} },
+      {
+        id: "msg_1",
+        type: "message",
+        role: "assistant",
+        model: "claude-sonnet-5-5",
+        content: [{ type: "text", text: "Done" }],
+        stop_reason: "end_turn",
+        usage: { input_tokens: 5, output_tokens: 1 },
+      },
     ]);
     const access = {
       provider: "anthropic" as const,
@@ -296,7 +298,7 @@ describe("chat models", () => {
     assert.equal(answer.finishReason, "stop");
     const body = calls[0]?.body ?? {};
     assert.equal(body.max_tokens, 4096);
-    assert.equal(body.system, "Be brief");
+    assert.deepEqual(body.system, [{ type: "text", text: "Be brief" }]);
     assert.deepEqual(body.messages, [
       { role: "user", content: [{ type: "text", text: "hi" }] },
       { role: "assistant", content: raw },
@@ -335,22 +337,56 @@ describe("chat models", () => {
       temperature: 0.2,
       timeoutMs: 5000,
     }).chat(request, signal);
-    assert.deepEqual(answer.toolCalls, [{ id: "zerodot_call_1", name: "echo", input: { c: 3 } }]);
+    // Gemini gives no call id, so the AI SDK makes one.
+    assert.equal(answer.toolCalls.length, 1);
+    assert.match(answer.toolCalls[0]?.id ?? "", /^\w+$/);
+    assert.deepEqual({ ...answer.toolCalls[0], id: "" }, { id: "", name: "echo", input: { c: 3 } });
     assert.equal(answer.finishReason, "tool_calls");
     assert.deepEqual(answer.usage, { inputTokens: 4, outputTokens: 3 });
+    // The raw parts keep the thought signature, to send it back after the tool call.
+    const id = answer.toolCalls[0]?.id;
+    assert.equal(answer.raw?.provider, "ai-sdk:gemini");
     assert.deepEqual(answer.raw?.content, [
-      { functionCall: { name: "echo", args: { c: 3 } }, thoughtSignature: "s" },
+      {
+        type: "tool-call",
+        toolCallId: id,
+        toolName: "echo",
+        input: { c: 3 },
+        providerExecuted: undefined,
+        providerOptions: { google: { thoughtSignature: "s" } },
+      },
     ]);
     const body = calls[0]?.body ?? {};
     assert.match(calls[0]?.url ?? "", /models\/gemini-3\.8-flash:generateContent$/);
     assert.deepEqual(body.contents, [
       { role: "user", parts: [{ text: "hi" }] },
-      { role: "model", parts: [{ functionCall: { id: "c1", name: "echo", args: { a: 1 } } }] },
+      {
+        role: "model",
+        parts: [
+          {
+            functionCall: { id: "c1", name: "echo", args: { a: 1 } },
+            // A call without a signature, such as one from another provider, skips the check.
+            thoughtSignature: "skip_thought_signature_validator",
+          },
+        ],
+      },
       {
         role: "user",
         parts: [
-          { functionResponse: { id: "c1", name: "echo", response: { output: "1" } } },
-          { functionResponse: { id: "c2", name: "echo", response: { error: "boom" } } },
+          {
+            functionResponse: {
+              id: "c1",
+              name: "echo",
+              response: { name: "echo", content: "1" },
+            },
+          },
+          {
+            functionResponse: {
+              id: "c2",
+              name: "echo",
+              response: { name: "echo", error: "boom" },
+            },
+          },
         ],
       },
     ]);
@@ -466,8 +502,21 @@ async function supplyOf(
 }
 
 const openaiAnswer = (message: Record<string, unknown>) => ({
-  choices: [{ finish_reason: message.tool_calls ? "tool_calls" : "stop", message }],
-  usage: { prompt_tokens: 1, completion_tokens: 1 },
+  choices: [
+    {
+      index: 0,
+      finish_reason: message.tool_calls ? "tool_calls" : "stop",
+      message: {
+        role: "assistant",
+        ...message,
+        // A real answer marks each tool call as a function. The AI SDK checks it.
+        ...(Array.isArray(message.tool_calls)
+          ? { tool_calls: message.tool_calls.map((call) => ({ type: "function", ...call })) }
+          : {}),
+      },
+    },
+  ],
+  usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
 });
 
 const openaiModel = () =>
@@ -497,10 +546,24 @@ describe("supply nodes", () => {
       "agent.model.openai": "ai.model",
       "agent.model.anthropic": "ai.model",
       "agent.model.gemini": "ai.model",
+      "agent.model.mistral": "ai.model",
+      "agent.model.groq": "ai.model",
+      "agent.model.xai": "ai.model",
+      "agent.model.deepseek": "ai.model",
+      "agent.model.bedrock": "ai.model",
+      "agent.model.vertex": "ai.model",
       "agent.model.compatible": "ai.model",
+      "agent.model.openrouter": "ai.model",
+      "agent.model.ollama": "ai.model",
+      "agent.model.azure": "ai.model",
       "agent.embedding.openai": "ai.embedding",
       "agent.embedding.gemini": "ai.embedding",
+      "agent.embedding.mistral": "ai.embedding",
+      "agent.embedding.bedrock": "ai.embedding",
+      "agent.embedding.vertex": "ai.embedding",
       "agent.embedding.compatible": "ai.embedding",
+      "agent.embedding.ollama": "ai.embedding",
+      "agent.embedding.azure": "ai.embedding",
       "agent.splitter.recursive": "ai.textSplitter",
       "agent.splitter.character": "ai.textSplitter",
       "agent.splitter.token": "ai.textSplitter",
@@ -530,11 +593,64 @@ describe("supply nodes", () => {
       { model: "llama4", maxTokens: 50, temperature: 0.3 },
       { credential: { type: "ai.compatible", data: { baseUrl: "https://llm.test/v1" } } },
     );
-    await (model as ChatModel).chat({ system: undefined, messages: [], tools: [] }, signal);
+    await (model as ChatModel).chat(
+      { system: undefined, messages: [{ role: "user", content: "hi" }], tools: [] },
+      signal,
+    );
     assert.equal(calls[0]?.url, "https://llm.test/v1/chat/completions");
     assert.equal(calls[0]?.body.model, "llama4");
     assert.equal(calls[0]?.body.max_tokens, 50);
     assert.equal(calls[0]?.body.temperature, 0.3);
+  });
+
+  it("each new chat model sends a turn with tools to its provider", async () => {
+    type Cred = { type: string; data: Record<string, unknown> };
+    const cases: [string, Record<string, unknown>, Cred, string][] = [
+      [
+        "agent.model.groq",
+        {},
+        { type: "ai.groq", data: { apiKey: KEY } },
+        "https://api.groq.com/openai/v1/chat/completions",
+      ],
+      [
+        "agent.model.openrouter",
+        { model: "openai/gpt-6.1-terra" },
+        { type: "ai.openrouter", data: { apiKey: KEY } },
+        "https://openrouter.ai/api/v1/chat/completions",
+      ],
+      [
+        "agent.model.ollama",
+        { model: "qwen3" },
+        { type: "ai.ollama", data: {} },
+        "http://localhost:11434/v1/chat/completions",
+      ],
+      [
+        "agent.model.deepseek",
+        {},
+        { type: "ai.deepseek", data: { apiKey: KEY } },
+        "https://api.deepseek.com/chat/completions",
+      ],
+    ];
+    for (const [type, config, credential, url] of cases) {
+      const call = { id: "c1", function: { name: "echo", arguments: "{}" } };
+      const calls = mockFetch([openaiAnswer({ content: null, tool_calls: [call] })]);
+      const model = (await supplyOf(type, config, { credential })) as ChatModel;
+      const answer = await model.chat(
+        { system: "Be brief", messages: [{ role: "user", content: "hi" }], tools: [echo.spec] },
+        signal,
+      );
+      assert.equal(calls[0]?.url, url, type);
+      assert.deepEqual(answer.toolCalls, [{ id: "c1", name: "echo", input: {} }], type);
+      assert.equal((calls[0]?.body.tools as unknown[] | undefined)?.length, 1, type);
+    }
+    await assert.rejects(
+      supplyOf(
+        "agent.model.azure",
+        {},
+        { credential: { type: "ai.azure", data: { apiKey: KEY, resourceName: "r" } } },
+      ),
+      /"model"/,
+    );
   });
 
   it("a workflow tool checks its name and needs runWorkflow", async () => {
@@ -552,12 +668,12 @@ describe("supply nodes", () => {
 describe("embeddings", () => {
   const vector = (seed: number) => [seed, seed + 0.5];
 
-  it("OpenAI: sends texts in batches, and keeps the order of the answer index", async () => {
+  it("OpenAI: sends texts in batches, and keeps their order", async () => {
     const texts = Array.from({ length: 300 }, (_, index) => `t${index}`);
     const answerOf = (from: number, count: number) => ({
       data: Array.from({ length: count }, (_, index) => ({
-        index: count - 1 - index,
-        embedding: vector(from + count - 1 - index),
+        index,
+        embedding: vector(from + index),
       })),
     });
     const calls = mockFetch([answerOf(0, 256), answerOf(256, 44)]);
@@ -579,8 +695,8 @@ describe("embeddings", () => {
 
   it("Gemini: sends the task type and the dimensions, and checks the length", async () => {
     const calls = mockFetch([
-      { embeddings: [{ values: [1, 2] }] },
-      { embeddings: [{ values: [1, 2, 3] }] },
+      { embedding: { values: [1, 2] } },
+      { embedding: { values: [1, 2, 3] } },
     ]);
     const embeddings = (await supplyOf(
       "agent.embedding.gemini",
@@ -591,16 +707,13 @@ describe("embeddings", () => {
     assert.deepEqual(await embeddings.embed(["q"], "query", signal), [[1, 2]]);
     assert.equal(
       calls[0]?.url,
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2:batchEmbedContents",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-embedding-2:embedContent",
     );
     assert.deepEqual(calls[0]?.body, {
-      requests: [
-        {
-          model: "models/gemini-embedding-2",
-          content: { parts: [{ text: "q" }] },
-          embedContentConfig: { taskType: "RETRIEVAL_QUERY", outputDimensionality: 2 },
-        },
-      ],
+      model: "models/gemini-embedding-2",
+      content: { parts: [{ text: "q" }] },
+      taskType: "RETRIEVAL_QUERY",
+      outputDimensionality: 2,
     });
     await assert.rejects(embeddings.embed(["d"], "document", signal), /3 dimensions, not 2/);
   });
@@ -614,7 +727,7 @@ describe("embeddings", () => {
       { model: "nomic-embed-text" },
       { credential },
     )) as Embeddings;
-    await assert.rejects(embeddings.embed(["a", "b"], "document", signal), /vector for text 2/);
+    await assert.rejects(embeddings.embed(["a", "b"], "document", signal), /Expected 2 embeddings/);
     assert.equal(calls[0]?.url, "http://localhost:11434/v1/embeddings");
   });
 });

@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { type Call, CUSTOM_MODEL, PROVIDER_LABEL } from "@zerodot/ai-core";
 import { type BinaryData, isRecord, readBinary, toBinary } from "@zerodot/node-sdk";
-import { type Call, PROVIDER_LABEL } from "./api";
 import type { AIConfig } from "./config";
-import { CUSTOM_MODEL } from "./models";
 
 type JsonObject = Record<string, unknown>;
 
@@ -13,7 +12,7 @@ export type Request = {
 };
 
 /** Lines of a field. One value on each line, because a signed URL can have commas. */
-const lines = (text: string | undefined): string[] =>
+export const lines = (text: string | undefined): string[] =>
   (text ?? "")
     .split(/\r?\n/)
     .map((item) => item.trim())
@@ -55,7 +54,28 @@ function chosenModel(c: AIConfig): string | undefined {
         embedding: c.geminiEmbeddingModel,
         image: c.geminiImageModel,
       }[c.resource as "text" | "embedding" | "image"];
+    case "mistral":
+      return { text: c.mistralTextModel, embedding: c.mistralEmbeddingModel }[
+        c.resource as "text" | "embedding"
+      ];
+    case "groq":
+      return c.groqTextModel;
+    case "xai":
+      return c.xaiTextModel;
+    case "deepseek":
+      return c.deepseekTextModel;
+    case "bedrock":
+      return { text: c.bedrockTextModel, embedding: c.bedrockEmbeddingModel }[
+        c.resource as "text" | "embedding"
+      ];
+    case "vertex":
+      return { text: c.vertexTextModel, embedding: c.vertexEmbeddingModel }[
+        c.resource as "text" | "embedding"
+      ];
     case "compatible":
+    case "openrouter":
+    case "ollama":
+    case "azure":
       return CUSTOM_MODEL;
   }
 }
@@ -93,7 +113,7 @@ export function base64Of(value: string, name: string): string {
 type Media = { url: string } | { mimeType: string; data: string };
 
 /** The URLs, the data URLs, and the binary field of the input as media items. */
-function imagesOf(c: AIConfig, input: unknown): Media[] {
+export function imagesOf(c: AIConfig, input: unknown): Media[] {
   const media: Media[] = lines(c.imageUrls).map((url): Media => {
     const found = /^data:([^;,]+);base64,(.*)$/s.exec(url);
     if (!found) return { url };
@@ -123,7 +143,7 @@ function objectOf(text: string | undefined, name: string, op: string): JsonObjec
 }
 
 /** A JSON array of objects. */
-function arrayOf(text: string | undefined, name: string): JsonObject[] | undefined {
+export function arrayOf(text: string | undefined, name: string): JsonObject[] | undefined {
   if (!text?.trim()) return undefined;
   let value: unknown;
   try {
@@ -140,7 +160,7 @@ function arrayOf(text: string | undefined, name: string): JsonObject[] | undefin
 const TOOL_NAME = /^[a-zA-Z0-9_-]{1,128}$/;
 
 /** The tools. Each tool has a name and a JSON Schema object for the input. */
-function toolsOf(text: string | undefined): JsonObject[] | undefined {
+export function toolsOf(text: string | undefined): JsonObject[] | undefined {
   const tools = arrayOf(text, "tools");
   if (!tools) return undefined;
   if (tools.length === 0) throw new Error('"tools" has no tool');
@@ -160,100 +180,26 @@ function toolsOf(text: string | undefined): JsonObject[] | undefined {
 }
 
 /** The tool name of "One Tool". */
-const toolNameOf = (c: AIConfig, op: string): string =>
+export const toolNameOf = (c: AIConfig, op: string): string =>
   need(c.toolChoiceName, "toolChoiceName", op).trim();
 
 /** A tool choice other than Auto needs tools. The node never drops it without a message. */
-function checkToolChoice(c: AIConfig, tools: JsonObject[] | undefined, op: string) {
+export function checkToolChoice(c: AIConfig, tools: JsonObject[] | undefined, op: string) {
   if (!tools && c.toolChoice !== "auto") {
     throw new Error(`${op}: "toolChoice" is "${c.toolChoice}" but there are no "tools"`);
   }
 }
 
-/** The tool choice of Anthropic. */
-function anthropicToolChoice(c: AIConfig, tools: JsonObject[] | undefined, op: string) {
-  if (!tools) return undefined;
-  const parallel = c.disableParallelToolUse ? { disable_parallel_tool_use: true } : {};
-  if (c.toolChoice === "tool") return { type: "tool", name: toolNameOf(c, op), ...parallel };
-  if (c.toolChoice === "none") return { type: "none" };
-  if (c.toolChoice === "auto" && Object.keys(parallel).length === 0) return undefined;
-  return { type: c.toolChoice, ...parallel };
-}
-
 /** A JSON Schema as an object. */
-const schemaOf = (c: AIConfig, op: string): JsonObject => objectOf(c.jsonSchema, "jsonSchema", op);
+export const schemaOf = (c: AIConfig, op: string): JsonObject =>
+  objectOf(c.jsonSchema, "jsonSchema", op);
 
 /** The system text, or undefined when empty. */
-const systemOf = (c: AIConfig): string | undefined => c.systemPrompt?.trim() || undefined;
+export const systemOf = (c: AIConfig): string | undefined => c.systemPrompt?.trim() || undefined;
 
 /** The prompt, or undefined when empty. */
-const promptOf = (c: AIConfig): string | undefined => (c.prompt?.trim() ? c.prompt : undefined);
-
-// OpenAI and compatible services
-
-function openaiText(c: AIConfig, input: unknown, op: string): Call {
-  const images = imagesOf(c, input);
-  const prompt = promptOf(c);
-  if (!prompt && images.length === 0) throw new Error(`${op} needs "prompt" or an image`);
-  const system = systemOf(c);
-  const tools = toolsOf(c.tools);
-  checkToolChoice(c, tools, op);
-  const toolChoice =
-    c.toolChoice === "any"
-      ? "required"
-      : c.toolChoice === "tool"
-        ? { type: "function", function: { name: toolNameOf(c, op) } }
-        : c.toolChoice === "none"
-          ? "none"
-          : undefined;
-  let responseFormat: JsonObject | undefined;
-  if (c.responseFormat === "json_object") responseFormat = { type: "json_object" };
-  if (c.responseFormat === "json_schema") {
-    responseFormat = {
-      type: "json_schema",
-      json_schema: { name: "output", strict: true, schema: schemaOf(c, op) },
-    };
-  }
-  const textPart = prompt ? [{ type: "text", text: prompt }] : [];
-  return {
-    method: "POST",
-    path: "/chat/completions",
-    json: {
-      model: modelOf(c),
-      messages: [
-        ...(system ? [{ role: "system", content: system }] : []),
-        {
-          role: "user",
-          // A message with images has a list of parts. A message without images is text.
-          content:
-            images.length === 0
-              ? prompt
-              : [
-                  ...textPart,
-                  ...images.map((item) => ({
-                    type: "image_url",
-                    image_url: { url: "url" in item ? item.url : dataUrlOf(item) },
-                  })),
-                ],
-        },
-      ],
-      temperature: c.temperature,
-      // Most compatible services know only the older name.
-      [c.provider === "compatible" ? "max_tokens" : "max_completion_tokens"]: c.maxTokens,
-      response_format: responseFormat,
-      tools: tools?.map((tool) => ({
-        type: "function",
-        function: {
-          name: tool.name,
-          description: tool.description,
-          parameters: tool.input_schema,
-        },
-      })),
-      tool_choice: tools ? toolChoice : undefined,
-      parallel_tool_calls: tools && c.disableParallelToolUse ? false : undefined,
-    },
-  };
-}
+export const promptOf = (c: AIConfig): string | undefined =>
+  c.prompt?.trim() ? c.prompt : undefined;
 
 // Anthropic
 
@@ -298,46 +244,6 @@ function anthropicContent(c: AIConfig, input: unknown, op: string): string | Jso
   return blocks;
 }
 
-/** The messages. After a tool call: the user turn, the answer of Claude, and the tool results. */
-function anthropicMessages(c: AIConfig, input: unknown, op: string): JsonObject[] {
-  const messages: JsonObject[] = [{ role: "user", content: anthropicContent(c, input, op) }];
-  const results = arrayOf(c.toolResults, "toolResults");
-  if (!results) return messages;
-  const assistant = arrayOf(c.assistantContent, "assistantContent");
-  if (!assistant) throw new Error(`${op} needs "assistantContent" with "toolResults"`);
-  const blocks = results.map((result, index) => {
-    const id = result.tool_use_id;
-    if (typeof id !== "string" || id === "") {
-      throw new Error(`Tool result ${index + 1}: "tool_use_id" is missing`);
-    }
-    const content = result.content ?? "";
-    return {
-      type: "tool_result",
-      tool_use_id: id,
-      content:
-        typeof content === "string" || Array.isArray(content) ? content : JSON.stringify(content),
-      ...(result.is_error === true ? { is_error: true } : {}),
-    };
-  });
-  if (blocks.length === 0) throw new Error('"toolResults" has no item');
-  messages.push({ role: "assistant", content: assistant }, { role: "user", content: blocks });
-  return messages;
-}
-
-/** The output settings: the effort, and the format when there is a schema. */
-function anthropicOutputConfig(c: AIConfig, op: string): JsonObject | undefined {
-  if (c.responseFormat === "json_object") {
-    throw new Error(`${op}: Anthropic has no JSON mode. Use JSON Schema`);
-  }
-  const config = {
-    ...(c.effort === "default" ? {} : { effort: c.effort }),
-    ...(c.responseFormat === "json_schema"
-      ? { format: { type: "json_schema", schema: schemaOf(c, op) } }
-      : {}),
-  };
-  return Object.keys(config).length > 0 ? config : undefined;
-}
-
 // Gemini
 
 /** The parts of the user turn: the media, then the text. */
@@ -371,26 +277,6 @@ const geminiTools = (tools: JsonObject[] | undefined) =>
         },
       ]
     : undefined;
-
-function geminiToolConfig(c: AIConfig, tools: JsonObject[] | undefined, op: string) {
-  if (!tools || c.toolChoice === "auto") return undefined;
-  if (c.toolChoice === "none") return { functionCallingConfig: { mode: "NONE" } };
-  if (c.toolChoice === "tool") {
-    return {
-      functionCallingConfig: { mode: "ANY", allowedFunctionNames: [toolNameOf(c, op)] },
-    };
-  }
-  return { functionCallingConfig: { mode: "ANY" } };
-}
-
-function geminiGenerationConfig(c: AIConfig, op: string): JsonObject | undefined {
-  const config: JsonObject = {};
-  if (c.maxTokens !== undefined) config.maxOutputTokens = c.maxTokens;
-  if (c.temperature !== undefined) config.temperature = c.temperature;
-  if (c.responseFormat !== "text") config.responseMimeType = "application/json";
-  if (c.responseFormat === "json_schema") config.responseJsonSchema = schemaOf(c, op);
-  return Object.keys(config).length > 0 ? config : undefined;
-}
 
 // Files
 
@@ -467,43 +353,6 @@ export function buildRequest(c: AIConfig, input: unknown): Request {
   const { provider } = c;
 
   switch (op) {
-    case "text.generate": {
-      if (provider === "openai" || provider === "compatible") {
-        return { call: openaiText(c, input, op) };
-      }
-      const tools = toolsOf(c.tools);
-      checkToolChoice(c, tools, op);
-      if (provider === "anthropic") {
-        return {
-          call: {
-            method: "POST",
-            path: "/v1/messages",
-            json: {
-              model: modelOf(c),
-              max_tokens: c.maxTokens ?? 1024,
-              system: systemOf(c),
-              messages: anthropicMessages(c, input, op),
-              tools,
-              tool_choice: anthropicToolChoice(c, tools, op),
-              output_config: anthropicOutputConfig(c, op),
-            },
-          },
-        };
-      }
-      return {
-        call: {
-          method: "POST",
-          path: `/models/${geminiModelPath(c)}:generateContent`,
-          json: {
-            systemInstruction: geminiSystem(c),
-            contents: [{ role: "user", parts: geminiParts(c, input, op) }],
-            tools: geminiTools(tools),
-            toolConfig: geminiToolConfig(c, tools, op),
-            generationConfig: geminiGenerationConfig(c, op),
-          },
-        },
-      };
-    }
     case "text.countTokens": {
       const tools = toolsOf(c.tools);
       if (provider === "anthropic") {
@@ -533,29 +382,6 @@ export function buildRequest(c: AIConfig, input: unknown): Request {
               tools: geminiTools(tools),
             },
           },
-        },
-      };
-    }
-    case "embedding.create": {
-      const text = need(c.input, "input", op);
-      if (provider === "gemini") {
-        return {
-          call: {
-            method: "POST",
-            path: `/models/${geminiModelPath(c)}:embedContent`,
-            json: {
-              content: { parts: [{ text }] },
-              embedContentConfig:
-                c.dimensions === undefined ? undefined : { outputDimensionality: c.dimensions },
-            },
-          },
-        };
-      }
-      return {
-        call: {
-          method: "POST",
-          path: "/embeddings",
-          json: { model: modelOf(c), input: text, dimensions: c.dimensions },
         },
       };
     }
@@ -791,189 +617,13 @@ const rec = (value: unknown): JsonObject => (isRecord(value) && !Array.isArray(v
 const arr = (value: unknown): unknown[] => (Array.isArray(value) ? value : []);
 
 /** A JSON value from text, or undefined when it is not JSON. */
-const parseJson = (text: string): unknown => {
+export const parseJson = (text: string): unknown => {
   try {
     return JSON.parse(text);
   } catch {
     return undefined;
   }
 };
-
-export type FinishReason = "stop" | "length" | "tool_calls" | "content_filter" | "other";
-export type ToolCall = { id: string; name: string; input: unknown };
-export type Usage = {
-  inputTokens: number | undefined;
-  outputTokens: number | undefined;
-  totalTokens: number | undefined;
-};
-
-/** The same answer shape for each provider. */
-type Normalized = {
-  text: string;
-  toolCalls: ToolCall[];
-  finishReason: FinishReason;
-  /** The finish reason as the provider wrote it. */
-  stopReason: string | undefined;
-  usage: Usage;
-  model: string | undefined;
-  id: string | undefined;
-  refusal?: string;
-  /** Anthropic only: the `content` of the answer, to continue after a tool call. */
-  assistantContent?: unknown[];
-};
-
-const sumTokens = (input: number | undefined, output: number | undefined) =>
-  input === undefined && output === undefined ? undefined : (input ?? 0) + (output ?? 0);
-
-function normalizeOpenAI(answer: JsonObject): Normalized {
-  const choice = rec(arr(answer.choices)[0]);
-  const message = rec(choice.message);
-  const stopReason = str(choice.finish_reason);
-  const usage = rec(answer.usage);
-  const reasons: Record<string, FinishReason> = {
-    stop: "stop",
-    length: "length",
-    tool_calls: "tool_calls",
-    function_call: "tool_calls",
-    content_filter: "content_filter",
-  };
-  return {
-    text: str(message.content) ?? "",
-    toolCalls: arr(message.tool_calls).map((entry) => {
-      const call = rec(entry);
-      const fn = rec(call.function);
-      const args = str(fn.arguments) ?? "";
-      return {
-        id: str(call.id) ?? "",
-        name: str(fn.name) ?? "",
-        input: args === "" ? {} : (parseJson(args) ?? args),
-      };
-    }),
-    finishReason: (stopReason && reasons[stopReason]) || "other",
-    stopReason,
-    usage: {
-      inputTokens: num(usage.prompt_tokens),
-      outputTokens: num(usage.completion_tokens),
-      totalTokens: num(usage.total_tokens),
-    },
-    model: str(answer.model),
-    id: str(answer.id),
-    refusal: str(message.refusal),
-  };
-}
-
-function normalizeAnthropic(answer: JsonObject): Normalized {
-  const content = arr(answer.content);
-  const blocks = content.map(rec);
-  const stopReason = str(answer.stop_reason);
-  const usage = rec(answer.usage);
-  const reasons: Record<string, FinishReason> = {
-    end_turn: "stop",
-    stop_sequence: "stop",
-    max_tokens: "length",
-    tool_use: "tool_calls",
-    refusal: "content_filter",
-  };
-  const inputTokens = num(usage.input_tokens);
-  const outputTokens = num(usage.output_tokens);
-  return {
-    text: blocks.map((block) => (block.type === "text" ? (str(block.text) ?? "") : "")).join(""),
-    toolCalls: blocks
-      .filter((block) => block.type === "tool_use")
-      .map((block) => ({
-        id: str(block.id) ?? "",
-        name: str(block.name) ?? "",
-        input: block.input ?? {},
-      })),
-    finishReason: (stopReason && reasons[stopReason]) || "other",
-    stopReason,
-    usage: { inputTokens, outputTokens, totalTokens: sumTokens(inputTokens, outputTokens) },
-    model: str(answer.model),
-    id: str(answer.id),
-    assistantContent: content,
-  };
-}
-
-const GEMINI_FILTERED = new Set([
-  "SAFETY",
-  "RECITATION",
-  "BLOCKLIST",
-  "PROHIBITED_CONTENT",
-  "SPII",
-  "IMAGE_SAFETY",
-  "IMAGE_PROHIBITED_CONTENT",
-  "IMAGE_RECITATION",
-]);
-
-function normalizeGemini(answer: JsonObject): Normalized {
-  const candidate = rec(arr(answer.candidates)[0]);
-  const parts = arr(rec(candidate.content).parts).map(rec);
-  const blocked = str(rec(answer.promptFeedback).blockReason);
-  const stopReason = str(candidate.finishReason) ?? blocked;
-  const toolCalls = parts
-    .filter((part) => isRecord(part.functionCall))
-    .map((part, index) => {
-      const call = rec(part.functionCall);
-      return {
-        id: str(call.id) ?? `call_${index + 1}`,
-        name: str(call.name) ?? "",
-        input: call.args ?? {},
-      };
-    });
-  const usage = rec(answer.usageMetadata);
-  const inputTokens = num(usage.promptTokenCount);
-  // Thinking tokens are output tokens that the answer does not show.
-  const outputTokens = sumTokens(num(usage.candidatesTokenCount), num(usage.thoughtsTokenCount));
-  let finishReason: FinishReason = "other";
-  if (toolCalls.length > 0) finishReason = "tool_calls";
-  else if (stopReason === "STOP") finishReason = "stop";
-  else if (stopReason === "MAX_TOKENS") finishReason = "length";
-  else if (stopReason && (GEMINI_FILTERED.has(stopReason) || blocked))
-    finishReason = "content_filter";
-  return {
-    text: parts
-      .filter((part) => part.thought !== true)
-      .map((part) => str(part.text) ?? "")
-      .join(""),
-    toolCalls,
-    finishReason,
-    stopReason,
-    usage: { inputTokens, outputTokens, totalTokens: num(usage.totalTokenCount) },
-    model: str(answer.modelVersion),
-    id: str(answer.responseId),
-  };
-}
-
-/** The output of text.generate. The tool calls come before the JSON, because a tool call has no JSON text. */
-function textResult(c: AIConfig, answer: JsonObject): unknown {
-  const normalized =
-    c.provider === "anthropic"
-      ? normalizeAnthropic(answer)
-      : c.provider === "gemini"
-        ? normalizeGemini(answer)
-        : normalizeOpenAI(answer);
-  let json: unknown;
-  if (c.responseFormat !== "text" && normalized.toolCalls.length === 0 && normalized.text.trim()) {
-    json = parseJson(normalized.text);
-    // A cut answer is not complete JSON. Every other answer must be.
-    if (json === undefined && normalized.finishReason !== "length") {
-      throw new Error(`${PROVIDER_LABEL[c.provider]} text.generate: the answer is not valid JSON`);
-    }
-  }
-  return {
-    text: normalized.text,
-    ...(json === undefined ? {} : { json }),
-    toolCalls: normalized.toolCalls,
-    finishReason: normalized.finishReason,
-    stopReason: normalized.stopReason,
-    usage: normalized.usage,
-    model: normalized.model,
-    id: normalized.id,
-    ...(normalized.refusal ? { refusal: normalized.refusal } : {}),
-    ...(normalized.assistantContent ? { assistantContent: normalized.assistantContent } : {}),
-    ...(c.includeRaw ? { raw: answer } : {}),
-  };
-}
 
 const EXTENSION: Record<string, string> = {
   "image/jpeg": "jpg",
@@ -1009,32 +659,12 @@ export function resultOf(c: AIConfig, answer: JsonObject): unknown {
   const op = `${c.resource}.${c.operation}`;
 
   switch (op) {
-    case "text.generate":
-      return textResult(c, answer);
     case "text.countTokens":
       return {
         inputTokens:
           c.provider === "anthropic" ? num(answer.input_tokens) : num(answer.totalTokens),
         ...(c.includeRaw ? { raw: answer } : {}),
       };
-    case "embedding.create": {
-      if (c.provider === "gemini") {
-        const values = rec(answer.embedding).values;
-        return {
-          embedding: values,
-          dimensions: arr(values).length,
-          model: modelOf(c).replace(/^models\//, ""),
-          usage: answer.usageMetadata,
-        };
-      }
-      const first = rec(arr(answer.data)[0]);
-      return {
-        embedding: first.embedding,
-        dimensions: arr(first.embedding).length,
-        model: answer.model,
-        usage: answer.usage,
-      };
-    }
     case "image.edit":
     case "image.generate": {
       if (c.provider === "gemini") return geminiImages(c, answer);

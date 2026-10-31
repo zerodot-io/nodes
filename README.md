@@ -14,7 +14,7 @@ ZERODOT_NODE_PACKAGES=@zerodot/redis
 
 ## Nodes
 
-- [`ai`](packages/ai): text, images, audio, and embeddings from OpenAI, Anthropic, Gemini, and compatible APIs
+- [`ai`](packages/ai): text, images, audio, and embeddings from OpenAI, Anthropic, Gemini, Mistral, Groq, xAI, DeepSeek, OpenRouter, Ollama, Azure, Bedrock, Vertex, and compatible APIs
 - [`ai-agent`](packages/ai-agent): an AI agent with ports for a chat model, memory, and tools, and the embeddings, text splitters, loader, reranker, and tool for vector stores
 - [`discord`](packages/discord): bot messages, webhooks, and slash commands
 - [`edit-image`](packages/edit-image): resize, crop, rotate, and convert images

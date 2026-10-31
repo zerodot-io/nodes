@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { CUSTOM_MODEL, idsOf, type ModelEntry, StatusError, withRetry } from "@zerodot/ai-core";
 import {
   type CredentialTypeDefinition,
   isRecord,
@@ -6,9 +7,7 @@ import {
 } from "@zerodot/node-sdk";
 import { z } from "zod";
 import { RERANKER_ICON } from "./icon";
-import { CUSTOM_MODEL, idsOf, type ModelEntry } from "./models";
 import { RAG_KIND, type Ranked, type Reranker } from "./rag";
-import { StatusError, withRetry } from "./retry";
 import { defineSupplyNode } from "./supply";
 
 export const COHERE_CREDENTIAL = "cohere";

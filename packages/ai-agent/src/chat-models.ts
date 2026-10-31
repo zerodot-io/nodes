@@ -1,17 +1,39 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import type { NodeDefinition } from "@zerodot/node-sdk";
-import { z } from "zod";
-import { accessOf, CREDENTIAL_OF, type Provider } from "./api";
-import { AI_ICON, ANTHROPIC_ICON, GEMINI_ICON, OPENAI_ICON } from "./icon";
-import { chatModelOf } from "./model";
 import {
   ANTHROPIC_MODELS,
+  accessOf,
+  BEDROCK_TEXT_MODELS,
+  CREDENTIAL_OF,
   CUSTOM_MODEL,
+  chatModelOf,
+  DEEPSEEK_TEXT_MODELS,
   GEMINI_TEXT_MODELS,
+  GROQ_TEXT_MODELS,
   idsOf,
+  MISTRAL_TEXT_MODELS,
   type ModelEntry,
   OPENAI_TEXT_MODELS,
-} from "./models";
+  type Provider,
+  VERTEX_TEXT_MODELS,
+  XAI_TEXT_MODELS,
+} from "@zerodot/ai-core";
+import type { NodeDefinition } from "@zerodot/node-sdk";
+import { z } from "zod";
+import {
+  AI_ICON,
+  ANTHROPIC_ICON,
+  AZURE_ICON,
+  BEDROCK_ICON,
+  DEEPSEEK_ICON,
+  GEMINI_ICON,
+  GROQ_ICON,
+  MISTRAL_ICON,
+  OLLAMA_ICON,
+  OPENAI_ICON,
+  OPENROUTER_ICON,
+  VERTEX_ICON,
+  XAI_ICON,
+} from "./icon";
 import { defineSupplyNode } from "./supply";
 import { KIND } from "./types";
 
@@ -90,6 +112,54 @@ const SPECS: Spec[] = [
     first: "gemini-3.8-flash",
     iconUrl: GEMINI_ICON,
   },
+  {
+    provider: "mistral",
+    label: "Mistral Chat Model",
+    description: "A Mistral AI model for the AI Agent",
+    models: MISTRAL_TEXT_MODELS,
+    first: "mistral-large-latest",
+    iconUrl: MISTRAL_ICON,
+  },
+  {
+    provider: "groq",
+    label: "Groq Chat Model",
+    description: "An open model on Groq for the AI Agent",
+    models: GROQ_TEXT_MODELS,
+    first: "openai/gpt-oss-120b",
+    iconUrl: GROQ_ICON,
+  },
+  {
+    provider: "xai",
+    label: "xAI Grok Chat Model",
+    description: "A Grok model for the AI Agent",
+    models: XAI_TEXT_MODELS,
+    first: "grok-4.7",
+    iconUrl: XAI_ICON,
+  },
+  {
+    provider: "deepseek",
+    label: "DeepSeek Chat Model",
+    description: "A DeepSeek model for the AI Agent",
+    models: DEEPSEEK_TEXT_MODELS,
+    first: "deepseek-v4-flash",
+    iconUrl: DEEPSEEK_ICON,
+  },
+  {
+    provider: "bedrock",
+    label: "AWS Bedrock Chat Model",
+    description: "A model on Amazon Bedrock, such as Claude or Nova, for the AI Agent",
+    models: BEDROCK_TEXT_MODELS,
+    first: "us.anthropic.claude-sonnet-5-5",
+    iconUrl: BEDROCK_ICON,
+  },
+  {
+    provider: "vertex",
+    label: "Google Vertex Chat Model",
+    description: "A Gemini model on Google Cloud Vertex AI for the AI Agent",
+    models: VERTEX_TEXT_MODELS,
+    first: "gemini-3.8-flash",
+    iconUrl: VERTEX_ICON,
+  },
 ];
 
 /** The chosen model id: the select, or Custom Model ID. */
@@ -137,35 +207,80 @@ const listed = SPECS.map((spec) =>
   }),
 );
 
-const compatible = defineSupplyNode({
-  type: "agent.model.compatible",
-  label: "OpenAI-compatible Chat Model",
-  description: "A model of a service with an OpenAI-style API, such as Ollama or a gateway",
-  category: "integration",
-  icon: "SparklesIcon",
-  iconUrl: AI_ICON,
-  supplies: KIND.model,
-  config: z.object({
-    model: z.string().default("").meta({
-      title: "Model ID",
-      description: "The model id of the service. The model must support tool calls",
-    }),
-    ...settings,
-  }),
-  defaultConfig: { model: "", timeoutMs: 120_000 },
-  credentialTypes: [CREDENTIAL_OF.compatible],
-  subtitle: (config) =>
-    typeof config.model === "string" && config.model !== "" ? config.model : undefined,
-  supply: ({ config, credential }) => {
-    const model = config.model.trim();
-    if (!model) throw new Error('The node needs "model"');
-    return chatModelOf(accessOf("compatible", credential), {
-      model,
-      maxTokens: config.maxTokens,
-      temperature: config.temperature,
-      timeoutMs: config.timeoutMs,
-    });
-  },
-});
+type TypedSpec = {
+  provider: "compatible" | "openrouter" | "ollama" | "azure";
+  label: string;
+  description: string;
+  modelTitle: string;
+  modelHint: string;
+  iconUrl: string;
+};
 
-export const chatModelNodes: NodeDefinition[] = [...listed, compatible];
+/** These providers have no model list. The user types the model id. */
+const TYPED: TypedSpec[] = [
+  {
+    provider: "compatible",
+    label: "OpenAI-compatible Chat Model",
+    description: "A model of a service with an OpenAI-style API, such as a gateway",
+    modelTitle: "Model ID",
+    modelHint: "The model id of the service. The model must support tool calls",
+    iconUrl: AI_ICON,
+  },
+  {
+    provider: "openrouter",
+    label: "OpenRouter Chat Model",
+    description: "A model of any provider on OpenRouter, for the AI Agent",
+    modelTitle: "Model ID",
+    modelHint:
+      "An OpenRouter model id, such as anthropic/claude-sonnet-5.5. It must support tool calls",
+    iconUrl: OPENROUTER_ICON,
+  },
+  {
+    provider: "ollama",
+    label: "Ollama Chat Model",
+    description: "A local model on Ollama for the AI Agent",
+    modelTitle: "Model",
+    modelHint: "The name of a model that Ollama has, such as qwen3. It must support tool calls",
+    iconUrl: OLLAMA_ICON,
+  },
+  {
+    provider: "azure",
+    label: "Azure OpenAI Chat Model",
+    description: "An OpenAI model on Azure for the AI Agent",
+    modelTitle: "Deployment Name",
+    modelHint: "The name of the model deployment in the Azure resource",
+    iconUrl: AZURE_ICON,
+  },
+];
+
+const typed = TYPED.map((spec) =>
+  defineSupplyNode({
+    type: `agent.model.${spec.provider}`,
+    label: spec.label,
+    description: spec.description,
+    category: "integration",
+    icon: "SparklesIcon",
+    iconUrl: spec.iconUrl,
+    supplies: KIND.model,
+    config: z.object({
+      model: z.string().default("").meta({ title: spec.modelTitle, description: spec.modelHint }),
+      ...settings,
+    }),
+    defaultConfig: { model: "", timeoutMs: 120_000 },
+    credentialTypes: [CREDENTIAL_OF[spec.provider]],
+    subtitle: (config) =>
+      typeof config.model === "string" && config.model !== "" ? config.model : undefined,
+    supply: ({ config, credential }) => {
+      const model = config.model.trim();
+      if (!model) throw new Error('The node needs "model"');
+      return chatModelOf(accessOf(spec.provider, credential), {
+        model,
+        maxTokens: config.maxTokens,
+        temperature: config.temperature,
+        timeoutMs: config.timeoutMs,
+      });
+    },
+  }),
+);
+
+export const chatModelNodes: NodeDefinition[] = [...listed, ...typed];

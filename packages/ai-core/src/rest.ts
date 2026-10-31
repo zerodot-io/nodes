@@ -1,180 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import type { ResolvedCredential } from "@zerodot/node-sdk";
+import { type Access, ANTHROPIC_VERSION, type CallOptions, signalOf } from "./access";
+import { type Answer, errorOf, retryAfterOf } from "./errors";
 
-export const PROVIDERS = ["openai", "anthropic", "gemini", "compatible"] as const;
-export type Provider = (typeof PROVIDERS)[number];
-
-/** The credential type of each provider. The node uses the one that matches `provider`. */
-export const CREDENTIAL_OF = {
-  openai: "ai.openai",
-  anthropic: "ai.anthropic",
-  gemini: "ai.gemini",
-  compatible: "ai.compatible",
-} as const satisfies Record<Provider, string>;
-
-export const PROVIDER_LABEL = {
-  openai: "OpenAI",
-  anthropic: "Anthropic",
-  gemini: "Gemini",
-  compatible: "The compatible service",
-} as const satisfies Record<Provider, string>;
-
-export const BASE_URL_OF = {
-  openai: "https://api.openai.com/v1",
-  anthropic: "https://api.anthropic.com",
-  gemini: "https://generativelanguage.googleapis.com/v1beta",
-  compatible: "",
-} as const satisfies Record<Provider, string>;
-
-/** The current Anthropic API version (checked on 2026-10-29). It removed temperature, top_p, and top_k. */
-export const ANTHROPIC_VERSION = "2026-10-21";
+// The plain HTTP calls: files, model lists, token counts, and the other calls that the AI SDK
+// does not have.
 
 /** The most items that "return all" collects. */
 export const MAX_ITEMS = 5000;
 const PAGE_SIZE = 100;
-
-export type Access = {
-  provider: Provider;
-  /** Empty only for a compatible service that needs no key. */
-  apiKey: string | undefined;
-  organization?: string;
-  project?: string;
-  /** The address up to the version, without a slash at the end. */
-  baseUrl: string;
-};
-export type CallOptions = { signal: AbortSignal; timeoutMs: number };
-
-/** Plain http is for a service on the same machine only. */
-const LOOPBACK = new Set(["localhost", "127.0.0.1", "[::1]"]);
-
-const text = (value: unknown): string | undefined =>
-  typeof value === "string" && value.trim() !== "" ? value.trim() : undefined;
-
-/** The key and the settings of the credential that matches the provider. */
-export function accessOf(
-  provider: Provider,
-  credential: Pick<ResolvedCredential, "type" | "data"> | null,
-): Access {
-  if (!credential || credential.type !== CREDENTIAL_OF[provider]) {
-    const name = provider === "compatible" ? "a compatible service" : PROVIDER_LABEL[provider];
-    throw new Error(`The node needs a credential for ${name}`);
-  }
-  const apiKey = text(credential.data.apiKey);
-  if (!apiKey && provider !== "compatible") throw new Error('The credential has no "apiKey"');
-  const base = text(credential.data.baseUrl) ?? BASE_URL_OF[provider];
-  if (!base) throw new Error('The credential has no "baseUrl"');
-  let parsed: URL;
-  try {
-    parsed = new URL(base);
-  } catch {
-    throw new Error('"baseUrl" is not a valid address');
-  }
-  if (
-    parsed.protocol !== "https:" &&
-    !(parsed.protocol === "http:" && LOOPBACK.has(parsed.hostname))
-  ) {
-    throw new Error('"baseUrl" must start with https:// (http:// only for localhost)');
-  }
-  return {
-    provider,
-    apiKey,
-    organization: text(credential.data.organization),
-    project: text(credential.data.project),
-    baseUrl: base.replace(/\/+$/, ""),
-  };
-}
-
-/** An error that a provider gave. `code` is the error code or type, for example `model_not_found`. */
-export class AIError extends Error {
-  readonly provider: Provider;
-  readonly code: string | undefined;
-  readonly status: number;
-  readonly requestId: string | undefined;
-  readonly retryAfter: number | undefined;
-
-  constructor(
-    provider: Provider,
-    message: string,
-    status: number,
-    code?: string,
-    requestId?: string,
-    retryAfter?: number,
-  ) {
-    super(message);
-    this.name = "AIError";
-    this.provider = provider;
-    this.code = code;
-    this.status = status;
-    this.requestId = requestId;
-    this.retryAfter = retryAfter;
-  }
-}
-
-/** Short help for the OpenAI errors that people see most. */
-const CODE_HINTS: Record<string, string> = {
-  invalid_api_key: "OpenAI did not accept the API key",
-  insufficient_quota: "The account has no credit left. Check the billing page",
-  model_not_found: "The model does not exist, or the account cannot use it",
-  context_length_exceeded: "The input is too long for the model",
-  rate_limit_exceeded: "OpenAI limits the requests. Try again later",
-  content_policy_violation: "OpenAI blocked the request because of its content policy",
-};
-
-/** Short help for the status codes. The name of the service comes first. */
-const statusHint = (provider: Provider, status: number): string | undefined => {
-  const name = PROVIDER_LABEL[provider];
-  const hints: Record<number, string> = {
-    401: `${name} did not accept the API key`,
-    403: "The key cannot use this resource. Check the project, the organization, and the model",
-    404: `${name} did not find the resource. Check the model ID and the base URL`,
-    413: "The request is too large",
-    429: `${name} limits the requests. Try again later`,
-    529: `${name} is busy. Try again later`,
-  };
-  return hints[status];
-};
-
-type Answer = Record<string, unknown> & {
-  error?: {
-    message?: string;
-    type?: string;
-    code?: string | number | null;
-    status?: string;
-  } | null;
-};
-
-/** The error for an answer with an error status. The text never has the key. */
-export function errorOf(
-  provider: Provider,
-  label: string,
-  status: number,
-  answer: Answer | null,
-  requestId?: string,
-  retryAfter?: number,
-): AIError {
-  const found = answer?.error;
-  const code =
-    typeof found?.code === "string"
-      ? found.code
-      : typeof found?.type === "string"
-        ? found.type
-        : typeof found?.status === "string"
-          ? found.status
-          : undefined;
-  const parts = [`${PROVIDER_LABEL[provider]} ${label} failed (${status})`];
-  if (typeof found?.message === "string" && found.message) parts.push(found.message);
-  const hint = (code && CODE_HINTS[code]) || statusHint(provider, status);
-  if (hint) parts.push(hint);
-  if (code) parts.push(`Error code ${code}`);
-  if (requestId) parts.push(`Request ID ${requestId}`);
-  if (retryAfter !== undefined) parts.push(`Try again in ${retryAfter} seconds`);
-  return new AIError(provider, parts.join(". "), status, code, requestId, retryAfter);
-}
-
-const retryAfterOf = (header: string | null): number | undefined => {
-  const seconds = Number(header);
-  return header !== null && Number.isFinite(seconds) && seconds >= 0 ? seconds : undefined;
-};
 
 export type Call = {
   method: "GET" | "POST" | "DELETE";
@@ -214,9 +47,6 @@ export function headersOf(access: Access, hasJson: boolean): Record<string, stri
     ...(hasJson ? { "content-type": "application/json" } : {}),
   };
 }
-
-const signalOf = (options: CallOptions): AbortSignal =>
-  AbortSignal.any([options.signal, AbortSignal.timeout(options.timeoutMs)]);
 
 /** The answer of a response. An error status gives an error with the time to wait. */
 async function readAnswer(

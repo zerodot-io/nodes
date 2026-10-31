@@ -1,22 +1,34 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { z } from "zod";
-import { PROVIDER_LABEL, PROVIDERS, type Provider } from "./api";
 import {
   ANTHROPIC_MODELS,
+  BEDROCK_EMBEDDING_MODELS,
+  BEDROCK_TEXT_MODELS,
   CUSTOM_MODEL,
+  DEEPSEEK_TEXT_MODELS,
+  EMBEDDING_PROVIDERS,
   GEMINI_EMBEDDING_MODELS,
   GEMINI_IMAGE_MODELS,
   GEMINI_TEXT_MODELS,
+  GROQ_TEXT_MODELS,
   idsOf,
+  MISTRAL_EMBEDDING_MODELS,
+  MISTRAL_TEXT_MODELS,
   MODERATION_MODELS,
   type ModelEntry,
   OPENAI_EMBEDDING_MODELS,
   OPENAI_IMAGE_MODELS,
   OPENAI_TEXT_MODELS,
+  PROVIDER_LABEL,
+  PROVIDERS,
+  type Provider,
   SPEECH_MODELS,
   TRANSCRIPTION_MODELS,
   TRANSLATION_MODELS,
-} from "./models";
+  VERTEX_EMBEDDING_MODELS,
+  VERTEX_TEXT_MODELS,
+  XAI_TEXT_MODELS,
+} from "@zerodot/ai-core";
+import { z } from "zod";
 
 // Resource and operation names follow the OpenAI API. The provider decides which ones work.
 
@@ -82,6 +94,15 @@ export const SUPPORT = {
     embedding: ["create"],
     model: ["list"],
   },
+  mistral: { text: ["generate"], embedding: ["create"], model: ["list"] },
+  groq: { text: ["generate"], model: ["list"] },
+  xai: { text: ["generate"], model: ["list"] },
+  deepseek: { text: ["generate"], model: ["list"] },
+  openrouter: { text: ["generate"], model: ["list"] },
+  ollama: { text: ["generate"], embedding: ["create"], model: ["list"] },
+  azure: { text: ["generate"], embedding: ["create"] },
+  bedrock: { text: ["generate"], embedding: ["create"] },
+  vertex: { text: ["generate"], embedding: ["create"] },
 } as const satisfies Record<Provider, Operations>;
 
 export const supports = (provider: Provider, resource: Resource, operation: string): boolean => {
@@ -141,7 +162,24 @@ export const PROVIDER_OPTIONS = [
   {
     id: "compatible",
     label: "OpenAI-compatible",
-    hint: "Any service with an OpenAI-style API, such as Ollama or a gateway",
+    hint: "Any service with an OpenAI-style API, such as a gateway",
+  },
+  { id: "mistral", label: "Mistral AI", hint: "Mistral models. Text and embeddings" },
+  { id: "groq", label: "Groq", hint: "Open models on fast hardware. Text" },
+  { id: "xai", label: "xAI", hint: "Grok models. Text" },
+  { id: "deepseek", label: "DeepSeek", hint: "DeepSeek models. Text" },
+  { id: "openrouter", label: "OpenRouter", hint: "Many providers with one key. Text" },
+  { id: "ollama", label: "Ollama", hint: "Local models. Text and embeddings" },
+  { id: "azure", label: "Azure OpenAI", hint: "OpenAI models on Azure. Text and embeddings" },
+  {
+    id: "bedrock",
+    label: "Amazon Bedrock",
+    hint: "Claude, Nova, and other models on AWS. Text and embeddings",
+  },
+  {
+    id: "vertex",
+    label: "Google Vertex AI",
+    hint: "Gemini models on Google Cloud. Text and embeddings",
   },
 ] as const satisfies readonly { id: Provider; label: string; hint: string }[];
 
@@ -159,7 +197,9 @@ const rules = (providers: readonly Provider[], operations: Operations): Rule[] =
 const show = (...groups: Rule[][]) => ({ showWhen: groups.flat() });
 
 const EVERY = PROVIDERS;
-const NOT_ANTHROPIC = ["openai", "compatible", "gemini"] as const;
+const NOT_ANTHROPIC = PROVIDERS.filter((provider) => provider !== "anthropic");
+/** These providers have no model list. The user types the model id, or the Azure deployment. */
+const TYPED_MODEL = ["compatible", "openrouter", "ollama", "azure"] as const;
 const COUNTERS = ["anthropic", "gemini"] as const;
 
 /** Labels and hints for a model select. The last option is Custom. */
@@ -218,12 +258,12 @@ export const aiConfig = z
         },
         hints: {
           text: "Write text with a chat model. Images can be input. All providers",
-          embedding: "Turn text into a vector of numbers. Not for Anthropic",
+          embedding: "Turn text into a vector of numbers. Not all providers",
           image: "Make images from a prompt. OpenAI and Gemini",
           moderation: "Check text or images for harmful content. OpenAI only",
           audio: "Turn speech into text, or text into speech. OpenAI only",
           file: "Upload, get, list, or delete files. OpenAI, Anthropic, and Gemini",
-          model: "List the models that the key can use. All providers",
+          model: "List the models that the key can use. Not for Azure, Bedrock, and Vertex",
           conversation: "Make, read, change, or delete a conversation. OpenAI only",
           conversationItem: "Add, list, read, or delete conversation items. OpenAI only",
         },
@@ -310,6 +350,42 @@ export const aiConfig = z
       .enum(idsOf(SPEECH_MODELS))
       .default("gpt-4o-mini-tts")
       .meta(modelMeta(["openai"], { audio: ["speak"] }, SPEECH_MODELS)),
+    mistralTextModel: z
+      .enum(idsOf(MISTRAL_TEXT_MODELS))
+      .default("mistral-large-latest")
+      .meta(modelMeta(["mistral"], { text: ["generate"] }, MISTRAL_TEXT_MODELS)),
+    groqTextModel: z
+      .enum(idsOf(GROQ_TEXT_MODELS))
+      .default("openai/gpt-oss-120b")
+      .meta(modelMeta(["groq"], { text: ["generate"] }, GROQ_TEXT_MODELS)),
+    xaiTextModel: z
+      .enum(idsOf(XAI_TEXT_MODELS))
+      .default("grok-4.7")
+      .meta(modelMeta(["xai"], { text: ["generate"] }, XAI_TEXT_MODELS)),
+    deepseekTextModel: z
+      .enum(idsOf(DEEPSEEK_TEXT_MODELS))
+      .default("deepseek-v4-flash")
+      .meta(modelMeta(["deepseek"], { text: ["generate"] }, DEEPSEEK_TEXT_MODELS)),
+    bedrockTextModel: z
+      .enum(idsOf(BEDROCK_TEXT_MODELS))
+      .default("us.anthropic.claude-sonnet-5-5")
+      .meta(modelMeta(["bedrock"], { text: ["generate"] }, BEDROCK_TEXT_MODELS)),
+    vertexTextModel: z
+      .enum(idsOf(VERTEX_TEXT_MODELS))
+      .default("gemini-3.8-flash")
+      .meta(modelMeta(["vertex"], { text: ["generate"] }, VERTEX_TEXT_MODELS)),
+    mistralEmbeddingModel: z
+      .enum(idsOf(MISTRAL_EMBEDDING_MODELS))
+      .default("mistral-embed")
+      .meta(modelMeta(["mistral"], { embedding: ["create"] }, MISTRAL_EMBEDDING_MODELS)),
+    bedrockEmbeddingModel: z
+      .enum(idsOf(BEDROCK_EMBEDDING_MODELS))
+      .default("amazon.titan-embed-text-v2:0")
+      .meta(modelMeta(["bedrock"], { embedding: ["create"] }, BEDROCK_EMBEDDING_MODELS)),
+    vertexEmbeddingModel: z
+      .enum(idsOf(VERTEX_EMBEDDING_MODELS))
+      .default("gemini-embedding-2")
+      .meta(modelMeta(["vertex"], { embedding: ["create"] }, VERTEX_EMBEDDING_MODELS)),
     customModel: z
       .string()
       .optional()
@@ -326,11 +402,22 @@ export const aiConfig = z
           hasCustomModel("audioModel", "openai", "audio", ["transcribe"]),
           hasCustomModel("translationModel", "openai", "audio", ["translate"]),
           hasCustomModel("speechModel", "openai", "audio", ["speak"]),
-          // A compatible service has no model list. The user types the id.
-          ...rules(["compatible"], { text: ["generate"], embedding: ["create"] }),
+          hasCustomModel("mistralTextModel", "mistral", "text", ["generate"]),
+          hasCustomModel("groqTextModel", "groq", "text", ["generate"]),
+          hasCustomModel("xaiTextModel", "xai", "text", ["generate"]),
+          hasCustomModel("deepseekTextModel", "deepseek", "text", ["generate"]),
+          hasCustomModel("bedrockTextModel", "bedrock", "text", ["generate"]),
+          hasCustomModel("vertexTextModel", "vertex", "text", ["generate"]),
+          hasCustomModel("mistralEmbeddingModel", "mistral", "embedding", ["create"]),
+          hasCustomModel("bedrockEmbeddingModel", "bedrock", "embedding", ["create"]),
+          hasCustomModel("vertexEmbeddingModel", "vertex", "embedding", ["create"]),
+          // These providers have no model list. The user types the id.
+          ...rules(TYPED_MODEL, { text: ["generate"] }),
+          ...rules(["compatible", "ollama", "azure"], { embedding: ["create"] }),
         ],
         title: "Custom Model ID",
-        description: "A model id, such as one from the List operation or from a compatible service",
+        description:
+          "A model id, such as one from the List operation. For Azure: the name of the deployment",
       }),
     // text
     systemPrompt: z
@@ -516,7 +603,7 @@ export const aiConfig = z
       .boolean()
       .default(false)
       .meta({
-        ...show(rules(["openai", "compatible", "anthropic"], { text: ["generate"] })),
+        ...show(rules(["openai", "compatible", "anthropic", "azure"], { text: ["generate"] })),
         title: "Disable Parallel Tool Use",
         description: "On: the model calls at most one tool in an answer",
       }),
@@ -554,7 +641,7 @@ export const aiConfig = z
       .optional()
       .meta({
         ...show(
-          rules(NOT_ANTHROPIC, { embedding: ["create"] }),
+          rules(EMBEDDING_PROVIDERS, { embedding: ["create"] }),
           rules(["openai"], { moderation: ["check"], audio: ["speak"] }),
         ),
         ui: "textarea",
@@ -566,7 +653,7 @@ export const aiConfig = z
       .min(1)
       .optional()
       .meta({
-        ...show(rules(NOT_ANTHROPIC, { embedding: ["create"] })),
+        ...show(rules(EMBEDDING_PROVIDERS, { embedding: ["create"] })),
         description: "A shorter vector. Not all models allow it. Empty keeps the full size",
       }),
     // image

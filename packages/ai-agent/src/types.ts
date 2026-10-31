@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import type { ChatModel, Message, ToolSpec } from "@zerodot/ai-core";
 import { isRecord } from "@zerodot/node-sdk";
 import { RAG_KIND } from "./rag";
 
@@ -14,43 +15,18 @@ export const KIND = {
   embedding: RAG_KIND.embedding,
 } as const;
 
+export type {
+  ChatModel,
+  ChatRequest,
+  FinishReason,
+  Message,
+  ModelTurn,
+  ToolCall,
+  ToolSpec,
+  Usage,
+} from "@zerodot/ai-core";
+
 type JsonObject = Record<string, unknown>;
-
-export type ToolCall = { id: string; name: string; input: unknown };
-
-/**
- * One message of the conversation, the same for each provider. `raw` is the answer content as
- * the provider gave it. The agent sends it back to the same provider, because some providers
- * need parts that this shape does not keep, such as thinking signatures.
- */
-export type Message =
-  | { role: "user"; content: string }
-  | {
-      role: "assistant";
-      content: string;
-      toolCalls?: ToolCall[];
-      raw?: { provider: string; content: unknown };
-    }
-  | { role: "tool"; toolCallId: string; name: string; content: string; isError?: boolean };
-
-export type ToolSpec = { name: string; description: string; inputSchema: JsonObject };
-
-export type FinishReason = "stop" | "length" | "tool_calls" | "content_filter" | "other";
-
-export type Usage = { inputTokens: number; outputTokens: number };
-
-export type ModelTurn = {
-  text: string;
-  toolCalls: ToolCall[];
-  finishReason: FinishReason;
-  usage: Usage;
-  raw?: { provider: string; content: unknown };
-};
-
-export type ChatRequest = { system: string | undefined; messages: Message[]; tools: ToolSpec[] };
-
-/** The value of an "ai.model" supply: a chat model that can call tools. */
-export type ChatModel = { chat(request: ChatRequest, signal: AbortSignal): Promise<ModelTurn> };
 
 /** The value of an "ai.memory" supply: the memory of one conversation. */
 export type Memory = {

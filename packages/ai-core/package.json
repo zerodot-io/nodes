@@ -1,0 +1,41 @@
+{
+  "name": "@zerodot/ai-core",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The shared code of @zerodot/ai and @zerodot/ai-agent: provider access, credentials, model lists, and the chat and embedding models. It is not published. tsdown bundles it into each package.",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "check-types": "tsc -p tsconfig.json",
+    "test": "tsx --test src/*.test.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/amazon-bedrock": "5.0.118",
+    "@ai-sdk/anthropic": "4.0.82",
+    "@ai-sdk/azure": "4.0.104",
+    "@ai-sdk/deepseek": "3.0.67",
+    "@ai-sdk/google": "4.0.99",
+    "@ai-sdk/google-vertex": "5.0.115",
+    "@ai-sdk/groq": "4.0.63",
+    "@ai-sdk/mistral": "4.0.66",
+    "@ai-sdk/openai": "4.0.96",
+    "@ai-sdk/openai-compatible": "3.0.71",
+    "@ai-sdk/xai": "5.0.24",
+    "@openrouter/ai-sdk-provider": "3.1.0",
+    "ai": "7.0.143"
+  },
+  "peerDependencies": {
+    "@zerodot/node-sdk": "^1.2.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.5",
+    "@zerodot/node-sdk": "^1.5.0",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "zod": "4.6.7"
+  }
+}
