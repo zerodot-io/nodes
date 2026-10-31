@@ -23,6 +23,10 @@ Manual: install `@zerodot/redis` where the web app and the worker run, and add i
 
 Starts a run when a message arrives on one or more channels. It can read the message as JSON, and it can return only the message without the channel name.
 
+### Redis Chat Memory (`redis.memory`)
+
+Keeps the conversation of an AI Agent (`@zerodot/ai-agent`) in a Redis list. Connect it to the **Memory** port of the agent. The key is the session ID, and each run of the agent adds one item. The agent reads the last turns of the session. The node can delete the turns that are older than the turns to remember, and it can set a time to live for the session. The Chat Memory Manager can read, add, and delete its messages.
+
 ## Credential
 
 **Redis** (`redis`): `host`, `port`, `user`, `password`, `database`, `ssl`. Empty fields mean port 6379, database 0, and no TLS. The password is secret.

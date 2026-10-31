@@ -32,8 +32,8 @@ ZERODOT_NODE_PACKAGES=@zerodot/redis
 - [`mysql`](packages/mysql): queries and rows in MySQL
 - [`notion`](packages/notion): pages, databases, blocks, and search
 - [`pdf`](packages/pdf): create, read, merge, split, and rotate PDF files
-- [`postgres`](packages/postgres): queries, rows, and change triggers for Postgres
-- [`redis`](packages/redis): keys, lists, and messages in Redis
+- [`postgres`](packages/postgres): queries, rows, change triggers, and AI Agent memory for Postgres
+- [`redis`](packages/redis): keys, lists, messages, and AI Agent memory in Redis
 - [`s3`](packages/s3): files and buckets in S3 and compatible storage
 - [`slack`](packages/slack): messages, channels, files, and Slack events
 - [`spreadsheet`](packages/spreadsheet): read and write CSV and XLSX files

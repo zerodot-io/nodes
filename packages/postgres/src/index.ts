@@ -3,7 +3,8 @@ import type { CredentialTypeDefinition, NodeDefinition } from "@zerodot/node-sdk
 import { postgresCredential } from "./credential";
 import postgres from "./postgres";
 import postgresListen from "./postgres-listen";
+import postgresMemory from "./postgres-memory";
 import postgresTrigger from "./postgres-trigger";
 
-export const nodes: NodeDefinition[] = [postgres, postgresTrigger, postgresListen];
+export const nodes: NodeDefinition[] = [postgres, postgresTrigger, postgresListen, postgresMemory];
 export const credentialTypes: CredentialTypeDefinition[] = [postgresCredential];
