@@ -509,6 +509,31 @@
       "credentialTypes": []
     },
     {
+      "name": "@zerodot/meta",
+      "label": "Meta",
+      "summary": "Publish to Instagram, Facebook Pages, and Threads",
+      "description": "Publish reels, photos, carousels, page posts, and threads with the Meta Graph API, check publishing quotas, and start a workflow on Meta webhooks. Use it for Instagram, Facebook Pages, and Threads.",
+      "version": "1.0.0",
+      "sdk": "^1.2",
+      "icon": "Share2Icon",
+      "iconUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNTY3IiBoZWlnaHQ9IjEwNDEiIHZlcnNpb249IjEuMiI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJhIiB4MT0iMzMyLjYiIHgyPSIxNDExIiB5MT0iNjM3LjciIHkyPSI2OTIuMiIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzAwNjRlMSIvPjxzdG9wIG9mZnNldD0iLjQiIHN0b3AtY29sb3I9IiMwMDY0ZTEiLz48c3RvcCBvZmZzZXQ9Ii44IiBzdG9wLWNvbG9yPSIjMDA3M2VlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMDA4MmZiIi8+PC9saW5lYXJHcmFkaWVudD48bGluZWFyR3JhZGllbnQgaWQ9ImIiIHgxPSIyNDUuNCIgeDI9IjI0NS40IiB5MT0iNzU3LjYiIHkyPSIzNTkuNyIgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzAwODJmYiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzAwNjRlMCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik0xNjkuNSA2ODYuNWMwIDU5LjkgMTMuMSAxMDUuOCAzMC4zIDEzMy42IDIyLjUgMzYuNCA1NiA1MS44IDkwLjIgNTEuOCA0NC4yIDAgODQuNS0xMC45IDE2Mi4zLTExOC42QzUxNC42IDY2Ny4xIDU4OCA1NDYgNjM3LjQgNDcwbDgzLjctMTI4LjZjNTguMS04OS4zIDEyNS4zLTE4OC42IDIwMi41LTI1NS45Qzk4Ni41IDMwLjUgMTA1NC41IDAgMTEyMi44IDBjMTE0LjggMCAyMjQuMSA2Ni41IDMwNy43IDE5MS40IDkxLjYgMTM2LjcgMTM2IDMwOC44IDEzNiA0ODYuNSAwIDEwNS42LTIwLjggMTgzLjItNTYuMiAyNDQuNi0zNC4yIDU5LjMtMTAwLjggMTE4LjUtMjEzIDExOC41Vjg3MS45Yzk2IDAgMTIwLTg4LjMgMTIwLTE4OS4zIDAtMTQ0LTMzLjYtMzAzLjgtMTA3LjUtNDE4LTUyLjQtODEtMTIwLjQtMTMwLjUtMTk1LjItMTMwLjUtODAuOCAwLTE0NS45IDYxLjEtMjE5LjEgMTY5LjktMzguOSA1Ny44LTc4LjggMTI4LjMtMTIzLjYgMjA3LjhsLTQ5LjQgODcuNWMtOTkuMSAxNzUuOS0xMjQuMiAyMTYtMTczLjggMjgyLjFDNDYxLjkgOTk3LjEgMzg3LjcgMTA0MSAyOTAgMTA0MWMtMTE1LjggMC0xODkuMS01MC4yLTIzNC40LTEyNS44QzE4LjUgODUzLjUuMyA3NzIuNi4zIDY4MC41eiIgc3R5bGU9ImZpbGw6IzAwODFmYiIvPjxwYXRoIGQ9Ik0xMzMuNyAyMDMuM0MyMTEuMyA4My43IDMyMy4yIDAgNDUxLjYgMCA1MjUuOSAwIDU5OS44IDIyIDY3NyA4NS4xYzg0LjQgNjguOSAxNzQuNCAxODIuNSAyODYuNyAzNjkuNmw0MC4yIDY3LjFjOTcuMiAxNjIgMTUyLjUgMjQ1LjMgMTg0LjggMjg0LjYgNDEuNiA1MC41IDcwLjggNjUuNSAxMDguNiA2NS41IDk2IDAgMTIwLTg4LjMgMTIwLTE4OS4zbDE0OS4yLTQuN2MwIDEwNS42LTIwLjggMTgzLjItNTYuMiAyNDQuNi0zNC4yIDU5LjMtMTAwLjggMTE4LjUtMjEzIDExOC41LTY5LjcgMC0xMzEuNS0xNS4yLTE5OS44LTc5LjZDMTA0NSA5MTEuOSA5ODMuNiA4MjQgOTM2LjQgNzQ0LjlMNzk2IDUxMC4xYy03MC41LTExNy44LTEzNS4yLTIwNS42LTE3Mi42LTI0NS40LTQwLjItNDIuOC05Mi05NC41LTE3NC41LTk0LjUtNjYuOSAwLTEyMy42IDQ2LjktMTcxLjEgMTE4Ljd6IiBzdHlsZT0iZmlsbDp1cmwoI2EpIi8+PHBhdGggZD0iTTQ0OC45IDE3MC4yYy02Ni45IDAtMTIzLjYgNDYuOS0xNzEuMSAxMTguNy02Ny4yIDEwMS40LTEwOC4zIDI1Mi41LTEwOC4zIDM5Ny42IDAgNTkuOSAxMy4xIDEwNS44IDMwLjMgMTMzLjZMNTUuNiA5MTUuMkMxOC41IDg1My41LjMgNzcyLjYuMyA2ODAuNWMwLTE2Ny42IDQ2LTM0Mi4zIDEzMy40LTQ3Ny4yQzIxMS4zIDgzLjcgMzIzLjIgMCA0NTEuNiAweiIgc3R5bGU9ImZpbGw6dXJsKCNiKSIvPjwvc3ZnPg==",
+      "nodes": [
+        {
+          "type": "trigger.meta",
+          "label": "Meta Trigger",
+          "description": "Start the workflow on a Meta webhook, such as a comment, a mention, or a message on Instagram, Facebook, or Threads"
+        },
+        {
+          "type": "meta.api",
+          "label": "Meta",
+          "description": "Publish reels, photos, carousels, and stories to Instagram, posts to Facebook Pages, and text, images, carousels, and videos to Threads, and check publishing quotas"
+        }
+      ],
+      "credentialTypes": [
+        "meta.api"
+      ]
+    },
+    {
       "name": "@zerodot/mongodb",
       "label": "MongoDB",
       "summary": "Documents in MongoDB",
